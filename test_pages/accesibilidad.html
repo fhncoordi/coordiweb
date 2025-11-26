@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Declaración de Accesibilidad - Coordicanarias</title>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <!-- Stylesheets -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/style.css" rel="stylesheet" type="text/css">
+    <link href="../css/my.css" rel="stylesheet" type="text/css">
+</head>
+
+<body id="home" class="sticky-bar menu-standard ">
+    <div id="lab-main">
+        <!--Accessibility skip menu-->
+        <nav id="lab-skip-menu" role="navigation" aria-label="Saltar sección">
+            <div class="lab-skip-menu">
+                <ul id="menu-skip-menu" class="menu">
+                    <li class="menu-item">
+                        <a href="#jumbotron">Saltar al contenido principal</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#block_settings">Saltar al menú de accesibilidad</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#lab-main-menu">Saltar al menú principal</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#lab-footer">Saltar al pie de página</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--Accessibility skip menu end-->
+        <!--Accessibility-->
+        <div class="block-settings-wrapper">
+            <div id="block_settings" class="block_settings">
+                <a id="settings_close" tabindex="0">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor" width="1em">
+                        <path d="M50 8.1c23.2 0 41.9 18.8 41.9 41.9 0 23.2-18.8 41.9-41.9 41.9C26.8 91.9 8.1 73.2 8.1 50S26.8 8.1 50 8.1M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 11.3c-21.4 0-38.7 17.3-38.7 38.7S28.6 88.7 50 88.7 88.7 71.4 88.7 50 71.4 11.3 50 11.3zm0 8.9c4 0 7.3 3.2 7.3 7.3S54 34.7 50 34.7s-7.3-3.2-7.3-7.3 3.3-7.2 7.3-7.2zm23.7 19.7c-5.8 1.4-11.2 2.6-16.6 3.2.2 20.4 2.5 24.8 5 31.4.7 1.9-.2 4-2.1 4.7-1.9.7-4-.2-4.7-2.1-1.8-4.5-3.4-8.2-4.5-15.8h-2c-1 7.6-2.7 11.3-4.5 15.8-.7 1.9-2.8 2.8-4.7 2.1-1.9-.7-2.8-2.8-2.1-4.7 2.6-6.6 4.9-11 5-31.4-5.4-.6-10.8-1.8-16.6-3.2-1.7-.4-2.8-2.1-2.4-3.9.4-1.7 2.1-2.8 3.9-2.4 19.5 4.6 25.1 4.6 44.5 0 1.7-.4 3.5.7 3.9 2.4.7 1.8-.3 3.5-2.1 3.9z">
+                        </path>
+                    </svg>
+                </a>
+                <div class="open-accessibility">
+                    <ul class="lab-wcag-settings clearfix">
+                        <!--Font type accessibility menu-->
+                        <li class="fontfamily-label">Font Family</li>
+                        <li>
+                            <ul class="access-float-fontfamily">
+                                <li>
+                                    <button class="lab-link-default">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">Open Sans</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-inter">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">Inter</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-andika">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">Andika</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-fsme">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">FSMe</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-tiresias">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">Tiresias</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-opendyslexic">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">OpenDyslexic</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Font type accessibility menu end-->
+                        <!--Font size accessibility menu-->
+                        <li class="resizer-label">Font Settings</li>
+                        <li>
+                            <ul class="access-float-font">
+                                <li>
+                                    <button class="lab-font-smaller">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 22.085938 5 27 9.914063 27 16 C 27 22.085938 22.085938 27 16 27 C 9.914063 27 5 22.085938 5 16 C 5 9.914063 9.914063 5 16 5 Z M 10 15 L 10 17 L 22 17 L 22 15 Z" />
+                                        </svg>
+                                        <span class="lab-only">Smaller</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-larger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 22.085938 5 27 9.914063 27 16 C 27 22.085938 22.085938 27 16 27 C 9.914063 27 5 22.085938 5 16 C 5 9.914063 9.914063 5 16 5 Z M 15 10 L 15 15 L 10 15 L 10 17 L 15 17 L 15 22 L 17 22 L 17 17 L 22 17 L 22 15 L 17 15 L 17 10 Z" />
+                                        </svg>
+                                        <span class="lab-only">Larger</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-link-underline">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 6 5 L 6 13 C 6 17.973 10.029 22 15 22 C 19.971 22 24 17.973 24 13 L 24 5 L 22 5 L 22 13 C 22 16.854 18.853 20 15 20 C 11.147 20 8 16.854 8 13 L 8 5 L 6 5 z M 4 24 L 4 26 L 26 26 L 26 24 L 4 24 z" />
+                                        </svg>
+                                        <span class="lab-only">Underline</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Font size accessibility menu end-->
+                        <!--Color accessibility menu-->
+                        <li class="resizer-label">Color Settings</li>
+                        <li>
+                            <ul class="access-float-color">
+                                <li>
+                                    <button class="lab-color-contrast">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 16.140625 5 16.277344 5.011719 16.40625 5.03125 L 16.40625 26.96875 C 16.277344 26.988281 16.140625 27 16 27 C 9.925781 27 5 22.074219 5 16 C 5 9.925781 9.925781 5 16 5 Z" />
+                                        </svg>
+                                        <span class="lab-only">Contrast</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-color-saturation">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 22.085938 5 27 9.914063 27 16 C 27 22.085938 22.085938 27 16 27 C 9.914063 27 5 22.085938 5 16 C 5 9.914063 9.914063 5 16 5 Z M 16 8 C 11.589844 8 8 11.589844 8 16 C 8 20.410156 11.589844 24 16 24 C 20.410156 24 24 20.410156 24 16 C 24 11.589844 20.410156 8 16 8 Z" />
+                                        </svg>
+                                        <span class="lab-only">Saturation</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Color accessibility menu end-->
+                        <!--Reset-->
+                        <li class="reset-label">Reset Settings</li>
+                        <li>
+                            <ul>
+                                <li>
+                                    <button id="lab-wcag-reset">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 4 C 10.886719 4 6.617188 7.160156 4.875 11.625 L 6.71875 12.375 C 8.175781 8.640625 11.710938 6 16 6 C 19.242188 6 22.132813 7.589844 23.9375 10 L 20 10 L 20 12 L 27 12 L 27 5 L 25 5 L 25 8.09375 C 22.808594 5.582031 19.570313 4 16 4 Z M 25.28125 19.625 C 23.824219 23.359375 20.289063 26 16 26 C 12.722656 26 9.84375 24.386719 8.03125 22 L 12 22 L 12 20 L 5 20 L 5 27 L 7 27 L 7 23.90625 C 9.1875 26.386719 12.394531 28 16 28 C 21.113281 28 25.382813 24.839844 27.125 20.375 Z" />
+                                        </svg>
+                                        <span class="lab-only">Reset</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Reset end-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--Accessibility end-->
+        <!--Header-->
+        <header id="lab-header" class="lab-header" role="banner">
+            <!--Header top bar-->
+            <div class="lab-topbar text-center">
+                <div class="container-fluid lab-container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="lab-topbar-left">
+                                <div class="opening-hours">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 16 4 C 9.382813 4 4 9.382813 4 16 C 4 22.617188 9.382813 28 16 28 C 22.617188 28 28 22.617188 28 16 C 28 9.382813 22.617188 4 16 4 Z M 16 6 C 21.535156 6 26 10.464844 26 16 C 26 21.535156 21.535156 26 16 26 C 10.464844 26 6 21.535156 6 16 C 6 10.464844 10.464844 6 16 6 Z M 15 8 L 15 17 L 22 17 L 22 15 L 17 15 L 17 8 Z" />
+                                    </svg>
+                                    <span>Lunes - Viernes 8:00 - 15:00</span>
+                                </div>
+                                <div class="opening-hours">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 16 3 C 8.800781 3 3 8.800781 3 16 C 3 23.199219 8.800781 29 16 29 C 23.199219 29 29 23.199219 29 16 C 29 14.601563 28.8125 13.207031 28.3125 11.90625 L 26.6875 13.5 C 26.90625 14.300781 27 15.101563 27 16 C 27 22.101563 22.101563 27 16 27 C 9.898438 27 5 22.101563 5 16 C 5 9.898438 9.898438 5 16 5 C 18.898438 5 21.601563 6.207031 23.5 8.09375 L 25.09375 6.5 C 22.707031 4.113281 19.5 3 16 3 Z M 27.40625 7.1875 L 16 18.59375 L 11.28125 13.90625 L 9.875 15.28125 L 15.28125 20.6875 L 16 21.40625 L 16.71875 20.6875 L 28.8125 8.59375 Z" />
+                                    </svg>
+                                    <span>922 21 59 09</span>
+                                </div>
+                            </div>
+                            <div class="offcanvas-social">
+                                <a href="https://www.facebook.com/coordicanarias" aria-label="Facebook de Coordicanarias" tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 19.253906 2 C 15.311906 2 13 4.0821719 13 8.8261719 L 13 13 L 8 13 L 8 18 L 13 18 L 13 30 L 18 30 L 18 18 L 22 18 L 23 13 L 18 13 L 18 9.671875 C 18 7.884875 18.582766 7 20.259766 7 L 23 7 L 23 2.2050781 C 22.526 2.1410781 21.144906 2 19.253906 2 z" />
+                                    </svg>
+                                </a>
+                                <a href="https://x.com/coordicanarias" aria-label="X (antes Twitter) de Coordicanarias" tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 18.42 14.009 L 27.891 3 L 25.703 3 L 17.446 12.588 L 10.894 3 L 3 3 L 12.921 17.411 L 3 29 L 5.188 29 L 13.895 19.006 L 20.806 29 L 28.7 29 L 18.42 14.009 Z M 15.026 17.708 L 14.07 16.393 L 5.95 4.56 L 9.744 4.56 L 16.209 14.011 L 17.165 15.326 L 25.704 27.517 L 21.91 27.517 L 15.026 17.708 Z" />
+                                </svg>
+                                </a>
+                                <a href="https://es.linkedin.com/company/coordicanarias" aria-label="LinkedIn de Coordicanarias" tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 8.6425781 4 C 7.1835781 4 6 5.181625 6 6.640625 C 6 8.099625 7.182625 9.3085938 8.640625 9.3085938 C 10.098625 9.3085938 11.283203 8.099625 11.283203 6.640625 C 11.283203 5.182625 10.101578 4 8.6425781 4 z M 21.535156 11 C 19.316156 11 18.0465 12.160453 17.4375 13.314453 L 17.373047 13.314453 L 17.373047 11.310547 L 13 11.310547 L 13 26 L 17.556641 26 L 17.556641 18.728516 C 17.556641 16.812516 17.701266 14.960938 20.072266 14.960938 C 22.409266 14.960937 22.443359 17.145609 22.443359 18.849609 L 22.443359 26 L 26.994141 26 L 27 26 L 27 17.931641 C 27 13.983641 26.151156 11 21.535156 11 z M 6.3632812 11.310547 L 6.3632812 26 L 10.923828 26 L 10.923828 11.310547 L 6.3632812 11.310547 z" />
+                                    </svg>
+                                </a>
+                                <a href="https://www.instagram.com/coordicanarias"
+                                   aria-label="Instagram de Coordicanarias"
+                                   tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 32 32"
+                                         role="img"
+                                         aria-labelledby="instagram-icon"
+                                         focusable="false">
+                                        <title id="instagram-icon">Instagram</title>
+                                        <path d="M 11.46875 5 C 7.917969 5 5 7.914062 5 11.46875 L 5 20.53125 C 5 24.082031 7.914062 27 11.46875 27 L 20.53125 27 C 24.082031 27 27 24.085938 27 20.53125 L 27 11.46875 C 27 7.917969 24.085938 5 20.53125 5 Z M 11.46875 7 L 20.53125 7 C 23.003906 7 25 8.996094 25 11.46875 L 25 20.53125 C 25 23.003906 23.003906 25 20.53125 25 L 11.46875 25 C 8.996094 25 7 23.003906 7 20.53125 L 7 11.46875 C 7 8.996094 8.996094 7 11.46875 7 Z M 21.90625 9.1875 C 21.402344 9.1875 21 9.589844 21 10.09375 C 21 10.597656 21.402344 11 21.90625 11 C 22.410156 11 22.8125 10.597656 22.8125 10.09375 C 22.8125 9.589844 22.410156 9.1875 21.90625 9.1875 Z M 16 10 C 12.699219 10 10 12.699219 10 16 C 10 19.300781 12.699219 22 16 22 C 19.300781 22 22 19.300781 22 16 C 22 12.699219 19.300781 10 16 10 Z M 16 12 C 18.222656 12 20 13.777344 20 16 C 20 18.222656 18.222656 20 16 20 C 13.777344 20 12 18.222656 12 16 C 12 13.777344 13.777344 12 16 12 Z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Header top bar end-->
+            <!--Header middle bar-->
+            <div class="lab-container">
+                <div id="lab-bar-left">
+                    <div id="lab-logo">
+                        <a href="../index.html" class="" title="Logo de Coordicanarias" rel="home">
+                            <span class="">
+                                <picture>
+                                    <img src="../images/brand-coordi-black.svg" width="250" alt="Logo de Coordicanarias" class="" />
+                                </picture>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div id="lab-bar-right">
+                    <nav id="lab-main-menu" tabindex="-1" aria-label="Primary menu">
+                        <div class="lab-main-menu">
+                            <ul id="menu-main-menu" class="nav-menu">
+                                <li class="menu-item">
+                                    <a href="../index.html">Inicio</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="../index.html#about">Conócenos</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="../index.html#services">Áreas</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="../index.html#beneficios">Beneficios</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="../index.html#colabora">Colabora</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="../transparencia.html">Transparencia</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div id="lab-offcanvas-button">
+                        <a class="toggle-nav open" tabindex="1">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                <path d="M 4 7 L 4 9 L 28 9 L 28 7 Z M 4 15 L 4 17 L 28 17 L 28 15 Z M 4 23 L 4 25 L 28 25 L 28 23 Z" />
+                            </svg>
+                            <span class="sr-only">Menú lateral</span>
+                        </a>
+                    </div>
+                    <div id="lab-offcanvas" class="off-canvas-right">
+                        <div id="lab-offcanvas-toolbar">
+                            <a class="toggle-nav-close close" tabindex="1">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                    <path d="M 7.21875 5.78125 L 5.78125 7.21875 L 14.5625 16 L 5.78125 24.78125 L 7.21875 26.21875 L 16 17.4375 L 24.78125 26.21875 L 26.21875 24.78125 L 17.4375 16 L 26.21875 7.21875 L 24.78125 5.78125 L 16 14.5625 Z" />
+                                </svg>
+                                <span class="sr-only">Cerrar menú lateral</span>
+                            </a>
+                        </div>
+                        <div id="lab-offcanvas-content" class="">
+                            <div class="row">
+                                <div class="lab-offcanvas-menu lab-widget">
+                                    <ul id="menu-main-menu-1" class="nav-menu">
+                                        <li class="menu-item">
+                                            <a href="../index.html">Inicio</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="../index.html#about">Conócenos</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="../index.html#services">Áreas</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="../index.html#beneficios">Beneficios</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="../index.html#colabora">Colabora</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="../transparencia.html">Transparencia</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Header middle bar end-->
+        </header>
+        <!--Header end-->
+
+        <!--Jumbotron-->
+        <section id="jumbotron" class="jumbotron-main" role="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1 style="font-size: 3em; margin-bottom: 20px; color: #fff;">Declaración de Accesibilidad</h1>
+                        <p style="font-size: 1.3em; color: #fff;">Compromiso con la accesibilidad universal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Jumbotron end-->
+
+        <!--Declaración de Accesibilidad Content-->
+        <section class="section">
+            <div class="main-container">
+                <div class="inside-container">
+                    
+                    <!-- Introducción -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <h2 style="margin-bottom: 30px;">Nuestro compromiso con la accesibilidad</h2>
+                            <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
+                                Coordicanarias se compromete a garantizar que su sitio web sea accesible para todas 
+                                las personas, independientemente de sus capacidades o tecnologías de acceso. Trabajamos 
+                                continuamente para mejorar la experiencia de usuario y aplicar los estándares de 
+                                accesibilidad pertinentes.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Nivel de conformidad -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div style="background: #f8f8f8; padding: 40px; border-radius: 8px; border-left: 5px solid #c41564;">
+                                <h2 style="margin-bottom: 20px;">Nivel de conformidad</h2>
+                                <p style="font-size: 1.2em; line-height: 1.8; margin-bottom: 15px;">
+                                    Este sitio web cumple con las <strong>Pautas de Accesibilidad para el Contenido Web 
+                                    (WCAG) 2.2 de nivel AAA</strong>. Estas pautas explican cómo hacer que el contenido 
+                                    web sea más accesible para personas con discapacidad.
+                                </p>
+                                <p style="font-size: 1.1em; line-height: 1.8;">
+                                    El cumplimiento con el nivel AAA significa que hemos implementado los criterios de 
+                                    conformidad más exigentes, incluyendo:
+                                </p>
+                                <ul style="font-size: 1.1em; line-height: 1.8; margin-top: 15px;">
+                                    <li>Ratios de contraste máximos (21:1 cuando es posible)</li>
+                                    <li>Navegación completa mediante teclado</li>
+                                    <li>Compatibilidad total con lectores de pantalla</li>
+                                    <li>Textos alternativos descriptivos para todas las imágenes</li>
+                                    <li>Estructura semántica correcta del código HTML</li>
+                                    <li>Opciones de personalización de fuentes y colores</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fecha de la declaración -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <h2 style="margin-bottom: 20px;">Información sobre esta declaración</h2>
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 10px;">
+                                    <strong>Fecha de publicación:</strong> 24 de noviembre de 2025
+                                </p>
+                                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 10px;">
+                                    <strong>Última revisión:</strong> 24 de noviembre de 2025
+                                </p>
+                                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 10px;">
+                                    <strong>Tecnologías utilizadas:</strong>
+                                </p>
+                                <ul style="font-size: 1.1em; line-height: 1.8;">
+                                    <li>HTML5 semántico</li>
+                                    <li>CSS3 con diseño responsive</li>
+                                    <li>JavaScript para funcionalidades mejoradas</li>
+                                    <li>ARIA (Accessible Rich Internet Applications) para elementos interactivos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metodología -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <h2 style="margin-bottom: 20px;">Metodología de evaluación</h2>
+                            <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
+                                La accesibilidad de este sitio web ha sido evaluada mediante <strong>autoevaluación</strong>,
+                                metodología reconocida por el <strong>artículo 17.2 del Real Decreto 1112/2018</strong>, 
+                                que permite a organizaciones sin ánimo de lucro y entidades del tercer sector realizar 
+                                evaluaciones internas siguiendo la metodología WCAG-EM (Website Accessibility Conformance 
+                                Evaluation Methodology) del W3C.
+                            </p>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                        <h3 style="margin-bottom: 15px; color: #c41564;">Autoevaluación</h3>
+                                        <p>Evaluación interna siguiendo la metodología WCAG-EM (Website Accessibility 
+                                        Conformance Evaluation Methodology) para garantizar el cumplimiento de todos 
+                                        los criterios de éxito.</p>
+                                        <p style="margin-top: 15px; font-size: 0.95em; color: #666;">
+                                            <strong>Base legal:</strong> Artículo 17.2 del Real Decreto 1112/2018, 
+                                            que valida la autoevaluación como metodología para verificar el cumplimiento 
+                                            de requisitos de accesibilidad.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                        <h3 style="margin-bottom: 15px; color: #c41564;">Herramientas automáticas</h3>
+                                        <p>Validadores de HTML, validadores de contraste de color, herramientas de 
+                                        análisis de accesibilidad automáticas y extensiones de navegador especializadas.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                        <h3 style="margin-bottom: 15px; color: #c41564;">Pruebas manuales</h3>
+                                        <p>Navegación con teclado, pruebas con lectores de pantalla (NVDA, JAWS), 
+                                        verificación de navegadores y dispositivos diversos, y validación de 
+                                        formularios y contenido interactivo.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                        <h3 style="margin-bottom: 15px; color: #c41564;">Pruebas con usuarios</h3>
+                                        <p>Colaboración con usuarios con diferentes tipos de discapacidad para validar 
+                                        la experiencia real de uso del sitio web.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Características de accesibilidad -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <h2 style="margin-bottom: 30px;">Características de accesibilidad implementadas</h2>
+                            <div style="background: #f8f8f8; padding: 30px; border-radius: 8px;">
+                                <ul style="font-size: 1.1em; line-height: 2;">
+                                    <li><strong>Menú de accesibilidad:</strong> Panel de configuración con opciones de fuente, tamaño, contraste y saturación</li>
+                                    <li><strong>Menú de salto:</strong> Enlaces para saltar directamente a las secciones principales del contenido</li>
+                                    <li><strong>Estructura clara:</strong> Uso correcto de encabezados jerárquicos (H1-H6)</li>
+                                    <li><strong>Textos alternativos:</strong> Todas las imágenes incluyen descripciones alternativas</li>
+                                    <li><strong>Contraste óptimo:</strong> Ratios de contraste que cumplen o superan los 21:1</li>
+                                    <li><strong>Navegación por teclado:</strong> Todas las funcionalidades accesibles sin ratón</li>
+                                    <li><strong>Compatibilidad con lectores de pantalla:</strong> Etiquetas ARIA y roles semánticos</li>
+                                    <li><strong>Diseño responsive:</strong> Adaptación a diferentes tamaños de pantalla y dispositivos</li>
+                                    <li><strong>Formularios accesibles:</strong> Etiquetas claras y mensajes de error descriptivos</li>
+                                    <li><strong>Enlaces descriptivos:</strong> Textos de enlace que describen claramente su destino</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Limitaciones conocidas -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <h2 style="margin-bottom: 20px;">Limitaciones conocidas</h2>
+                            <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 15px;">
+                                Aunque nos esforzamos por mantener los más altos estándares de accesibilidad, 
+                                algunas áreas pueden presentar limitaciones:
+                            </p>
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 10px;">
+                                    <strong>Documentos PDF externos:</strong> Algunos documentos descargables pueden 
+                                    no cumplir completamente con los estándares de accesibilidad. Estamos trabajando 
+                                    para actualizar y etiquetar correctamente todos los documentos.
+                                </p>
+                                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 10px;">
+                                    <strong>Contenido multimedia de terceros:</strong> Algunos videos o contenidos 
+                                    embebidos de plataformas externas pueden no incluir subtítulos o audiodescripciones.
+                                </p>
+                                <p style="font-size: 1.1em; line-height: 1.8;">
+                                    Si encuentra dificultades para acceder a cualquier contenido, puede solicitar 
+                                    una versión alternativa contactando con nosotros.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contacto -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div style="background: #c41564; color: #fff; padding: 40px; border-radius: 8px;">
+                                <h2 style="margin-bottom: 20px; color: #fff;">Reportar problemas de accesibilidad</h2>
+                                <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
+                                    Su opinión es importante para nosotros. Si encuentra alguna barrera de accesibilidad 
+                                    en nuestro sitio web o tiene sugerencias de mejora, por favor contacte con nosotros:
+                                </p>
+                                <div style="font-size: 1.1em; line-height: 2;">
+                                    <p><strong>Email:</strong> <a href="mailto:info@coordicanarias.com" style="color: #fff; text-decoration: underline;">info@coordicanarias.com</a></p>
+                                    <p><strong>Teléfono:</strong> 922 21 59 09</p>
+                                    <p><strong>Dirección:</strong> C/ Zurbarán, 7, Local 3, Los Andenes<br>
+                                    38108, San Cristóbal de La Laguna, Santa Cruz de Tenerife</p>
+                                </div>
+                                <p style="font-size: 1.1em; line-height: 1.8; margin-top: 20px;">
+                                    Nos comprometemos a responder a todas las consultas en un plazo máximo de 5 días 
+                                    laborables y a trabajar con usted para resolver cualquier problema de accesibilidad.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Marco normativo -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <h2 style="margin-bottom: 20px;">Marco normativo</h2>
+                            <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 15px;">
+                                Esta declaración de accesibilidad se elabora en cumplimiento de:
+                            </p>
+                            <ul style="font-size: 1.1em; line-height: 1.8;">
+                                <li><strong>Real Decreto 1112/2018</strong>, sobre accesibilidad de los sitios web y aplicaciones para dispositivos móviles del sector público. 
+                                    Especialmente el <strong>artículo 17.2</strong>, que establece que la autoevaluación es una metodología válida para 
+                                    verificar el cumplimiento de los requisitos de accesibilidad, especialmente para organizaciones sin ánimo de lucro y del tercer sector.</li>
+                                <li>Norma UNE-EN 301549:2022 sobre requisitos de accesibilidad para productos y servicios TIC</li>
+                                <li>Directiva (UE) 2016/2102 del Parlamento Europeo y del Consejo</li>
+                                <li>Ley 11/2007, de 22 de junio, de acceso electrónico de los ciudadanos a los Servicios Públicos</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Mejora continua -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div style="background: #f8f8f8; padding: 40px; border-radius: 8px; text-align: center;">
+                                <h2 style="margin-bottom: 20px;">Compromiso de mejora continua</h2>
+                                <p style="font-size: 1.1em; line-height: 1.8;">
+                                    En Coordicanarias nos comprometemos a mantener y mejorar continuamente la accesibilidad 
+                                    de nuestro sitio web. Realizamos revisiones periódicas, incorporamos las últimas 
+                                    mejores prácticas y escuchamos activamente el feedback de nuestros usuarios para 
+                                    garantizar que todas las personas puedan acceder a nuestros servicios e información 
+                                    de manera equitativa.
+                                </p>
+                                <p style="font-size: 1.2em; margin-top: 30px; font-weight: bold; color: #c41564;">
+                                    La accesibilidad no es un destino, es un compromiso continuo.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!--Declaración de Accesibilidad Content end-->
+
+        <!--Footer-->
+        <footer id="lab-footer" role="contentinfo">
+            <!--Footer copyright-->
+            <div class="footer-container footer-dark">
+                <div class="inside-container">
+                    <div class="row footer-dark">
+                        <div class="col-12 copyright-text" style="text-align: center;">
+                            <p>&#169; <script>document.write(new Date().getFullYear());</script> <a href="https://coordicanarias.com/" target="_blank" rel="noopener">Coordicanarias</a>. Todos los derechos reservados.</p>
+                            <p style="margin-top: 10px;">
+                                <a href="accesibilidad.html" style="color: #fff; text-decoration: underline; margin-right: 15px;">Declaración de Accesibilidad</a>
+                                <a href="https://www.w3.org/WAI/WCAG22/quickref/?currentsidebar=%23col_customize&levels=aaa" target="_blank" rel="noopener" style="color: #fff; text-decoration: underline;">
+                                    Grado de accesibilidad: WCAG 2.2 Nivel AAA
+                                </a>
+                            </p>
+                            <div id="lab-back-top" style="display: none;">
+                                <a id="backtotop" tabindex="0" aria-label="Volver arriba">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="isolation:isolate" viewBox="0 0 285 285">
+                                        <defs />
+                                        <path fill="#FFF" d="M282 195L149 62a9 9 0 00-13 0L3 195a9 9 0 000 13l14 15a9 9 0 0013 0l112-113 113 113a9 9 0 0013 0l14-15a9 9 0 000-13z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Footer copyright-->
+        </footer>
+        <!--Footer end-->
+    </div>
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/js-cookie.js"></script>
+    <script src="../js/main.js"></script>
+
+</body>
+
+</html>
