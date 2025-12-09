@@ -5,12 +5,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Coordicanarias</title>
+    <title>Aviso Legal - Coordicanarias</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <!-- Stylesheets -->
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/my.css" rel="stylesheet" type="text/css">
+    <style>
+        /* Scroll suave nativo */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ============================================
+           TABS DE AVISO LEGAL - CON ICONOS FONT AWESOME
+           ============================================ */
+
+        .category-tabs {
+            margin: 60px 0 40px;
+        }
+
+        .nav-tabs-transparency {
+            border-bottom: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+
+        .nav-tabs-transparency .nav-item {
+            flex: 0 1 auto;
+        }
+
+        .nav-tabs-transparency .nav-link {
+            /* Estilo base */
+            color: #ffffff;
+            background-color: #2d353c;
+            border: 2px solid #2d353c;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Iconos de Font Awesome */
+        .nav-tabs-transparency .nav-link .tab-icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .nav-tabs-transparency .nav-link:hover {
+            color: #000000;
+            background-color: #ffffff;
+            border-color: #2d353c;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tabs-transparency .nav-link.active,
+        .nav-tabs-transparency .nav-link[aria-selected="true"] {
+            color: #000000;
+            background-color: #ffffff;
+            border-color: #2d353c;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mantener el focus ring rojo para accesibilidad */
+        .nav-tabs-transparency .nav-link:focus {
+            outline: 2px dotted #f00;
+            outline-offset: 0;
+        }
+
+        /* Cards de contenido */
+        .transparency-card {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .transparency-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .transparency-card h3 {
+            color: #2d353c;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2d353c;
+        }
+
+        .transparency-card .card-icon {
+            width: 50px;
+            height: 50px;
+            background: #2d353c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .transparency-card p {
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+
+        @media (max-width: 768px) {
+            .nav-tabs-transparency .nav-link .tab-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .nav-tabs-transparency {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-tabs-transparency .nav-item {
+                width: 100%;
+            }
+
+            .nav-tabs-transparency .nav-link {
+                width: 100%;
+            }
+        }
+
+        /* Respetar preferencias de movimiento reducido (WCAG 2.3.3) */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
 </head>
 
 <body id="home" class="sticky-bar menu-standard ">
@@ -231,28 +384,10 @@
                                         <a href="#home" data-scroll class="">Inicio</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="" data-scroll href="#identificacion-al">Identificación</a>
-                                    </li>
-                                    <li class="menu-item">
                                         <a class="" data-scroll href="#objeto-al">Objeto</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="" data-scroll href="#condiciones-al">Condiciones de uso</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a class="" data-scroll href="#propiedadintelectual-al">Propiedad Intelectual</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a class="" data-scroll href="#enlaces-al">Enlaces</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a class="" data-scroll href="#protect-al">Protección de datos</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a class="" data-scroll href="#cook-al">Cookies</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a class="" data-scroll href="#legisla-al">Legislación</a>
+                                        <a class="" data-scroll href="#aviso-legal">Aviso Legal</a>
                                     </li>
                                     <li class="menu-item">
                                         <a class="" data-scroll href="#contacto-al">Contacto</a>
@@ -322,28 +457,10 @@
                                             <a href="#home" data-scroll class="">Inicio</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" data-scroll href="#identificacion-al">Identificación</a>
-                                        </li>
-                                        <li class="menu-item">
                                             <a class="" data-scroll href="#objeto-al">Objeto</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" data-scroll href="#condiciones-al">Condiciones de uso</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a class="" data-scroll href="#propiedadintelectual-al">Propiedad Intelectual</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a class="" data-scroll href="#enlaces-al">Enlaces</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a class="" data-scroll href="#protect-al">Protección de datos</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a class="" data-scroll href="#cook-al">Cookies</a>
-                                        </li>
-                                        <li class="menu-item">
-                                            <a class="" data-scroll href="#legisla-al">Legislación</a>
+                                            <a class="" data-scroll href="#aviso-legal">Aviso Legal</a>
                                         </li>
                                         <li class="menu-item">
                                             <a class="" data-scroll href="#contacto-al">Contacto</a>
@@ -376,28 +493,10 @@
                                                     <a class="">Inicio</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="#identificacion-al">Identificación</a>
-                                                </li>
-                                                <li class="menu-item">
                                                     <a class="" href="#objeto-al">Objeto</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="#condiciones-al">Condiciones de uso</a>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a class="" href="#propiedadintelectual-al">Propiedad Intelectual</a>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a class="" data-scroll href="#enlaces-al">Enlaces</a>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a class="" data-scroll href="#protect-al">Protección de datos</a>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a class="" data-scroll href="#cook-al">Cookies</a>
-                                                </li>
-                                                <li class="menu-item">
-                                                    <a class="" data-scroll href="#legisla-al">Legislación</a>
+                                                    <a class="" href="#aviso-legal">Aviso Legal</a>
                                                 </li>
                                                 <li class="menu-item">
                                                     <a class="" data-scroll href="#contacto-al">Contacto</a>
@@ -427,7 +526,7 @@
 
         <!--About section-->
         <!--Descripción del Área-->
-        <section id="identificacion-al" class="section">
+        <!--<section id="identificacion-al" class="section">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -445,14 +544,14 @@
                                 <p><strong>Horario de Atención:</strong> Lunes a viernes de 8:00 a 15:00</p>
                             </div>
 
-                            <!--<div class="highlight-box">
+                            <div class="highlight-box">
                                 <p><strong>Nota:</strong> Recuerde completar el CIF de la entidad antes de publicar este aviso legal.</p>
-                            </div>-->
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </section>-->
         <!--About section end-->
 
 
@@ -462,7 +561,7 @@
                 <div class="inside-container">
                     <div class="row">
                         <div class="col-12">
-                            <h2 style="margin-bottom: 40px;">2. Objeto</h2>
+                            <h2 style="margin-bottom: 40px;">Objeto</h2>
                         </div>
                     </div>
                     <div class="row">
@@ -475,8 +574,98 @@
         </section>
         <!--Objeto end section-->
 
+        <!--Main Content-->
+        <section id="aviso-legal" class="section">
+            <div class="main-container">
+                <div class="inside-container">
+                    <div class="col-12">
+                        <h2 style="margin-bottom: 30px;">Aviso Legal</h2>
+                    </div>
+                    <!--Category Tabs-->
+                    <div class="category-tabs">
+
+                        <ul class="nav nav-tabs-transparency" role="tablist" aria-label="Categorías de aviso legal">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active"
+                                        id="condiciones-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="condiciones-al"
+                                        aria-selected="true"
+                                        data-target="#condiciones-al">
+                                    <i class="fas fa-file-contract tab-icon" aria-hidden="true"></i>
+                                    <span>Condiciones de uso</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        id="propiedadintelectual-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="propiedadintelectual-al"
+                                        aria-selected="false"
+                                        data-target="#propiedadintelectual-al">
+                                    <i class="fas fa-copyright tab-icon" aria-hidden="true"></i>
+                                    <span>Propiedad intelectual</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        id="enlaces-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="enlaces-al"
+                                        aria-selected="false"
+                                        data-target="#enlaces-al">
+                                    <i class="fas fa-link tab-icon" aria-hidden="true"></i>
+                                    <span>Enlaces externos</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        id="protect-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="protect-al"
+                                        aria-selected="false"
+                                        data-target="#protect-al">
+                                    <i class="fas fa-shield-alt tab-icon" aria-hidden="true"></i>
+                                    <span>Protección de datos</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        id="cook-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="cook-al"
+                                        aria-selected="false"
+                                        data-target="#cook-al">
+                                    <i class="fas fa-cookie-bite tab-icon" aria-hidden="true"></i>
+                                    <span>Cookies</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        id="legisla-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="legisla-al"
+                                        aria-selected="false"
+                                        data-target="#legisla-al">
+                                    <i class="fas fa-gavel tab-icon" aria-hidden="true"></i>
+                                    <span>Legislación aplicable</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="legalTabContent">
+
+                        <!--TAB 1: CONDICIONES DE USO-->
+                        <div class="tab-pane fade show active" id="condiciones-al" role="tabpanel" aria-labelledby="condiciones-tab">
+
         <!--Condiciones section-->
-        <section id="condiciones-al" class="section">
+        <section class="section">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -505,9 +694,14 @@
         </section>
         <!--Condiciones end section-->
 
+                        </div>
+                        <!--TAB 1 END-->
+
+                        <!--TAB 2: PROPIEDAD INTELECTUAL-->
+                        <div class="tab-pane fade" id="propiedadintelectual-al" role="tabpanel" aria-labelledby="propiedadintelectual-tab">
 
         <!--Propiedad intelectual-->
-        <section id="propiedadintelectual-al" class="section section-bg">
+        <section class="section section-bg">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -525,8 +719,14 @@
         </section>
         <!--Propiedad Intelectual end-->
 
+                        </div>
+                        <!--TAB 2 END-->
+
+                        <!--TAB 3: ENLACES EXTERNOS-->
+                        <div class="tab-pane fade" id="enlaces-al" role="tabpanel" aria-labelledby="enlaces-tab">
+
         <!--Enlaces section-->
-        <section id="enlaces-al" class="section">
+        <section class="section">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -543,8 +743,14 @@
         </section>
         <!--Enlaces end section-->
 
+                        </div>
+                        <!--TAB 3 END-->
+
+                        <!--TAB 4: PROTECCIÓN DE DATOS-->
+                        <div class="tab-pane fade" id="protect-al" role="tabpanel" aria-labelledby="protect-tab">
+
         <!--Enlaces section-->
-        <section id="protect-al" class="section section-bg">
+        <section class="section section-bg">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -561,8 +767,14 @@
         </section>
         <!--Enlaces end section-->
 
+                        </div>
+                        <!--TAB 4 END-->
+
+                        <!--TAB 5: COOKIES-->
+                        <div class="tab-pane fade" id="cook-al" role="tabpanel" aria-labelledby="cook-tab">
+
         <!--Cookies section-->
-        <section id="cook-al" class="section">
+        <section class="section">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -579,8 +791,14 @@
         </section>
         <!--Cookies end section-->
 
+                        </div>
+                        <!--TAB 5 END-->
+
+                        <!--TAB 6: LEGISLACIÓN APLICABLE-->
+                        <div class="tab-pane fade" id="legisla-al" role="tabpanel" aria-labelledby="legisla-tab">
+
         <!--Enlaces section-->
-        <section id="legisla-al" class="section section-bg">
+        <section class="section section-bg">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -596,6 +814,19 @@
             </div>
         </section>
         <!--Enlaces end section-->
+
+                        </div>
+                        <!--TAB 6 END-->
+
+                    </div>
+                    <!--Tab content end-->
+
+                </div>
+                <!--Category tabs end-->
+            </div>
+        </div>
+        </section>
+        <!--Main content end-->
 
         <!--Contact section-->
         <section id="contacto-al" class="section">
@@ -687,18 +918,10 @@
                             border-bottom: 1px solid #000; margin-bottom: 20px">Enlaces Rápidos</h3>
 
                             <div class="row">
-                                <div class="col-6 pop-link" style="text-align: center">
+                                <div class="col-12 pop-link" style="text-align: center">
                                     <a class="" data-scroll href="#home">Inicio</a>
-                                    <a class="" data-scroll href="#identificacion-al">Identificación</a>
                                     <a class="" data-scroll href="#objeto-al">Objeto</a>
-                                    <a class="" data-scroll href="#condiciones-al">Condiciones de uso</a>
-                                    <a class="" data-scroll href="#propiedadintelectual-al">Propiedad Intelectual</a>
-                                </div>
-                                <div class="col-6 pop-link" style="text-align: center">
-                                    <a class="" data-scroll href="#enlaces-al">Enlaces</a>
-                                    <a class="" data-scroll href="#protect-al">Protección de datos</a>
-                                    <a class="" data-scroll href="#cook-al">Cookies</a>
-                                    <a class="" data-scroll href="#legisla-al">Legislación</a>
+                                    <a class="" data-scroll href="#aviso-legal">Aviso Legal</a>
                                     <a class="" data-scroll href="#contacto-al">Contacto</a>
                                 </div>
                             </div>
@@ -769,6 +992,61 @@
     <script src="../js/mixitup.min.js"></script>
     <script src="../js/js-cookie.js"></script>
     <script src="../js/main.js"></script>
+
+<!-- Script para tabs de aviso legal -->
+<script>
+    $(document).ready(function() {
+        // Manejar clic en tabs
+        $('.nav-tabs-transparency .nav-link').on('click', function(e) {
+            e.preventDefault();
+
+            // Remover active de todos los tabs y contenidos
+            $('.nav-tabs-transparency .nav-link').removeClass('active');
+            $('.tab-pane').removeClass('show active');
+
+            // Añadir active al tab clickeado
+            $(this).addClass('active');
+
+            // Mostrar el contenido correspondiente
+            var target = $(this).data('target');
+            $(target).addClass('show active');
+
+            // Actualizar aria-selected
+            $('.nav-tabs-transparency .nav-link').attr('aria-selected', 'false');
+            $(this).attr('aria-selected', 'true');
+        });
+
+        // Soporte para navegación por teclado
+        $('.nav-tabs-transparency .nav-link').on('keydown', function(e) {
+            var $this = $(this);
+            var $items = $('.nav-tabs-transparency .nav-link');
+            var index = $items.index($this);
+
+            // Flecha derecha o abajo
+            if (e.which === 39 || e.which === 40) {
+                e.preventDefault();
+                var $next = $items.eq(index + 1).length ? $items.eq(index + 1) : $items.eq(0);
+                $next.focus().click();
+            }
+            // Flecha izquierda o arriba
+            else if (e.which === 37 || e.which === 38) {
+                e.preventDefault();
+                var $prev = $items.eq(index - 1).length ? $items.eq(index - 1) : $items.eq($items.length - 1);
+                $prev.focus().click();
+            }
+            // Home
+            else if (e.which === 36) {
+                e.preventDefault();
+                $items.eq(0).focus().click();
+            }
+            // End
+            else if (e.which === 35) {
+                e.preventDefault();
+                $items.eq($items.length - 1).focus().click();
+            }
+        });
+    });
+</script>
 
 </body>
 
