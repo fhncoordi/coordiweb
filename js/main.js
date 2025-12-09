@@ -57,6 +57,7 @@ function scrollToSection(event) {
         '#welcome': 300, '#transparency-info': 150, '#participa-tra': 100,
         '#identificacion-al':300, '#objeto-al': 160, '#condiciones-al': 150, '#propiedadintelectual-al':150,
         '#enlaces-al':150, '#protect-al': 150, '#legisla-al': 150,'#cook-al':150, '#cotacto-al': 50,
+        '#compromiso': 180, '#accesi-info': 150, '#contacto-acc': 150,
     };
 
     let offset = offsetMap[href] || 0;
