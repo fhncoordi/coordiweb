@@ -2428,4 +2428,18 @@ aural {
     .search-modal .gsc-input input.gsc-input {
         font-size: 16px !important;
     }
+
+    /* Responsive font size for section headers */
+    .our-header h2 {
+        font-size: 40px;
+        padding-bottom: 40px;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 576px) {
+    .our-header h2 {
+        font-size: 32px;
+        padding-bottom: 30px;
+    }
 }
