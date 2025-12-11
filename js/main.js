@@ -59,7 +59,7 @@ function scrollToSection(event) {
         '#enlaces-al':150, '#protect-al': 150, '#legisla-al': 150,'#cook-al':150, '#cotacto-al': 50,
         '#compromiso': 180, '#accesi-info': 150, '#contacto-acc': 150,
         '#objeto-pc': 180, '#politica-cookies': 150, 'contacto-pc': 150,
-        '#objeto-pp': 180, '#politica-privacidad': 150, 'contacto-pp': 150
+        '#objeto-pp': 180, '#politica-privacidad': 150, 'contacto-pp': 150,
     };
 
     let offset = offsetMap[href] || 0;
