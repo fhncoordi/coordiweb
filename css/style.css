@@ -967,62 +967,6 @@ body.link-underline a svg {
     color: #000;
 }
 
-/* Side Navigation */
-.sidenav {
-    background-color: #fff;
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 5;
-    top: 0;
-    left: auto;
-    right: 0;
-    overflow: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    box-shadow: -1px 0 5px -2px #666;
-    text-align: center;
-	display: none;
-}
-
-.sidemenu-logo {
-    margin: 50px 0;
-    display: inline-block;
-}
-
-#sidemenu-logo a:hover {
-    background-color: transparent;
-}
-
-.sidenav a {
-    text-decoration: none;
-    color: #161616;
-    transition: 0.3s;
-    text-align: center;
-}
-
-.menu-item:hover {
-    text-decoration: underline;
-}
-
-.sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 20px;
-    font-size: 30px;
-    cursor: pointer;
-}
-
-#closebtn:hover {
-    background-color: transparent;
-}
-
-#off-canvas-btn {
-    font-size: 20px;
-    float: right;
-    cursor: pointer;
-}
-
 /* Breadcrumb */
 
 #lab-offcanvas-button {
@@ -1788,12 +1732,6 @@ input.btnContact:hover {
 
 /* Media Query */
 @media (max-width: 1080px) {
-    #off-canvas-btn {
-        padding: 0 5px;
-        position: relative;
-        top: 5px;
-    }
-
     .menu-standard #lab-logo-nav .lab-main-menu,
     #lab-wcag {
         display: none;

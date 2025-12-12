@@ -254,31 +254,6 @@ jQuery(document).ready(function() {
     if ($('#portfolio').length > 0) {
         mixitup('#portfolio');
     }
-    let mySidenav = $("#mySidenav");
-
-    $(".openNav").click(function() {
-        mySidenav.css('width', mySidenav.width() > 1 ? "0" : "300px");
-		mySidenav.css('display', "block");
-    });
-	
-	$(".openNav").keypress(function(event){
-	  if(event.keyCode == 13){
-		mySidenav.css('width', mySidenav.width() > 1 ? "0" : "300px");
-		mySidenav.css('display', "block");
-	  }
-    }); 
-
-    $(".closebtn").click(function() {
-        mySidenav.css('width', "0");
-		mySidenav.css('display', "none");
-    });
-	
-	$(".closebtn").keypress(function(event){
-	  if(event.keyCode == 13){
-		mySidenav.css('width', "0");
-		mySidenav.css('display', "none");
-	  }
-    }); 
 
     $('[data-scroll]').on('click', scrollToSection);
 
