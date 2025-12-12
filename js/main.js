@@ -71,6 +71,12 @@ function scrollToSection(event) {
 
     $(this).closest("li").addClass("current-menu-item").siblings().removeClass('current-menu-item');
 
+    // Cerrar el menú lateral si está abierto
+    if ($('body').hasClass('off-canvas-opened')) {
+        LaboffcanvasToggleNav();
+        $('#lab-offcanvas').css('right', '-330px');
+    }
+
     $('html, body').animate({
         scrollTop: sectionTop - offset
     }, 500);

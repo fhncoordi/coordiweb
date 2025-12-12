@@ -264,6 +264,26 @@ h3,
     background-position: center;
 }
 
+.jumbotron_cookies {
+    padding: 150px 40px 100px 40px;
+    text-align: center;
+    background:
+            linear-gradient(rgba(244, 247, 252, 0.7), rgba(244, 247, 252, 0.7)),
+            url("../images/banners/politica_cookies.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.jumbotron_alegal {
+    padding: 150px 40px 100px 40px;
+    text-align: center;
+    background:
+            linear-gradient(rgba(244, 247, 252, 0.7), rgba(244, 247, 252, 0.7)),
+            url("../images/banners/alegal.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
 
 /* Accessibility */
 body a:focus,

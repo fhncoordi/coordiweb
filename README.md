@@ -14,10 +14,10 @@ Sitio web institucional de la Coordinadora de Personas con Discapacidad Física 
 
 ```
 coordiweb/
-├── index.html                 # Página principal
-├── transparencia.html         # Portal de transparencia con sistema de tabs
+├── index.html                # Página principal
+├── transparencia.html        # Portal de transparencia con sistema de tabs
 ├── accesibilidad.html        # Declaración de accesibilidad
-├── areas/                     # Páginas de áreas específicas
+├── areas/                    # Páginas de áreas específicas
 │   ├── alegal.html           # Aviso legal con sistema de tabs
 │   ├── aintegral.html        # Atención integral
 │   ├── empleo.html           # Empleo
@@ -33,7 +33,33 @@ coordiweb/
 
 ```
 
-## Última Actualización
+## Últimas Actualizaciones
+
+### Mejoras de UX y Búsqueda Global (Diciembre 2024)
+
+**Funcionalidad de Búsqueda:**
+- ✅ Implementada búsqueda global con Google Custom Search Engine en todas las páginas
+- ✅ Icono de búsqueda (lupa) en header junto a redes sociales
+- ✅ Modal accesible con atributos ARIA
+- ✅ 11 páginas actualizadas: index.html, transparencia.html, y todas las páginas en /areas/
+
+**Mejoras de Navegación Móvil:**
+- ✅ Clase `.sr-only` para texto de icono del menú (accesibilidad)
+- ✅ Icono de menú aumentado de 20px a 32px
+- ✅ Margen derecho de 20px para separar del borde
+- ✅ Auto-cierre del menú lateral al seleccionar una opción
+- ✅ Padding responsive optimizado para móviles y tablets
+
+**Navegación:**
+- ✅ Opción "Áreas" agregada a todos los menús laterales
+- ✅ Secciones "Novedades" y "Colabora" comentadas (en desarrollo)
+
+**Archivos Modificados:**
+- `index.html` - Secciones comentadas y navegación
+- `css/my.css` - Clase .sr-only, tamaño de iconos, padding responsive
+- `js/main.js` - Auto-cierre de menú lateral
+- `transparencia.html` - Búsqueda
+- `areas/*.html` (11 archivos) - Búsqueda y menú "Áreas"
 
 ### Sistema de Tabs en Aviso Legal
 

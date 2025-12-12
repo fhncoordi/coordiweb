@@ -29,3 +29,45 @@
     color: rgba(255, 255, 255, 0.75);
     margin-top: 20px;
 }
+
+/* Clase para ocultar elementos visualmente pero mantenerlos accesibles para lectores de pantalla */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Aumentar tamaño del icono de menú móvil */
+#lab-offcanvas-button {
+    margin-right: 20px;
+}
+
+#lab-main .toggle-nav.open {
+    height: 32px;
+    width: 32px;
+}
+
+#lab-main .toggle-nav.open svg {
+    width: 32px;
+    height: 32px;
+    fill: currentColor;
+}
+
+/* Reducir padding lateral en sección Conócenos para tablets y móviles */
+@media (max-width: 991px) {
+    #lab-main .inside-container {
+        padding: 3em 2em;
+    }
+}
+
+@media (max-width: 576px) {
+    #lab-main .inside-container {
+        padding: 2em 1em;
+    }
+}
