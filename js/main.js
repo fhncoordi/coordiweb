@@ -257,6 +257,22 @@ jQuery(document).ready(function() {
 
     $('[data-scroll]').on('click', scrollToSection);
 
+    // Cerrar menú lateral al hacer clic en cualquier enlace del menú
+    $('#lab-offcanvas .nav-menu a').on('click', function(e) {
+        // No cerrar si es el enlace de búsqueda (ya lo maneja su propio handler)
+        if ($(this).attr('id') === 'search-menu-link') {
+            return;
+        }
+
+        // Cerrar el menú con un pequeño delay para mejor UX
+        setTimeout(function() {
+            if ($('body').hasClass('off-canvas-opened')) {
+                LaboffcanvasToggleNav();
+                $('#lab-offcanvas').css('right', '-330px');
+            }
+        }, 100);
+    });
+
     // custom formatting example
     $('.count-number').data('countToOptions', {
         formatter: function(value, options) {
@@ -428,6 +444,19 @@ jQuery(document).ready(function($) {
         if (e.type === 'click' || (e.type === 'keypress' && e.keyCode === 13)) {
             e.preventDefault();
             openSearchModal();
+        }
+    });
+
+    // Abrir modal desde el menú lateral
+    $('#search-menu-link').on('click keypress', function(e) {
+        if (e.type === 'click' || (e.type === 'keypress' && e.keyCode === 13)) {
+            e.preventDefault();
+            openSearchModal();
+            // Cerrar el menú lateral si está abierto
+            if ($('body').hasClass('off-canvas-opened')) {
+                LaboffcanvasToggleNav();
+                $('#lab-offcanvas').css('right', '-330px');
+            }
         }
     });
 
