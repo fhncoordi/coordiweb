@@ -258,12 +258,7 @@ jQuery(document).ready(function() {
     $('[data-scroll]').on('click', scrollToSection);
 
     // Cerrar menú lateral al hacer clic en cualquier enlace del menú
-    $('#lab-offcanvas .nav-menu a').on('click', function(e) {
-        // No cerrar si es el enlace de búsqueda (ya lo maneja su propio handler)
-        if ($(this).attr('id') === 'search-menu-link') {
-            return;
-        }
-
+    $('#lab-offcanvas .nav-menu a:not(#search-menu-link)').on('click', function(e) {
         // Cerrar el menú con un pequeño delay para mejor UX
         setTimeout(function() {
             if ($('body').hasClass('off-canvas-opened')) {
