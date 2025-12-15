@@ -164,7 +164,7 @@
     if (function_exists('fsockopen')) {
         $errno = 0;
         $errstr = '';
-        $socket = @fsockopen('smtp.gmail.com', 587, $errno, $errstr, 10);
+        $socket = @fsockopen('smtp.gmail.com', 465, $errno, $errstr, 10);
 
         if ($socket) {
             $smtp_test = true;
@@ -179,7 +179,7 @@
 
     echo '<div class="check-item ' . ($smtp_test ? 'success' : 'error') . '">';
     echo '<span class="status">' . ($smtp_test ? '✓' : '✗') . '</span>';
-    echo '<strong>Conexión a smtp.gmail.com:587:</strong> ' . $smtp_message;
+    echo '<strong>Conexión a smtp.gmail.com:465 (SSL):</strong> ' . $smtp_message;
     echo '</div>';
 
     if (!$smtp_test) {
@@ -238,7 +238,7 @@
             echo '<li>Habiliten la extensión <strong>sockets</strong></li>';
         }
         if (!$smtp_test) {
-            echo '<li>Permitan conexiones salientes al puerto 587 (SMTP)</li>';
+            echo '<li>Permitan conexiones salientes al puerto 465 (SMTP con SSL)</li>';
         }
         echo '</ul>';
         echo '<p>La mayoría de hostings modernos tienen estas opciones habilitadas por defecto.</p>';
