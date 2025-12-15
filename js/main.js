@@ -258,7 +258,8 @@ jQuery(document).ready(function() {
     $('[data-scroll]').on('click', scrollToSection);
 
     // Cerrar menú lateral al hacer clic en cualquier enlace del menú
-    $('#lab-offcanvas .nav-menu a:not(#search-menu-link)').on('click', function(e) {
+    // (excepto elementos dentro del formulario de búsqueda)
+    $('#lab-offcanvas .nav-menu a:not(.menu-search-item a)').on('click', function(e) {
         // Cerrar el menú con un pequeño delay para mejor UX
         setTimeout(function() {
             if ($('body').hasClass('off-canvas-opened')) {
@@ -442,16 +443,24 @@ jQuery(document).ready(function($) {
         }
     });
 
-    // Abrir modal desde el menú lateral
-    $('#search-menu-link').on('click keypress', function(e) {
-        if (e.type === 'click' || (e.type === 'keypress' && e.keyCode === 13)) {
-            e.preventDefault();
-            openSearchModal();
+    // Manejar búsqueda desde formulario móvil
+    $('#mobile-search-form').on('submit', function(e) {
+        e.preventDefault();
+
+        const searchQuery = $('#mobile-search-input').val().trim();
+
+        if (searchQuery) {
             // Cerrar el menú lateral si está abierto
             if ($('body').hasClass('off-canvas-opened')) {
                 LaboffcanvasToggleNav();
                 $('#lab-offcanvas').css('right', '-330px');
             }
+
+            // Redirigir a Google Custom Search con el query
+            // Usamos el ID de CSE de Coordicanarias: 406aa1d8b8d294efe
+            const cseId = '406aa1d8b8d294efe';
+            const searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery) + '&cx=' + cseId;
+            window.location.href = searchUrl;
         }
     });
 
@@ -500,5 +509,118 @@ jQuery(document).ready(function($) {
 
         // Devolver el foco al icono de búsqueda
         searchTrigger.focus();
+    }
+});
+
+
+// ============================================
+// BANNER DE COOKIES
+// ============================================
+jQuery(document).ready(function($) {
+    const cookieBanner = $('#cookie-banner');
+    const cookieAcceptBtn = $('#cookie-accept');
+    const COOKIE_NAME = 'cookies_accepted';
+    const COOKIE_EXPIRY_DAYS = 365;
+
+    // Verificar si el usuario ya aceptó las cookies
+    function checkCookieConsent() {
+        const consent = Cookies.get(COOKIE_NAME);
+
+        if (!consent) {
+            // Si no hay consentimiento previo, mostrar el banner después de un pequeño delay
+            setTimeout(function() {
+                cookieBanner.addClass('show');
+            }, 1000);
+        }
+    }
+
+    // Aceptar cookies
+    cookieAcceptBtn.on('click', function() {
+        // Guardar el consentimiento en una cookie
+        Cookies.set(COOKIE_NAME, 'true', {
+            expires: COOKIE_EXPIRY_DAYS,
+            path: '/',
+            sameSite: 'Lax'
+        });
+
+        // Ocultar el banner con animación
+        cookieBanner.removeClass('show');
+
+        // Opcional: Remover del DOM después de la animación
+        setTimeout(function() {
+            cookieBanner.remove();
+        }, 400);
+    });
+
+    // Inicializar al cargar la página
+    checkCookieConsent();
+});
+
+
+// ============================================
+// MENSAJES DE FORMULARIO DE CONTACTO
+// ============================================
+jQuery(document).ready(function($) {
+    // Obtener parámetros de la URL
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Verificar si hay mensaje de éxito o error
+    var success = getUrlParameter('success');
+    var error = getUrlParameter('error');
+    var formMessage = $('#form-message');
+
+    if (success === '1') {
+        // Mostrar mensaje de éxito
+        formMessage.html('<strong>¡Mensaje enviado!</strong> Gracias por contactarnos. Te responderemos lo antes posible.');
+        formMessage.addClass('success').show();
+
+        // Limpiar el formulario
+        $('#contact-form')[0].reset();
+
+        // Scroll suave al mensaje
+        $('html, body').animate({
+            scrollTop: formMessage.offset().top - 100
+        }, 500);
+
+        // Limpiar la URL después de mostrar el mensaje
+        setTimeout(function() {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }, 100);
+
+    } else if (error) {
+        // Mostrar mensaje de error
+        var errorMessage = '';
+
+        switch(error) {
+            case 'metodo_invalido':
+                errorMessage = 'Método de envío inválido. Por favor, usa el formulario.';
+                break;
+            case 'origen_invalido':
+                errorMessage = 'Petición no autorizada. Por favor, recarga la página e inténtalo de nuevo.';
+                break;
+            case 'error_envio':
+                errorMessage = 'Hubo un problema al enviar el mensaje. Por favor, inténtalo más tarde o contáctanos directamente.';
+                break;
+            default:
+                errorMessage = error;
+        }
+
+        formMessage.html('<strong>Error:</strong> ' + errorMessage);
+        formMessage.addClass('error').show();
+
+        // Scroll suave al mensaje
+        $('html, body').animate({
+            scrollTop: formMessage.offset().top - 100
+        }, 500);
+
+        // Limpiar la URL después de mostrar el mensaje
+        setTimeout(function() {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }, 100);
     }
 });
