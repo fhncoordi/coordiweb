@@ -197,7 +197,7 @@ try {
     $mail->SMTPAuth   = true;
     $mail->Username   = SMTP_USER;
     $mail->Password   = SMTP_PASS;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->SMTPSecure = SMTP_SECURE; // Usa 'ssl' (puerto 465) o 'tls' (puerto 587)
     $mail->Port       = SMTP_PORT;
     $mail->CharSet    = 'UTF-8';
 

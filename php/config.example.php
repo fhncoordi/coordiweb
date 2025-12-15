@@ -17,7 +17,8 @@
 // CONFIGURACIÓN DE SMTP (Google Workspace)
 // ============================================
 define('SMTP_HOST', 'smtp.gmail.com');
-define('SMTP_PORT', 587);
+define('SMTP_PORT', 465); // Usa 465 (SSL) si el hosting bloquea 587 (STARTTLS)
+define('SMTP_SECURE', 'ssl'); // 'ssl' para puerto 465, 'tls' para puerto 587
 define('SMTP_USER', 'noreply@coordicanarias.com');
 define('SMTP_PASS', 'TU_CONTRASEÑA_DE_APLICACION_AQUI'); // Reemplaza con contraseña de aplicación de Google
 define('SMTP_FROM_NAME', 'Coordicanarias - Formulario Web');
