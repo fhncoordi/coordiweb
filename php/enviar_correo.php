@@ -187,46 +187,84 @@ $cuerpo_email = "
 </html>
 ";
 
-try {
-    // Crear instancia de PHPMailer
-    $mail = new PHPMailer(true);
+$email_enviado = false;
+$metodo_usado = '';
 
-    // Configuración del servidor SMTP
-    $mail->isSMTP();
-    $mail->Host       = SMTP_HOST;
-    $mail->SMTPAuth   = true;
-    $mail->Username   = SMTP_USER;
-    $mail->Password   = SMTP_PASS;
-    $mail->SMTPSecure = SMTP_SECURE; // Usa 'ssl' (puerto 465) o 'tls' (puerto 587)
-    $mail->Port       = SMTP_PORT;
-    $mail->CharSet    = 'UTF-8';
+// Intentar envío con SMTP (método preferido)
+if (EMAIL_METHOD === 'smtp' || EMAIL_METHOD === 'smtp_with_fallback') {
+    try {
+        // Crear instancia de PHPMailer
+        $mail = new PHPMailer(true);
 
-    // Configuración del correo
-    $mail->setFrom(SMTP_USER, SMTP_FROM_NAME);
-    $mail->addAddress($email_destino);
-    $mail->addReplyTo($email, $nombre);
+        // Configuración del servidor SMTP
+        $mail->isSMTP();
+        $mail->Host       = SMTP_HOST;
+        $mail->SMTPAuth   = true;
+        $mail->Username   = SMTP_USER;
+        $mail->Password   = SMTP_PASS;
+        $mail->SMTPSecure = SMTP_SECURE; // Usa 'ssl' (puerto 465) o 'tls' (puerto 587)
+        $mail->Port       = SMTP_PORT;
+        $mail->CharSet    = 'UTF-8';
 
-    // Contenido del correo
-    $mail->isHTML(true);
-    $mail->Subject = $asunto;
-    $mail->Body    = $cuerpo_email;
+        // Configuración del correo
+        $mail->setFrom(SMTP_USER, SMTP_FROM_NAME);
+        $mail->addAddress($email_destino);
+        $mail->addReplyTo($email, $nombre);
 
-    // Versión texto plano (fallback)
-    $mail->AltBody = "Nuevo mensaje de contacto\n\n" .
-                     "Nombre: $nombre\n" .
-                     "Email: $email\n" .
-                     "Mensaje: $mensaje\n\n" .
-                     "Área: $nombre_area\n" .
-                     "Fecha: " . date('d/m/Y H:i:s');
+        // Contenido del correo
+        $mail->isHTML(true);
+        $mail->Subject = $asunto;
+        $mail->Body    = $cuerpo_email;
 
-    // Enviar el correo
-    $mail->send();
-    $email_enviado = true;
+        // Versión texto plano (fallback)
+        $mail->AltBody = "Nuevo mensaje de contacto\n\n" .
+                         "Nombre: $nombre\n" .
+                         "Email: $email\n" .
+                         "Mensaje: $mensaje\n\n" .
+                         "Área: $nombre_area\n" .
+                         "Fecha: " . date('d/m/Y H:i:s');
 
-} catch (Exception $e) {
-    $email_enviado = false;
-    // Para depuración (comentar en producción):
-    // error_log("Error al enviar correo: {$mail->ErrorInfo}");
+        // Enviar el correo
+        $mail->send();
+        $email_enviado = true;
+        $metodo_usado = 'SMTP';
+
+    } catch (Exception $e) {
+        // Si falla SMTP y está configurado el fallback, intentar con mail()
+        if (EMAIL_METHOD === 'smtp_with_fallback') {
+            error_log("SMTP falló, intentando fallback con mail(): " . $e->getMessage());
+            // Continuar al método mail() más abajo
+        } else {
+            $email_enviado = false;
+            error_log("Error al enviar correo con SMTP: " . $e->getMessage());
+        }
+    }
+}
+
+// Fallback: Usar función mail() nativa de PHP si SMTP falló o está configurado
+if (!$email_enviado && (EMAIL_METHOD === 'mail' || EMAIL_METHOD === 'smtp_with_fallback')) {
+    // Preparar headers para mail()
+    $headers = array();
+    $headers[] = 'MIME-Version: 1.0';
+    $headers[] = 'Content-type: text/html; charset=UTF-8';
+    $headers[] = 'From: ' . SMTP_FROM_NAME . ' <' . SMTP_USER . '>';
+    $headers[] = 'Reply-To: ' . $nombre . ' <' . $email . '>';
+    $headers[] = 'X-Mailer: PHP/' . phpversion();
+
+    // Enviar con mail()
+    $email_enviado = mail(
+        $email_destino,
+        $asunto,
+        $cuerpo_email,
+        implode("\r\n", $headers)
+    );
+
+    if ($email_enviado) {
+        $metodo_usado = 'mail()';
+        error_log("Email enviado correctamente usando mail() nativa de PHP");
+    } else {
+        error_log("Error: No se pudo enviar el email ni con SMTP ni con mail()");
+    }
 }
 
 // ============================================
