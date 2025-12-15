@@ -14,46 +14,9 @@ require 'PHPMailer/Exception.php';
 require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/SMTP.php';
 
-// ============================================
-// CONFIGURACIÓN DE SMTP (Google Workspace)
-// ============================================
-define('SMTP_HOST', 'smtp.gmail.com');
-define('SMTP_PORT', 587);
-define('SMTP_USER', 'noreply@coordicanarias.com');
-define('SMTP_PASS', 'CREDENCIAL_REVOCADA');
-define('SMTP_FROM_NAME', 'Coordicanarias - Formulario Web');
-
-// ============================================
-// CONFIGURACIÓN DE EMAILS POR ÁREA
-// ============================================
-// Para cambiar el email de un área específica, modifica el valor correspondiente abajo
-// Por ahora todos apuntan a fhn@coordicanarias.com para pruebas
-
-$emails_por_area = array(
-    'inicio'              => 'fhn@coordicanarias.com',  // Página principal
-    'transparencia'       => 'fhn@coordicanarias.com',  // Página de transparencia
-    'formacion'           => 'fhn@coordicanarias.com',  // Formación e Innovación
-    'empleo'              => 'fhn@coordicanarias.com',  // Empleo con Apoyo
-    'accesibilidad'       => 'fhn@coordicanarias.com',  // Accesibilidad
-    'ocio'                => 'fhn@coordicanarias.com',  // Ocio y Tiempo Libre
-    'igualdad'            => 'fhn@coordicanarias.com',  // Igualdad y Promoción de la Mujer
-    'aintegral'           => 'fhn@coordicanarias.com',  // Atención Integral
-    'alegal'              => 'fhn@coordicanarias.com',  // Asesoramiento Legal
-    'participacion'       => 'fhn@coordicanarias.com',  // Participación Ciudadana
-    'politica-cookies'    => 'fhn@coordicanarias.com',  // Política de Cookies
-    'politica-privacidad' => 'fhn@coordicanarias.com', // Política de Privacidad
-    'default'             => 'fhn@coordicanarias.com'   // Email por defecto si no se especifica área
-);
-
-// ============================================
-// CONFIGURACIÓN DE SEGURIDAD
-// ============================================
-// Solo permitir envíos desde el mismo dominio (protección anti-spam)
-$dominios_permitidos = array(
-    'coordicanarias.com',
-    'www.coordicanarias.com',
-    'localhost' // Para pruebas locales
-);
+// Cargar configuración de SMTP desde archivo externo
+// IMPORTANTE: El archivo config.php contiene credenciales sensibles y NO está en git
+require_once 'config.php';
 
 // ============================================
 // FUNCIONES DE VALIDACIÓN Y SANITIZACIÓN
