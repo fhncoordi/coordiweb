@@ -983,6 +983,80 @@ body.link-underline a svg {
     margin-left: 10px;
 }
 
+/* Mobile Search Form in Offcanvas Menu */
+.menu-search-item {
+    padding: 15px 0;
+}
+
+.mobile-search-form {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.mobile-search-input {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 14px;
+    line-height: 1.5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.mobile-search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.mobile-search-input::placeholder {
+    color: #999;
+}
+
+.mobile-search-button {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border: none !important;
+    border-radius: 4px;
+    background-color: #007bff !important;
+    color: #fff !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-search-button:hover,
+.mobile-search-button:focus {
+    background-color: #0056b3 !important;
+    outline: none;
+}
+
+.mobile-search-button:active {
+    background-color: #004085 !important;
+}
+
+.mobile-search-button svg {
+    width: 20px !important;
+    height: 20px !important;
+    fill: #fff !important;
+    color: #fff !important;
+}
+
 /* Section */
 .section-bg {
     background-color: #f4f7fc;
