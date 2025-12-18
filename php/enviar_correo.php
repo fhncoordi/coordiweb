@@ -196,6 +196,10 @@ if (EMAIL_METHOD === 'smtp' || EMAIL_METHOD === 'smtp_with_fallback') {
         // Crear instancia de PHPMailer
         $mail = new PHPMailer(true);
 
+        // Activar modo debug (TEMPORAL - quitar después)
+        $mail->SMTPDebug = 3; // 0=sin debug, 1=cliente, 2=cliente+servidor, 3=detallado
+        $mail->Debugoutput = 'html'; // Mostrar en HTML formateado
+
         // Configuración del servidor SMTP
         $mail->isSMTP();
         $mail->Host       = SMTP_HOST;
@@ -251,12 +255,14 @@ if (!$email_enviado && (EMAIL_METHOD === 'mail' || EMAIL_METHOD === 'smtp_with_f
     $headers[] = 'Reply-To: ' . $nombre . ' <' . $email . '>';
     $headers[] = 'X-Mailer: PHP/' . phpversion();
 
-    // Enviar con mail()
+    // Enviar con mail() - Usar parámetro adicional para especificar remitente
+    $parametros_adicionales = '-f' . SMTP_USER; // Usa noreply@coordicanarias.com como remitente
     $email_enviado = mail(
         $email_destino,
         $asunto,
         $cuerpo_email,
-        implode("\r\n", $headers)
+        implode("\r\n", $headers),
+        $parametros_adicionales
     );
 
     if ($email_enviado) {
@@ -284,11 +290,17 @@ if (strpos($_SERVER['HTTP_REFERER'], '/areas/') !== false) {
 
 if ($email_enviado) {
     // Éxito - redirigir con mensaje de éxito
-    header("Location: $pagina_origen?success=1");
-    exit;
+    echo "<hr><h2 style='color: green;'>✓ Email enviado correctamente usando: $metodo_usado</h2>";
+    echo "<p><a href='$pagina_origen?success=1'>Volver al formulario</a></p>";
+    // TEMPORAL: Deshabilitado para ver debug
+    // header("Location: $pagina_origen?success=1");
+    // exit;
 } else {
     // Error al enviar - redirigir con mensaje de error
-    header("Location: $pagina_origen?error=error_envio");
-    exit;
+    echo "<hr><h2 style='color: red;'>✗ Error al enviar el email</h2>";
+    echo "<p><a href='$pagina_origen?error=error_envio'>Volver al formulario</a></p>";
+    // TEMPORAL: Deshabilitado para ver debug
+    // header("Location: $pagina_origen?error=error_envio");
+    // exit;
 }
 ?>

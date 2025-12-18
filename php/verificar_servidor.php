@@ -158,31 +158,56 @@
     // Probar conexión a Gmail SMTP
     echo '<h2>🌐 Test de Conexión a Gmail SMTP</h2>';
 
-    $smtp_test = false;
-    $smtp_message = '';
+    $smtp_test_465 = false;
+    $smtp_test_587 = false;
+    $smtp_message_465 = '';
+    $smtp_message_587 = '';
 
+    // Probar puerto 465 (SSL)
     if (function_exists('fsockopen')) {
         $errno = 0;
         $errstr = '';
         $socket = @fsockopen('smtp.gmail.com', 465, $errno, $errstr, 10);
 
         if ($socket) {
-            $smtp_test = true;
-            $smtp_message = 'Conexión exitosa al servidor SMTP de Gmail';
+            $smtp_test_465 = true;
+            $smtp_message_465 = 'Conexión exitosa al servidor SMTP de Gmail';
             fclose($socket);
         } else {
-            $smtp_message = 'No se pudo conectar: ' . $errstr . ' (código: ' . $errno . ')';
+            $smtp_message_465 = 'No se pudo conectar: ' . $errstr . ' (código: ' . $errno . ')';
         }
     } else {
-        $smtp_message = 'La función fsockopen no está disponible';
+        $smtp_message_465 = 'La función fsockopen no está disponible';
     }
 
-    echo '<div class="check-item ' . ($smtp_test ? 'success' : 'error') . '">';
-    echo '<span class="status">' . ($smtp_test ? '✓' : '✗') . '</span>';
-    echo '<strong>Conexión a smtp.gmail.com:465 (SSL):</strong> ' . $smtp_message;
+    echo '<div class="check-item ' . ($smtp_test_465 ? 'success' : 'error') . '">';
+    echo '<span class="status">' . ($smtp_test_465 ? '✓' : '✗') . '</span>';
+    echo '<strong>Conexión a smtp.gmail.com:465 (SSL):</strong> ' . $smtp_message_465;
     echo '</div>';
 
-    if (!$smtp_test) {
+    // Probar puerto 587 (STARTTLS)
+    if (function_exists('fsockopen')) {
+        $errno = 0;
+        $errstr = '';
+        $socket = @fsockopen('smtp.gmail.com', 587, $errno, $errstr, 10);
+
+        if ($socket) {
+            $smtp_test_587 = true;
+            $smtp_message_587 = 'Conexión exitosa al servidor SMTP de Gmail';
+            fclose($socket);
+        } else {
+            $smtp_message_587 = 'No se pudo conectar: ' . $errstr . ' (código: ' . $errno . ')';
+        }
+    } else {
+        $smtp_message_587 = 'La función fsockopen no está disponible';
+    }
+
+    echo '<div class="check-item ' . ($smtp_test_587 ? 'success' : 'error') . '">';
+    echo '<span class="status">' . ($smtp_test_587 ? '✓' : '✗') . '</span>';
+    echo '<strong>Conexión a smtp.gmail.com:587 (STARTTLS):</strong> ' . $smtp_message_587;
+    echo '</div>';
+
+    if (!$smtp_test_465 && !$smtp_test_587) {
         $all_ok = false;
     }
 
