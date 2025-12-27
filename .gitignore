@@ -37,5 +37,7 @@ yarn.lock
 # Archivos de configuración con credenciales
 php/config.php
 
-# Scripts de diagnóstico (no deben estar en producción)
+# Scripts de diagnóstico y prueba (no deben estar en producción)
 php/verificar_servidor.php
+php/db/test_*.php
+php/test_*.php
