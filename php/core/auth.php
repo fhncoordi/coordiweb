@@ -6,6 +6,7 @@
  * Gestión de login, logout, sesiones seguras y CSRF
  */
 
+require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../db/connection.php';
 require_once __DIR__ . '/security.php';
 
@@ -134,10 +135,12 @@ function isLoggedIn() {
 /**
  * Requerir autenticación (redirigir si no logueado)
  *
- * @param string $redirect_url URL a redirigir si no autenticado
+ * @param string $redirect_url URL a redirigir si no autenticado (opcional)
  */
-function requireLogin($redirect_url = '/admin/login.php') {
+function requireLogin($redirect_url = null) {
     if (!isLoggedIn()) {
+        // Si no se proporciona URL, usar la función url() para generar la ruta correcta
+        $redirect_url = $redirect_url ?? url('admin/login.php');
         header('Location: ' . $redirect_url);
         exit;
     }

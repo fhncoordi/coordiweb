@@ -41,3 +41,5 @@ php/config.php
 php/verificar_servidor.php
 php/db/test_*.php
 php/test_*.php
+admin/test_*.php
+admin/*_debug.php

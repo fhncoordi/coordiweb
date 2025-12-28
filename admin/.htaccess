@@ -1,0 +1,35 @@
+# ============================================
+# COORDICANARIAS CMS - Admin Panel
+# ============================================
+# Proteger el panel de administración de redirecciones de WordPress
+
+# Deshabilitar redirecciones de WordPress para este directorio
+RewriteEngine On
+# RewriteBase se auto-detecta, funciona en /new/admin/ y /admin/
+
+# Permitir acceso directo a archivos PHP
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Evitar que WordPress redirija este directorio
+RewriteCond %{REQUEST_URI} ^/admin/
+RewriteRule ^ - [L]
+
+# Página de inicio por defecto
+DirectoryIndex index.php
+
+# Protección de archivos sensibles
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevenir listado de directorios
+Options -Indexes
+
+# Headers de seguridad
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>

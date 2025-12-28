@@ -4,6 +4,7 @@
  * Coordicanarias CMS
  */
 
+require_once __DIR__ . '/../php/config.php';
 require_once __DIR__ . '/../php/core/auth.php';
 require_once __DIR__ . '/../php/core/security.php';
 
@@ -12,7 +13,7 @@ setSecurityHeaders();
 
 // Si ya está logueado, redirigir al dashboard
 if (isLoggedIn()) {
-    header('Location: /admin/index.php');
+    header('Location: ' . url('admin/index.php'));
     exit;
 }
 
@@ -28,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Por favor, complete todos los campos';
     } else {
         if (login($username, $password)) {
-            header('Location: /admin/index.php');
+            header('Location: ' . url('admin/index.php'));
             exit;
         } else {
             $error = 'Usuario o contraseña incorrectos';

@@ -7,6 +7,7 @@
  * TODO: Crear dashboard completo con estadísticas
  */
 
+require_once __DIR__ . '/../php/config.php';
 require_once __DIR__ . '/../php/core/auth.php';
 require_once __DIR__ . '/../php/core/security.php';
 
@@ -133,7 +134,7 @@ $usuario = getCurrentUser();
 <!-- Navbar -->
 <nav class="navbar-admin">
     <div class="container">
-        <a href="/admin/index.php" class="navbar-brand">
+        <a href="<?= url('admin/index.php') ?>" class="navbar-brand">
             Coordicanarias - Panel Admin
         </a>
         <div class="user-info">
@@ -141,7 +142,7 @@ $usuario = getCurrentUser();
                 <?= e($usuario['nombre_completo']) ?>
                 <span class="badge-role"><?= e($usuario['rol']) ?></span>
             </span>
-            <a href="/admin/logout.php" class="btn-logout">Cerrar Sesión</a>
+            <a href="<?= url('admin/logout.php') ?>" class="btn-logout">Cerrar Sesión</a>
         </div>
     </div>
 </nav>
