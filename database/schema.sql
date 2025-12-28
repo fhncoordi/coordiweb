@@ -30,13 +30,24 @@ CREATE TABLE IF NOT EXISTS usuarios (
     INDEX idx_activo (activo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Usuario administrador por defecto
--- Username: admin
--- Password: Admin2025! (CAMBIAR DESPUÉS DEL PRIMER LOGIN)
--- Hash generado con password_hash('Admin2025!', PASSWORD_DEFAULT)
-INSERT INTO usuarios (username, email, password_hash, nombre_completo, rol, activo)
-VALUES ('admin', 'admin@coordicanarias.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador', 'admin', 1)
-ON DUPLICATE KEY UPDATE username = username;
+-- ============================================
+-- CREAR USUARIO ADMINISTRADOR INICIAL
+-- ============================================
+-- IMPORTANTE: Después de ejecutar este schema, debes crear el usuario admin manualmente
+-- desde el panel de phpMyAdmin o ejecutando este SQL con TU PROPIA contraseña:
+--
+-- INSERT INTO usuarios (username, email, password_hash, nombre_completo, rol, activo)
+-- VALUES (
+--     'admin',
+--     'admin@coordicanarias.com',
+--     '$2y$10$TU_PASSWORD_HASH_AQUI',  -- Generar con: password_hash('tu_password', PASSWORD_DEFAULT)
+--     'Administrador',
+--     'admin',
+--     1
+-- );
+--
+-- Para generar el hash de tu contraseña, ejecuta en PHP:
+-- echo password_hash('tu_password_seguro', PASSWORD_DEFAULT);
 
 -- ============================================
 -- TABLA: areas
