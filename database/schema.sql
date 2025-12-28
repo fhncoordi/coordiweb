@@ -206,6 +206,31 @@ CREATE TABLE IF NOT EXISTS registro_actividad (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
+-- TABLA: noticias
+-- Noticias, actualidades y comunicados
+-- ============================================
+CREATE TABLE IF NOT EXISTS noticias (
+    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    slug VARCHAR(200) NOT NULL UNIQUE,
+    resumen TEXT COMMENT 'Breve resumen para listados',
+    contenido TEXT,
+    imagen_destacada VARCHAR(255),
+    fecha_publicacion DATE NOT NULL,
+    autor VARCHAR(100),
+    categoria VARCHAR(100),
+    destacada TINYINT(1) DEFAULT 0 COMMENT 'Mostrar en homepage',
+    activo TINYINT(1) DEFAULT 1,
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_modificacion DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_slug (slug),
+    INDEX idx_fecha_publicacion (fecha_publicacion),
+    INDEX idx_destacada (destacada),
+    INDEX idx_activo (activo),
+    INDEX idx_categoria (categoria)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
 -- FIN DEL ESQUEMA
 -- ============================================
 

@@ -8,11 +8,11 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 
 ## 📊 PROGRESO GENERAL
 
-- [x] **FASE 1:** Infraestructura Base ✅ COMPLETADA
-- [ ] **FASE 2:** Módulos CRUD
-- [ ] **FASE 3:** Migración de Datos
-- [ ] **FASE 4:** Conversión Frontend
-- [ ] **FASE 5:** Pruebas y Deploy
+- [x] **FASE 1:** Infraestructura Base ✅ COMPLETADA (Días 1-5)
+- [ ] **FASE 2:** Módulos CRUD (Días 6-12)
+- [ ] **FASE 3:** Migración de Datos (Días 13-15)
+- [ ] **FASE 4:** Conversión Frontend (Días 16-20)
+- [ ] **FASE 5:** Pruebas y Deploy (Días 21-22)
 
 ---
 
@@ -34,7 +34,9 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 - [x] Crear `/admin/login.php` con formulario (diseño del sitio)
 - [x] Crear `/admin/logout.php`
 - [x] Crear `/admin/index.php` temporal para probar
-- [ ] Probar login con usuario `admin` en servidor
+- [x] Implementar detección automática de rutas (BASE_PATH)
+- [x] Crear `/admin/.htaccess` para evitar redirecciones de WordPress
+- [x] Probar login con usuario `admin` en servidor ✅ FUNCIONA
 
 **Archivos creados:**
 - `/php/core/auth.php` - Sistema de autenticación completo
@@ -42,6 +44,8 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 - `/admin/login.php` - Formulario de login
 - `/admin/logout.php` - Cierre de sesión
 - `/admin/index.php` - Dashboard temporal
+- `/admin/.htaccess` - Protección contra redirecciones WP
+- `/php/config.php` - Detección automática de BASE_PATH (actualizado)
 
 **Seguridad implementada:**
 - ✅ Password hashing (`password_hash()`)
@@ -50,13 +54,30 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 - ✅ Protección session hijacking (IP + User Agent)
 - ✅ Timeout de sesión (4 horas)
 - ✅ Registro de actividad en BD
+- ✅ Detección automática de rutas (funciona en /new/ y producción)
 
-### Día 5: Panel base
-- [ ] Crear `/admin/index.php` (dashboard con estadísticas)
-- [ ] Crear `/admin/includes/header.php` (navbar admin)
-- [ ] Crear `/admin/includes/footer.php`
-- [ ] Crear `/admin/includes/sidebar.php` (menú lateral)
-- [ ] Crear `/admin/assets/css/admin.css`
+### Día 5: Panel base ✅ COMPLETADO
+- [x] Crear `/admin/index.php` (dashboard con estadísticas)
+- [x] Crear `/admin/includes/header.php` (navbar admin)
+- [x] Crear `/admin/includes/footer.php`
+- [x] Crear `/admin/includes/sidebar.php` (menú lateral)
+- [x] Crear `/admin/assets/css/admin.css`
+
+**Archivos creados:**
+- `/admin/includes/header.php` - Navbar común con usuario y menú
+- `/admin/includes/footer.php` - Footer común con scripts
+- `/admin/includes/sidebar.php` - Menú lateral de navegación
+- `/admin/assets/css/admin.css` - Estilos completos del panel (590 líneas)
+- `/admin/index.php` - Dashboard con estadísticas reales de BD
+
+**Características del Dashboard:**
+- ✅ Estadísticas en tiempo real (proyectos, áreas, servicios, testimonios)
+- ✅ Últimos proyectos creados
+- ✅ Registro de actividad reciente (solo admin)
+- ✅ Acciones rápidas para gestión de contenido
+- ✅ Diseño responsive con sidebar colapsable
+- ✅ Navegación por teclado y accesible
+- ✅ Usa colores del sitio (#243659, #667eea)
 
 ---
 
@@ -192,22 +213,36 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 - ✅ PDO con prepared statements
 - ✅ Singleton pattern para conexión
 - ✅ Credenciales en archivo no trackeado
-- ⏳ CSRF tokens (próxima fase)
-- ⏳ Password hashing (próxima fase)
-- ⏳ Sesiones seguras (próxima fase)
+- ✅ CSRF tokens implementados
+- ✅ Password hashing implementado
+- ✅ Sesiones seguras implementadas
+- ✅ Detección automática de rutas (BASE_PATH)
+- ✅ Protección contra redirecciones de WordPress
 
 ---
 
 ## 🎯 PRÓXIMO PASO
 
-**Continuar con Fase 1 - Día 3-4: Sistema de Autenticación**
+**Continuar con Fase 2 - Día 6-7: Módulo CRUD de Proyectos (PRIORIDAD ALTA)**
 
 Archivos a crear:
-1. `/php/auth.php`
-2. `/php/security.php`
-3. `/admin/login.php`
-4. `/admin/logout.php`
+1. `/php/models/Proyecto.php` - Modelo con métodos getAll, getById, create, update, delete
+2. `/admin/proyectos.php` - Vista CRUD completa:
+   - Listado con tabla paginada
+   - Formulario de creación
+   - Formulario de edición
+   - Sistema de subida de imágenes
+   - Soft delete (activo = 0)
+3. Crear directorio `/uploads/proyectos/` con permisos 755
+
+**Características a implementar:**
+- ✅ Protección CSRF en todos los formularios
+- ✅ Validación de imágenes (JPG, PNG, GIF, WEBP, máx 5MB)
+- ✅ Asignación de proyectos a áreas
+- ✅ Categorías para filtros (cadena separada por comas)
+- ✅ Campo "destacado" para proyectos principales
+- ✅ Ordenamiento manual (campo "orden")
 
 ---
 
-*Última actualización: 2025-12-28 - Sistema de autenticación completado*
+*Última actualización: 2025-12-28 - FASE 1 COMPLETADA - Dashboard funcionando*
