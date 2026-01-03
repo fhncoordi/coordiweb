@@ -83,7 +83,47 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 
 ## FASE 2: Módulos CRUD
 
-### Día 6-7: Proyectos (PRIORIDAD ALTA)
+### Día 8: Áreas ✅ COMPLETADO
+- [x] Crear `/php/models/Area.php`
+- [x] Crear `/admin/areas.php` (CRUD completo)
+- [x] Implementar subida de imagen banner
+- [x] Toggle activo/inactivo
+- [x] Reordenar menú (Áreas como primer item)
+
+**Archivos creados:**
+- `/php/models/Area.php` - Modelo con métodos getAll, getById, update, validación
+- `/admin/areas.php` - Vista CRUD (solo editar áreas existentes, no crear/eliminar)
+- `/uploads/areas/` - Directorio para imágenes banner
+
+**Características:**
+- ✅ Edición de 6 áreas temáticas fijas
+- ✅ Subida de imagen banner con validación
+- ✅ Color picker para tema del área
+- ✅ Slug auto-generado (editable)
+- ✅ Campo orden para organización
+- ✅ Toggle activo/inactivo
+
+### Módulo Adicional: Noticias ✅ COMPLETADO
+- [x] Agregar tabla `noticias` al schema.sql
+- [x] Crear `/php/models/Noticia.php`
+- [x] Crear `/admin/noticias.php` (CRUD completo)
+- [x] Restaurar Testimonios en menú (coexisten)
+
+**Archivos creados:**
+- `database/schema.sql` - Tabla noticias agregada (9 tablas totales)
+- `/php/models/Noticia.php` - Modelo CRUD completo con destacadas
+- `/admin/noticias.php` - Vista CRUD: crear, editar, eliminar
+- `/uploads/noticias/` - Directorio para imágenes destacadas
+
+**Características:**
+- ✅ CRUD completo (crear, editar, eliminar)
+- ✅ Noticias destacadas (para homepage)
+- ✅ Categorías reutilizables
+- ✅ Slug auto-generado desde título
+- ✅ Fecha de publicación y autor
+- ✅ Soft delete (mantiene registros)
+
+### Día 6-7: Proyectos (PRIORIDAD ALTA) - PENDIENTE
 - [ ] Crear `/php/models/Proyecto.php` (getAll, getById, create, update, delete)
 - [ ] Crear `/admin/proyectos.php`:
   - [ ] Vista de listado con tabla
@@ -245,4 +285,4 @@ Archivos a crear:
 
 ---
 
-*Última actualización: 2025-12-28 - FASE 1 COMPLETADA - Dashboard funcionando*
+*Última actualización: 2025-12-28 - Módulos de Áreas y Noticias completados*
