@@ -123,15 +123,33 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 - ✅ Fecha de publicación y autor
 - ✅ Soft delete (mantiene registros)
 
-### Día 6-7: Proyectos (PRIORIDAD ALTA) - PENDIENTE
-- [ ] Crear `/php/models/Proyecto.php` (getAll, getById, create, update, delete)
-- [ ] Crear `/admin/proyectos.php`:
-  - [ ] Vista de listado con tabla
-  - [ ] Formulario de creación
-  - [ ] Formulario de edición
-  - [ ] Función de eliminación (soft delete)
-  - [ ] Sistema de subida de imágenes
-- [ ] Crear directorio `/uploads/proyectos/` con permisos 755
+### Día 6-7: Proyectos (PRIORIDAD ALTA) ✅ COMPLETADO
+- [x] Crear `/php/models/Proyecto.php` (getAll, getById, create, update, delete)
+- [x] Crear `/admin/proyectos.php`:
+  - [x] Vista de listado con tabla
+  - [x] Formulario de creación
+  - [x] Formulario de edición
+  - [x] Función de eliminación (soft delete)
+  - [x] Sistema de subida de imágenes
+- [x] Crear directorio `/uploads/proyectos/` con permisos 755
+- [x] Migrar 16 proyectos existentes desde HTML a BD
+
+**Archivos creados:**
+- `/php/models/Proyecto.php` - Modelo CRUD completo con validación
+- `/admin/proyectos.php` - Vista CRUD: crear, editar, eliminar, toggle
+- `/database/migration_proyectos.sql` - Migración de 16 proyectos
+- `/uploads/proyectos/` - Directorio para imágenes
+
+**Características:**
+- ✅ CRUD completo (crear, editar, eliminar soft delete)
+- ✅ Toggle activo/inactivo y destacado
+- ✅ Subida de imágenes con validación (JPG, PNG, GIF, WEBP, max 5MB)
+- ✅ Selector de área temática
+- ✅ Categorías para filtros (comma-separated)
+- ✅ Campo orden para organización
+- ✅ 16 proyectos migrados desde HTML
+
+**Commit:** `048c8e4` - Módulo CRUD de Proyectos completado
 
 ### Día 8: Áreas
 - [ ] Crear `/php/models/Area.php`
@@ -160,13 +178,12 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 ## FASE 3: Migración de Datos
 
 ### Día 13-14: Script de migración
-- [ ] Crear `/database/migration_data.sql` con:
-  - [ ] INSERT de 23 proyectos desde index.html
-  - [ ] INSERT de servicios de las 6 áreas (extraer de HTMLs)
-  - [ ] INSERT de beneficios de las 6 áreas
-  - [ ] INSERT de 2 testimonios actuales
-  - [ ] INSERT de configuración de contacto
-- [ ] Ejecutar migration script en BD
+- [x] Crear `/database/migration_proyectos.sql` con INSERT de 16 proyectos desde HTML ✅
+- [x] Ejecutar migration script de proyectos en BD ✅
+- [ ] Crear `/database/migration_servicios.sql` con INSERT de servicios de las 6 áreas
+- [ ] Crear `/database/migration_beneficios.sql` con INSERT de beneficios de las 6 áreas
+- [ ] Crear `/database/migration_testimonios.sql` con INSERT de testimonios
+- [ ] Crear `/database/migration_configuracion.sql` con INSERT de configuración de contacto
 
 ### Día 15: Migrar imágenes
 - [ ] Copiar `/images/portfolio/*` a `/uploads/proyectos/`
@@ -263,26 +280,29 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 
 ## 🎯 PRÓXIMO PASO
 
-**Continuar con Fase 2 - Día 6-7: Módulo CRUD de Proyectos (PRIORIDAD ALTA)**
+**Continuar con Fase 2 - Día 9: Módulo CRUD de Servicios**
 
 Archivos a crear:
-1. `/php/models/Proyecto.php` - Modelo con métodos getAll, getById, create, update, delete
-2. `/admin/proyectos.php` - Vista CRUD completa:
-   - Listado con tabla paginada
-   - Formulario de creación
+1. `/php/models/Servicio.php` - Modelo con métodos CRUD
+2. `/admin/servicios.php` - Vista CRUD completa:
+   - Listado con tabla agrupada por área
+   - Formulario de creación con selector de área
    - Formulario de edición
-   - Sistema de subida de imágenes
+   - Sistema de iconos (Font Awesome)
    - Soft delete (activo = 0)
-3. Crear directorio `/uploads/proyectos/` con permisos 755
+   - Ordenamiento manual por área
 
 **Características a implementar:**
-- ✅ Protección CSRF en todos los formularios
-- ✅ Validación de imágenes (JPG, PNG, GIF, WEBP, máx 5MB)
-- ✅ Asignación de proyectos a áreas
-- ✅ Categorías para filtros (cadena separada por comas)
-- ✅ Campo "destacado" para proyectos principales
-- ✅ Ordenamiento manual (campo "orden")
+- ✅ Selector de área (foreign key)
+- ✅ Campo icono para Font Awesome (ej: "fa-briefcase")
+- ✅ Campo orden para organización dentro del área
+- ✅ Toggle activo/inactivo
+- ✅ Validación de área existente
+
+**Opciones:**
+- Podemos migrar servicios existentes desde HTMLs de áreas después de crear el CRUD
+- O crear el CRUD primero y luego hacer la migración
 
 ---
 
-*Última actualización: 2025-12-28 - Módulos de Áreas y Noticias completados*
+*Última actualización: 2026-01-03 - Módulos completados: Áreas, Noticias, Proyectos*
