@@ -44,6 +44,27 @@ class Proyecto {
     }
 
     /**
+     * Obtener proyectos agrupados por área
+     *
+     * @param bool $solo_activos Si true, solo proyectos y áreas activas
+     * @return array Array asociativo con áreas como keys y proyectos como values
+     */
+    public static function getAllAgrupados($solo_activos = true) {
+        $proyectos = self::getAll($solo_activos);
+        $agrupados = [];
+
+        foreach ($proyectos as $proyecto) {
+            $area_nombre = $proyecto['area_nombre'] ?? 'Sin área';
+            if (!isset($agrupados[$area_nombre])) {
+                $agrupados[$area_nombre] = [];
+            }
+            $agrupados[$area_nombre][] = $proyecto;
+        }
+
+        return $agrupados;
+    }
+
+    /**
      * Obtener proyectos destacados para homepage
      *
      * @param int $limite Número de proyectos a obtener

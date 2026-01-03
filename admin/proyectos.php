@@ -212,7 +212,8 @@ if (isset($_GET['error'])) {
 
 // Obtener datos para vista de listado
 if ($modo === 'listado') {
-    $proyectos = Proyecto::getAll(false); // Mostrar todos (activos e inactivos)
+    $proyectos_agrupados = Proyecto::getAllAgrupados(false); // Mostrar todos (activos e inactivos) agrupados por área
+    $total_proyectos = count(Proyecto::getAll(false));
 }
 
 // Obtener áreas para el selector
@@ -265,98 +266,106 @@ include __DIR__ . '/includes/sidebar.php';
         <div class="table-header">
             <h3 class="table-title">
                 <i class="fas fa-list me-2"></i>Listado de Proyectos
-                <span class="badge bg-primary ms-2"><?= count($proyectos) ?></span>
+                <span class="badge bg-primary ms-2"><?= $total_proyectos ?></span>
             </h3>
             <a href="<?= url('admin/proyectos.php?crear=1') ?>" class="btn btn-primary">
                 <i class="fas fa-plus me-2"></i>Crear Proyecto
             </a>
         </div>
 
-        <?php if (count($proyectos) > 0): ?>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th style="width: 60px;">ID</th>
-                        <th style="width: 80px;">Imagen</th>
-                        <th>Título</th>
-                        <th>Área</th>
-                        <th style="width: 100px;">Orden</th>
-                        <th style="width: 100px;">Destacado</th>
-                        <th style="width: 100px;">Estado</th>
-                        <th style="width: 200px;">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($proyectos as $proy): ?>
-                    <tr>
-                        <td><strong>#<?= e($proy['id']) ?></strong></td>
-                        <td>
-                            <?php if ($proy['imagen']): ?>
-                            <img src="<?= url($proy['imagen']) ?>" alt="<?= attr($proy['titulo']) ?>"
-                                 class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
-                            <?php else: ?>
-                            <div class="bg-light d-flex align-items-center justify-content-center"
-                                 style="width: 60px; height: 60px;">
-                                <i class="fas fa-image text-muted"></i>
-                            </div>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <strong><?= e($proy['titulo']) ?></strong>
-                            <?php if ($proy['categorias']): ?>
-                            <br><small class="text-muted"><?= e($proy['categorias']) ?></small>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <span class="badge bg-secondary">
-                                <?= e($proy['area_nombre'] ?? 'Sin área') ?>
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <span class="badge bg-info"><?= e($proy['orden']) ?></span>
-                        </td>
-                        <td>
-                            <form method="POST" class="d-inline">
-                                <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
-                                <input type="hidden" name="accion" value="toggle_destacado">
-                                <input type="hidden" name="proyecto_id" value="<?= $proy['id'] ?>">
-                                <input type="hidden" name="nuevo_estado" value="<?= $proy['destacado'] ? 0 : 1 ?>">
-                                <button type="submit" class="btn btn-sm <?= $proy['destacado'] ? 'btn-warning' : 'btn-outline-secondary' ?>"
-                                        title="<?= $proy['destacado'] ? 'Destacado' : 'No destacado' ?>">
-                                    <i class="fas fa-star"></i>
-                                </button>
-                            </form>
-                        </td>
-                        <td>
-                            <form method="POST" class="d-inline">
-                                <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
-                                <input type="hidden" name="accion" value="toggle_activo">
-                                <input type="hidden" name="proyecto_id" value="<?= $proy['id'] ?>">
-                                <input type="hidden" name="nuevo_estado" value="<?= $proy['activo'] ? 0 : 1 ?>">
-                                <button type="submit" class="btn btn-sm <?= $proy['activo'] ? 'btn-success' : 'btn-secondary' ?>">
-                                    <i class="fas fa-<?= $proy['activo'] ? 'check-circle' : 'times-circle' ?>"></i>
-                                    <?= $proy['activo'] ? 'Activo' : 'Inactivo' ?>
-                                </button>
-                            </form>
-                        </td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="<?= url('admin/proyectos.php?editar=' . $proy['id']) ?>"
-                                   class="btn btn-sm btn-outline-primary" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                        title="Eliminar" onclick="confirmarEliminar(<?= $proy['id'] ?>, '<?= addslashes($proy['titulo']) ?>')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+        <?php if ($total_proyectos > 0): ?>
+            <!-- Proyectos agrupados por área -->
+            <?php foreach ($proyectos_agrupados as $area_nombre => $proyectos): ?>
+            <div class="mb-4">
+                <h4 class="mb-3">
+                    <i class="fas fa-th-large me-2 text-primary"></i>
+                    <?= e($area_nombre) ?>
+                    <span class="badge bg-secondary ms-2"><?= count($proyectos) ?> proyectos</span>
+                </h4>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th style="width: 80px;">Imagen</th>
+                                <th>Título</th>
+                                <th>Categorías</th>
+                                <th style="width: 80px;">Orden</th>
+                                <th style="width: 100px;">Destacado</th>
+                                <th style="width: 100px;">Estado</th>
+                                <th style="width: 180px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($proyectos as $proy): ?>
+                            <tr>
+                                <td><strong>#<?= e($proy['id']) ?></strong></td>
+                                <td>
+                                    <?php if ($proy['imagen']): ?>
+                                    <img src="<?= url($proy['imagen']) ?>" alt="<?= attr($proy['titulo']) ?>"
+                                         class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                    <?php else: ?>
+                                    <div class="bg-light d-flex align-items-center justify-content-center"
+                                         style="width: 60px; height: 60px;">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td><strong><?= e($proy['titulo']) ?></strong></td>
+                                <td>
+                                    <?php if ($proy['categorias']): ?>
+                                    <small class="text-muted"><?= e($proy['categorias']) ?></small>
+                                    <?php else: ?>
+                                    <small class="text-muted">-</small>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-info"><?= e($proy['orden']) ?></span>
+                                </td>
+                                <td>
+                                    <form method="POST" class="d-inline">
+                                        <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
+                                        <input type="hidden" name="accion" value="toggle_destacado">
+                                        <input type="hidden" name="proyecto_id" value="<?= $proy['id'] ?>">
+                                        <input type="hidden" name="nuevo_estado" value="<?= $proy['destacado'] ? 0 : 1 ?>">
+                                        <button type="submit" class="btn btn-sm <?= $proy['destacado'] ? 'btn-warning' : 'btn-outline-secondary' ?>"
+                                                title="<?= $proy['destacado'] ? 'Destacado' : 'No destacado' ?>">
+                                            <i class="fas fa-star"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="POST" class="d-inline">
+                                        <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
+                                        <input type="hidden" name="accion" value="toggle_activo">
+                                        <input type="hidden" name="proyecto_id" value="<?= $proy['id'] ?>">
+                                        <input type="hidden" name="nuevo_estado" value="<?= $proy['activo'] ? 0 : 1 ?>">
+                                        <button type="submit" class="btn btn-sm <?= $proy['activo'] ? 'btn-success' : 'btn-secondary' ?>">
+                                            <i class="fas fa-<?= $proy['activo'] ? 'check-circle' : 'times-circle' ?>"></i>
+                                            <?= $proy['activo'] ? 'Activo' : 'Inactivo' ?>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="<?= url('admin/proyectos.php?editar=' . $proy['id']) ?>"
+                                           class="btn btn-sm btn-outline-primary" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                title="Eliminar" onclick="confirmarEliminar(<?= $proy['id'] ?>, '<?= addslashes($proy['titulo']) ?>')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php endforeach; ?>
         <?php else: ?>
         <div class="text-center text-muted py-5">
             <i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i>
