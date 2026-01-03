@@ -142,6 +142,13 @@
     background-color: #004085 !important;
 }
 
+.portfolio-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+
 /* ============================================
    BANNER DE COOKIES
    ============================================ */
