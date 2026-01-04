@@ -311,3 +311,219 @@ function hashPassword($password) {
 function needsRehash($hash) {
     return password_needs_rehash($hash, PASSWORD_DEFAULT);
 }
+
+// ============================================
+// SISTEMA DE PERMISOS POR ÁREA
+// ============================================
+
+/**
+ * Verificar si el usuario puede gestionar un área específica
+ *
+ * @param int $area_id ID del área a verificar
+ * @return bool True si puede gestionar
+ */
+function puedeGestionarArea($area_id) {
+    $usuario = getCurrentUser();
+    if (!$usuario) {
+        return false;
+    }
+
+    // Admin puede gestionar todo
+    if ($usuario['rol'] === 'admin') {
+        return true;
+    }
+
+    // Editor puede gestionar todas las áreas
+    if ($usuario['rol'] === 'editor') {
+        return true;
+    }
+
+    // Coordinador solo puede gestionar su área
+    if ($usuario['rol'] === 'coordinador') {
+        return $usuario['area_id'] == $area_id;
+    }
+
+    return false;
+}
+
+/**
+ * Verificar si el usuario puede gestionar un proyecto específico
+ *
+ * @param int $proyecto_id ID del proyecto
+ * @return bool True si puede gestionar
+ */
+function puedeGestionarProyecto($proyecto_id) {
+    $usuario = getCurrentUser();
+    if (!$usuario) {
+        return false;
+    }
+
+    // Admin puede gestionar todo
+    if ($usuario['rol'] === 'admin') {
+        return true;
+    }
+
+    // Obtener el área del proyecto
+    $proyecto = fetchOne("SELECT area_id FROM proyectos WHERE id = ?", [$proyecto_id]);
+    if (!$proyecto) {
+        return false;
+    }
+
+    return puedeGestionarArea($proyecto['area_id']);
+}
+
+/**
+ * Verificar si el usuario puede gestionar un servicio específico
+ *
+ * @param int $servicio_id ID del servicio
+ * @return bool True si puede gestionar
+ */
+function puedeGestionarServicio($servicio_id) {
+    $usuario = getCurrentUser();
+    if (!$usuario) {
+        return false;
+    }
+
+    // Admin puede gestionar todo
+    if ($usuario['rol'] === 'admin') {
+        return true;
+    }
+
+    // Obtener el área del servicio
+    $servicio = fetchOne("SELECT area_id FROM servicios WHERE id = ?", [$servicio_id]);
+    if (!$servicio) {
+        return false;
+    }
+
+    return puedeGestionarArea($servicio['area_id']);
+}
+
+/**
+ * Verificar si el usuario puede gestionar un beneficio específico
+ *
+ * @param int $beneficio_id ID del beneficio
+ * @return bool True si puede gestionar
+ */
+function puedeGestionarBeneficio($beneficio_id) {
+    $usuario = getCurrentUser();
+    if (!$usuario) {
+        return false;
+    }
+
+    // Admin puede gestionar todo
+    if ($usuario['rol'] === 'admin') {
+        return true;
+    }
+
+    // Obtener el área del beneficio
+    $beneficio = fetchOne("SELECT area_id FROM beneficios WHERE id = ?", [$beneficio_id]);
+    if (!$beneficio) {
+        return false;
+    }
+
+    return puedeGestionarArea($beneficio['area_id']);
+}
+
+/**
+ * Obtener condición SQL para filtrar por áreas permitidas
+ *
+ * @param string $alias Alias de tabla (ej: 'p' para proyectos)
+ * @return string Condición SQL para WHERE
+ */
+function getAreaFilterSQL($alias = '') {
+    $usuario = getCurrentUser();
+    if (!$usuario) {
+        return '1=0'; // No mostrar nada si no está autenticado
+    }
+
+    // Admin y editor ven todo
+    if ($usuario['rol'] === 'admin' || $usuario['rol'] === 'editor') {
+        return '1=1';
+    }
+
+    // Coordinador solo ve su área
+    if ($usuario['rol'] === 'coordinador' && $usuario['area_id']) {
+        $column = $alias ? "{$alias}.area_id" : 'area_id';
+        return "{$column} = " . intval($usuario['area_id']);
+    }
+
+    return '1=0'; // Por defecto no mostrar nada
+}
+
+/**
+ * Obtener lista de IDs de áreas que el usuario puede gestionar
+ *
+ * @return array Lista de IDs de áreas
+ */
+function getAreasGestionables() {
+    $usuario = getCurrentUser();
+    if (!$usuario) {
+        return [];
+    }
+
+    // Admin y editor pueden gestionar todas las áreas
+    if ($usuario['rol'] === 'admin' || $usuario['rol'] === 'editor') {
+        $areas = fetchAll("SELECT id FROM areas WHERE activo = 1");
+        return array_column($areas, 'id');
+    }
+
+    // Coordinador solo puede gestionar su área
+    if ($usuario['rol'] === 'coordinador' && $usuario['area_id']) {
+        return [$usuario['area_id']];
+    }
+
+    return [];
+}
+
+/**
+ * Verificar si el usuario puede gestionar usuarios
+ * Solo admin puede gestionar usuarios
+ *
+ * @return bool True si puede gestionar usuarios
+ */
+function puedeGestionarUsuarios() {
+    return isAdmin();
+}
+
+/**
+ * Verificar si el usuario puede gestionar áreas
+ * Solo admin puede gestionar áreas
+ *
+ * @return bool True si puede gestionar áreas
+ */
+function puedeGestionarAreas() {
+    return isAdmin();
+}
+
+/**
+ * Verificar si el usuario puede gestionar configuración
+ * Solo admin puede gestionar configuración
+ *
+ * @return bool True si puede gestionar configuración
+ */
+function puedeGestionarConfiguracion() {
+    return isAdmin();
+}
+
+/**
+ * Verificar si el usuario puede ver el registro de actividad
+ * Solo admin puede ver el registro
+ *
+ * @return bool True si puede ver registro
+ */
+function puedeVerRegistroActividad() {
+    return isAdmin();
+}
+
+/**
+ * Requerir permiso para gestionar área
+ * Redirige o muestra error si no tiene permisos
+ *
+ * @param int $area_id ID del área
+ */
+function requirePermissionArea($area_id) {
+    if (!puedeGestionarArea($area_id)) {
+        http_response_code(403);
+        die('Acceso denegado. No tienes permisos para gestionar esta área.');
+    }
+}
