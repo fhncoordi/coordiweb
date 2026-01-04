@@ -10,6 +10,7 @@ require_once __DIR__ . '/../php/core/security.php';
 require_once __DIR__ . '/../php/models/Area.php';
 require_once __DIR__ . '/../php/models/Servicio.php';
 require_once __DIR__ . '/../php/models/Beneficio.php';
+require_once __DIR__ . '/../php/models/Proyecto.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
 
 // Obtener el área actual por slug
@@ -22,9 +23,10 @@ if (!$area) {
     exit;
 }
 
-// Obtener servicios y beneficios del área
+// Obtener servicios, beneficios y proyectos del área
 $servicios = Servicio::getAll(true, $area['id']);
 $beneficios = Beneficio::getAll(true, $area['id']);
+$proyectos = Proyecto::getByArea($area['id'], true);
 
 // Obtener configuración del sitio (para redes sociales)
 $config = Configuracion::getAll();
@@ -482,42 +484,27 @@ if (!function_exists('attr')) {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                            <h3 style="margin-bottom: 15px;">TAIDA - Radio Escolar e Inclusión Educativa</h3>
-                            <img src="../images/portfolio/taida.jpg" alt="Imagen del Proyecto TAIDA" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                            <p style="margin-bottom: 15px;">
-                                Proyecto innovador que potencia la comunicación, las habilidades sociales y la innovación
-                                socioeducativa en 36 Centros Educativos Públicos de Infantil y Primaria del Municipio de
-                                Santa Cruz de Tenerife. Utiliza la radio y la técnica del croma como recursos pedagógicos
-                                para promover la convivencia escolar y la inclusión educativa.
-                            </p>
-                            <p>
-                                TAIDA transmite al alumnado los principios de la comunicación a través de talleres de radio
-                                escolar, crea canales de YouTube en cada centro participante y edita las intervenciones de
-                                los estudiantes. Más de 550 alumnos y alumnas se benefician de este proyecto que convierte
-                                la radio en un recurso estratégico para la participación y la inclusión.
-                            </p>
-                        </article>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                            <h3 style="margin-bottom: 15px;">TENIQUE 2024 - VI Edición</h3>
-                            <img src="../images/portfolio/tenique24.jpg" alt="Imagen del Proyecto TENIQUE 2024" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                            <p style="margin-bottom: 15px;">
-                                TENIQUE, que significa "piedra" en lengua guanche, es un proyecto participativo que lleva
-                                6 ediciones acercando el arte urbano a los barrios de Santa Cruz de Tenerife. Involucra
-                                a centros educativos, asociaciones vecinales y el colectivo de personas con discapacidad
-                                en encuentros de sensibilización y creación colectiva de murales.
-                            </p>
-                            <p>
-                                A través de obras realizadas por reconocidos artistas urbanos como Sabotaje al Montaje y
-                                Feo Flip, en colaboración con la comunidad, TENIQUE favorece la cohesión social y el
-                                empoderamiento. Cada edición regala a los barrios obras artísticas accesibles que reflejan
-                                la diversidad y generan mecanismos de sensibilización para la verdadera integración social.
-                            </p>
-                        </article>
-                    </div>
+                    <?php if (!empty($proyectos)): ?>
+                        <?php foreach ($proyectos as $proyecto): ?>
+                            <div class="col-lg-6 mb-4">
+                                <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
+                                    <h3 style="margin-bottom: 15px;"><?= e($proyecto['titulo']) ?></h3>
+                                    <?php if (!empty($proyecto['imagen'])): ?>
+                                        <img src="<?= e($proyecto['imagen']) ?>"
+                                             alt="<?= attr($proyecto['titulo']) ?>"
+                                             style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                                    <?php endif; ?>
+                                    <div style="margin-bottom: 15px;">
+                                        <?= nl2br(e($proyecto['descripcion'])) ?>
+                                    </div>
+                                </article>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <p class="text-center">No hay proyectos disponibles en este momento.</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

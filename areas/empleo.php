@@ -10,6 +10,7 @@ require_once __DIR__ . '/../php/core/security.php';
 require_once __DIR__ . '/../php/models/Area.php';
 require_once __DIR__ . '/../php/models/Servicio.php';
 require_once __DIR__ . '/../php/models/Beneficio.php';
+require_once __DIR__ . '/../php/models/Proyecto.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
 
 // Obtener el área actual por slug
@@ -22,9 +23,10 @@ if (!$area) {
     exit;
 }
 
-// Obtener servicios y beneficios del área
+// Obtener servicios, beneficios y proyectos del área
 $servicios = Servicio::getAll(true, $area['id']);
 $beneficios = Beneficio::getAll(true, $area['id']);
+$proyectos = Proyecto::getByArea($area['id'], true);
 
 // Obtener configuración del sitio (para redes sociales)
 $config = Configuracion::getAll();
@@ -491,36 +493,27 @@ if (!function_exists('attr')) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 mb-4">
-                            <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                                <h3 style="margin-bottom: 15px;">Proyecto DRACAENA</h3>
-                                <img src="../images/portfolio/dracaena14.jpg" alt="Imagen del Proyecto DRACAENA" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                                <p style="margin-bottom: 15px;">
-                                    Proyecto experimental de empleo cofinanciado por el Servicio Canario de Empleo que ofrece
-                                    itinerarios personalizados de inserción laboral. Incluye orientación especializada, formación
-                                    en competencias clave y prácticas profesionales en empresas colaboradoras.
-                                </p>
-                                <p>
-                                    DRACAENA ha facilitado la inserción laboral de decenas de personas con discapacidad,
-                                    convirtiéndose en un modelo de éxito en inclusión laboral en Canarias.
-                                </p>
-                            </article>
-                        </div>
-                        <div class="col-lg-6 mb-4">
-                            <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                                <h3 style="margin-bottom: 15px;">Bolsa de empleo</h3>
-                                <img src="../images/portfolio/bolsa_empleo.jpg" alt="Imagen de la Bolsa de Empleo" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                                <p style="margin-bottom: 15px;">
-                                    Servicio permanente de intermediación laboral que conecta a personas con discapacidad en búsqueda
-                                    activa de empleo con empresas que buscan incorporar talento diverso. Gestionamos ofertas laborales
-                                    y facilitamos procesos de selección adaptados.
-                                </p>
-                                <p>
-                                    Nuestra bolsa de empleo funciona como un puente efectivo entre candidatos cualificados
-                                    y empresas comprometidas con la inclusión laboral real.
-                                </p>
-                            </article>
-                        </div>
+                        <?php if (!empty($proyectos)): ?>
+                            <?php foreach ($proyectos as $proyecto): ?>
+                                <div class="col-lg-6 mb-4">
+                                    <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
+                                        <h3 style="margin-bottom: 15px;"><?= e($proyecto['titulo']) ?></h3>
+                                        <?php if (!empty($proyecto['imagen'])): ?>
+                                            <img src="<?= e($proyecto['imagen']) ?>"
+                                                 alt="<?= attr($proyecto['titulo']) ?>"
+                                                 style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                                        <?php endif; ?>
+                                        <div style="margin-bottom: 15px;">
+                                            <?= nl2br(e($proyecto['descripcion'])) ?>
+                                        </div>
+                                    </article>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="col-12">
+                                <p class="text-center">No hay proyectos disponibles en este momento.</p>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

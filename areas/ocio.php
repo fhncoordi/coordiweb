@@ -10,6 +10,7 @@ require_once __DIR__ . '/../php/core/security.php';
 require_once __DIR__ . '/../php/models/Area.php';
 require_once __DIR__ . '/../php/models/Servicio.php';
 require_once __DIR__ . '/../php/models/Beneficio.php';
+require_once __DIR__ . '/../php/models/Proyecto.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
 
 // Obtener el área actual por slug
@@ -22,9 +23,10 @@ if (!$area) {
     exit;
 }
 
-// Obtener servicios y beneficios del área
+// Obtener servicios, beneficios y proyectos del área
 $servicios = Servicio::getAll(true, $area['id']);
 $beneficios = Beneficio::getAll(true, $area['id']);
+$proyectos = Proyecto::getByArea($area['id'], true);
 
 // Obtener configuración del sitio (para redes sociales)
 $config = Configuracion::getAll();
@@ -482,36 +484,27 @@ if (!function_exists('attr')) {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                            <h3 style="margin-bottom: 15px;">Sintiendo mi Ciudad</h3>
-                            <img src="../images/portfolio/sintiendo_mi_ciudad.jpg" alt="Imagen de Sintiendo mi Ciudad" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                            <p style="margin-bottom: 15px;">
-                                Programa innovador de turismo accesible que promueve el conocimiento y disfrute del patrimonio
-                                cultural y natural de Canarias. A través de rutas adaptadas, visitas guiadas y actividades
-                                sensoriales, acercamos la riqueza de nuestras islas a personas con discapacidad.
-                            </p>
-                            <p>
-                                Este proyecto fomenta la inclusión social y el derecho al ocio, convirtiendo el turismo
-                                en una experiencia enriquecedora y accesible para todas las personas.
-                            </p>
-                        </article>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                            <h3 style="margin-bottom: 15px;">Activados</h3>
-                            <img src="../images/portfolio/activados.jpg" alt="Imagen de Activados" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                            <p style="margin-bottom: 15px;">
-                                Programa de actividades deportivas y recreativas adaptadas que promueve la vida activa
-                                y saludable. Incluye talleres de actividad física, deportes adaptados, actividades al aire
-                                libre y eventos recreativos diseñados para todos los niveles y capacidades.
-                            </p>
-                            <p>
-                                A través de metodologías inclusivas y adaptadas, favorecemos el bienestar físico y emocional,
-                                fortalecemos las relaciones sociales y promovemos hábitos de vida saludables.
-                            </p>
-                        </article>
-                    </div>
+                    <?php if (!empty($proyectos)): ?>
+                        <?php foreach ($proyectos as $proyecto): ?>
+                            <div class="col-lg-6 mb-4">
+                                <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
+                                    <h3 style="margin-bottom: 15px;"><?= e($proyecto['titulo']) ?></h3>
+                                    <?php if (!empty($proyecto['imagen'])): ?>
+                                        <img src="<?= e($proyecto['imagen']) ?>"
+                                             alt="<?= attr($proyecto['titulo']) ?>"
+                                             style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                                    <?php endif; ?>
+                                    <div style="margin-bottom: 15px;">
+                                        <?= nl2br(e($proyecto['descripcion'])) ?>
+                                    </div>
+                                </article>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <p class="text-center">No hay proyectos disponibles en este momento.</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

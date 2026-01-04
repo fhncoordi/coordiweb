@@ -10,6 +10,7 @@ require_once __DIR__ . '/../php/core/security.php';
 require_once __DIR__ . '/../php/models/Area.php';
 require_once __DIR__ . '/../php/models/Servicio.php';
 require_once __DIR__ . '/../php/models/Beneficio.php';
+require_once __DIR__ . '/../php/models/Proyecto.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
 
 // Obtener el área actual por slug
@@ -22,9 +23,10 @@ if (!$area) {
     exit;
 }
 
-// Obtener servicios y beneficios del área
+// Obtener servicios, beneficios y proyectos del área
 $servicios = Servicio::getAll(true, $area['id']);
 $beneficios = Beneficio::getAll(true, $area['id']);
+$proyectos = Proyecto::getByArea($area['id'], true);
 
 // Obtener configuración del sitio (para redes sociales)
 $config = Configuracion::getAll();
@@ -491,39 +493,27 @@ if (!function_exists('attr')) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 mb-4">
-                            <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                                <h3 style="margin-bottom: 15px;">Proyecto Cuídate</h3>
-                                <img src="../images/portfolio/cuidate_2025.jpg" alt="Imagen del Proyecto Cuídate" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                                <p style="margin-bottom: 15px;">
-                                    Servicio permanente de atención psicológica y trabajo social que ofrece apoyo
-                                    continuo a personas con discapacidad y sus familias. Brindamos orientación,
-                                    acompañamiento en procesos vitales y conexión con recursos comunitarios.
-                                </p>
-                                <p>
-                                    Nuestro enfoque personalizado garantiza que cada persona reciba la atención
-                                    específica que necesita para desarrollar su proyecto de vida.
-                                </p>
-                            </article>
-                        </div>
-                        <div class="col-lg-6 mb-4">
-                            <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                                <h3 style="margin-bottom: 15px;">Promoción de la Autonomía Personal</h3>
-                                <img src="../images/portfolio/autonomia_personal3.jpg" alt="Imagen del Proyecto Autonomía Personal" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                                <p style="margin-bottom: 15px;">
-                                    Programa de apoyo integral para personas con discapacidad física que fomenta
-                                    la capacidad de tomar decisiones propias y ejecutar actividades básicas de
-                                    la vida diaria. Acompañamos en tareas domésticas, relaciones personales,
-                                    educación, cuidado de la salud y participación comunitaria.
-                                </p>
-                                <p>
-                                    Nuestra intervención preventiva y personalizada busca mantener las capacidades
-                                    cognitivas, funcionales, sociales y emocionales, evitando patologías derivadas
-                                    de la inactividad y mejorando la calidad de vida desde el respeto a la dignidad
-                                    y preferencias de cada persona.
-                                </p>
-                            </article>
-                        </div>
+                        <?php if (!empty($proyectos)): ?>
+                            <?php foreach ($proyectos as $proyecto): ?>
+                                <div class="col-lg-6 mb-4">
+                                    <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
+                                        <h3 style="margin-bottom: 15px;"><?= e($proyecto['titulo']) ?></h3>
+                                        <?php if (!empty($proyecto['imagen'])): ?>
+                                            <img src="<?= e($proyecto['imagen']) ?>"
+                                                 alt="<?= attr($proyecto['titulo']) ?>"
+                                                 style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                                        <?php endif; ?>
+                                        <div style="margin-bottom: 15px;">
+                                            <?= nl2br(e($proyecto['descripcion'])) ?>
+                                        </div>
+                                    </article>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="col-12">
+                                <p class="text-center">No hay proyectos disponibles en este momento.</p>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

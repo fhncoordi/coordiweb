@@ -10,6 +10,7 @@ require_once __DIR__ . '/../php/core/security.php';
 require_once __DIR__ . '/../php/models/Area.php';
 require_once __DIR__ . '/../php/models/Servicio.php';
 require_once __DIR__ . '/../php/models/Beneficio.php';
+require_once __DIR__ . '/../php/models/Proyecto.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
 
 // Obtener el área actual por slug
@@ -22,9 +23,10 @@ if (!$area) {
     exit;
 }
 
-// Obtener servicios y beneficios del área
+// Obtener servicios, beneficios y proyectos del área
 $servicios = Servicio::getAll(true, $area['id']);
 $beneficios = Beneficio::getAll(true, $area['id']);
+$proyectos = Proyecto::getByArea($area['id'], true);
 
 // Obtener configuración del sitio (para redes sociales)
 $config = Configuracion::getAll();
@@ -482,38 +484,27 @@ if (!function_exists('attr')) {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                            <h3 style="margin-bottom: 15px;">Parlamento Canario de la Mujer con Discapacidad</h3>
-                            <img src="../images/portfolio/parlamento_canario_mujeres.jpg" alt="Imagen del Parlamento Canario de la Mujer" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                            <p style="margin-bottom: 15px;">
-                                Espacio de participación y representación donde las mujeres con discapacidad de Canarias
-                                debaten, proponen y defienden políticas públicas que respondan a sus necesidades específicas.
-                                El Parlamento es un órgano consultivo que traslada propuestas a las instituciones canarias.
-                            </p>
-                            <p>
-                                A través de este proyecto, las mujeres con discapacidad ejercen su derecho a participar
-                                activamente en las decisiones políticas y sociales que afectan a sus vidas, siendo
-                                protagonistas del cambio social.
-                            </p>
-                        </article>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                            <h3 style="margin-bottom: 15px;">Magarza Crea</h3>
-                            <img src="../images/portfolio/magarza_crea.jpg" alt="Imagen del Proyecto Magarza Crea" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
-                            <p style="margin-bottom: 15px;">
-                                Programa de empoderamiento y desarrollo creativo para mujeres con discapacidad que combina
-                                talleres artísticos, expresión creativa y desarrollo de habilidades personales. A través
-                                del arte y la creatividad, las participantes exploran su identidad y fortalecen su autoestima.
-                            </p>
-                            <p>
-                                Magarza Crea es un espacio seguro donde las mujeres con discapacidad se encuentran,
-                                comparten experiencias y desarrollan su potencial creativo, generando redes de apoyo mutuo
-                                y promoviendo el bienestar emocional.
-                            </p>
-                        </article>
-                    </div>
+                    <?php if (!empty($proyectos)): ?>
+                        <?php foreach ($proyectos as $proyecto): ?>
+                            <div class="col-lg-6 mb-4">
+                                <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
+                                    <h3 style="margin-bottom: 15px;"><?= e($proyecto['titulo']) ?></h3>
+                                    <?php if (!empty($proyecto['imagen'])): ?>
+                                        <img src="<?= e($proyecto['imagen']) ?>"
+                                             alt="<?= attr($proyecto['titulo']) ?>"
+                                             style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                                    <?php endif; ?>
+                                    <div style="margin-bottom: 15px;">
+                                        <?= nl2br(e($proyecto['descripcion'])) ?>
+                                    </div>
+                                </article>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <p class="text-center">No hay proyectos disponibles en este momento.</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
