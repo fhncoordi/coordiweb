@@ -14,37 +14,58 @@ class Noticia {
      *
      * @param bool $solo_activas Si true, solo retorna noticias activas
      * @param int $limite Límite de resultados (0 = sin límite)
+     * @param int $area_id Si se especifica, filtra por área
      * @return array Lista de noticias ordenadas por fecha de publicación DESC
      */
-    public static function getAll($solo_activas = false, $limite = 0) {
-        $sql = "SELECT * FROM noticias";
+    public static function getAll($solo_activas = false, $limite = 0, $area_id = null) {
+        $sql = "SELECT n.*, a.nombre as area_nombre, a.slug as area_slug
+                FROM noticias n
+                LEFT JOIN areas a ON n.area_id = a.id
+                WHERE 1=1";
+
+        $params = [];
 
         if ($solo_activas) {
-            $sql .= " WHERE activo = 1";
+            $sql .= " AND n.activo = 1";
         }
 
-        $sql .= " ORDER BY fecha_publicacion DESC, fecha_creacion DESC";
+        if ($area_id !== null) {
+            $sql .= " AND n.area_id = ?";
+            $params[] = $area_id;
+        }
+
+        $sql .= " ORDER BY n.fecha_publicacion DESC, n.fecha_creacion DESC";
 
         if ($limite > 0) {
             $sql .= " LIMIT " . (int)$limite;
         }
 
-        return fetchAll($sql);
+        return fetchAll($sql, $params);
     }
 
     /**
      * Obtener noticias destacadas
      *
      * @param int $limite Número de noticias a obtener
+     * @param int $area_id Si se especifica, filtra por área
      * @return array Lista de noticias destacadas
      */
-    public static function getDestacadas($limite = 3) {
-        $sql = "SELECT * FROM noticias
-                WHERE activo = 1 AND destacada = 1
-                ORDER BY fecha_publicacion DESC
-                LIMIT " . (int)$limite;
+    public static function getDestacadas($limite = 3, $area_id = null) {
+        $sql = "SELECT n.*, a.nombre as area_nombre, a.slug as area_slug
+                FROM noticias n
+                LEFT JOIN areas a ON n.area_id = a.id
+                WHERE n.activo = 1 AND n.destacada = 1";
 
-        return fetchAll($sql);
+        $params = [];
+
+        if ($area_id !== null) {
+            $sql .= " AND n.area_id = ?";
+            $params[] = $area_id;
+        }
+
+        $sql .= " ORDER BY n.fecha_publicacion DESC LIMIT " . (int)$limite;
+
+        return fetchAll($sql, $params);
     }
 
     /**
@@ -54,7 +75,11 @@ class Noticia {
      * @return array|null Datos de la noticia o null si no existe
      */
     public static function getById($id) {
-        return fetchOne("SELECT * FROM noticias WHERE id = ?", [$id]);
+        $sql = "SELECT n.*, a.nombre as area_nombre
+                FROM noticias n
+                LEFT JOIN areas a ON n.area_id = a.id
+                WHERE n.id = ?";
+        return fetchOne($sql, [$id]);
     }
 
     /**
@@ -75,11 +100,12 @@ class Noticia {
      */
     public static function create($datos) {
         $sql = "INSERT INTO noticias (
-                    titulo, slug, resumen, contenido, imagen_destacada,
+                    area_id, titulo, slug, resumen, contenido, imagen_destacada,
                     fecha_publicacion, autor, categoria, destacada, activo
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $params = [
+            $datos['area_id'] ?? null,
             $datos['titulo'],
             $datos['slug'],
             $datos['resumen'],
@@ -114,6 +140,7 @@ class Noticia {
         }
 
         $sql = "UPDATE noticias SET
+                area_id = ?,
                 titulo = ?,
                 slug = ?,
                 resumen = ?,
@@ -127,6 +154,7 @@ class Noticia {
                 WHERE id = ?";
 
         $params = [
+            $datos['area_id'] ?? null,
             $datos['titulo'],
             $datos['slug'],
             $datos['resumen'],
@@ -275,5 +303,14 @@ class Noticia {
     public static function getCategorias() {
         $result = fetchAll("SELECT DISTINCT categoria FROM noticias WHERE categoria IS NOT NULL AND categoria != '' ORDER BY categoria");
         return array_column($result, 'categoria');
+    }
+
+    /**
+     * Obtener todas las áreas para el selector
+     *
+     * @return array Lista de áreas activas
+     */
+    public static function getAreas() {
+        return fetchAll("SELECT id, nombre FROM areas WHERE activo = 1 ORDER BY orden ASC");
     }
 }

@@ -18,6 +18,10 @@ setSecurityHeaders();
 // Obtener usuario actual
 $usuario = getCurrentUser();
 
+// Verificar permisos por rol
+$es_coordinador = ($usuario['rol'] === 'coordinador');
+$area_permitida = $es_coordinador ? $usuario['area_id'] : null;
+
 // Variables
 $mensaje = '';
 $tipo_mensaje = '';
@@ -109,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif ($accion === 'crear') {
             // Preparar datos
             $datos = [
+                'area_id' => $es_coordinador ? $area_permitida : (int)($_POST['area_id'] ?? 0),
                 'titulo' => sanitizarTexto($_POST['titulo'] ?? ''),
                 'slug' => sanitizarTexto($_POST['slug'] ?? ''),
                 'resumen' => sanitizarTexto($_POST['resumen'] ?? ''),
@@ -176,19 +181,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif ($accion === 'actualizar' && isset($_POST['noticia_id'])) {
             $noticia_id = (int)$_POST['noticia_id'];
 
-            // Preparar datos
-            $datos = [
-                'titulo' => sanitizarTexto($_POST['titulo'] ?? ''),
-                'slug' => sanitizarTexto($_POST['slug'] ?? ''),
-                'resumen' => sanitizarTexto($_POST['resumen'] ?? ''),
-                'contenido' => sanitizarTexto($_POST['contenido'] ?? ''),
-                'imagen_destacada' => $_POST['imagen_destacada_actual'] ?? '',
-                'fecha_publicacion' => $_POST['fecha_publicacion'] ?? date('Y-m-d'),
-                'autor' => sanitizarTexto($_POST['autor'] ?? ''),
-                'categoria' => sanitizarTexto($_POST['categoria'] ?? ''),
-                'destacada' => isset($_POST['destacada']) ? 1 : 0,
-                'activo' => isset($_POST['activo']) ? 1 : 0
-            ];
+            // Verificar permisos: coordinador solo puede editar noticias de su área
+            $noticia_actual = Noticia::getById($noticia_id);
+            if ($es_coordinador && $noticia_actual['area_id'] != $area_permitida) {
+                $mensaje = 'No tienes permisos para editar esta noticia';
+                $tipo_mensaje = 'danger';
+            } else {
+                // Preparar datos
+                $datos = [
+                    'area_id' => $es_coordinador ? $area_permitida : (int)($_POST['area_id'] ?? 0),
+                    'titulo' => sanitizarTexto($_POST['titulo'] ?? ''),
+                    'slug' => sanitizarTexto($_POST['slug'] ?? ''),
+                    'resumen' => sanitizarTexto($_POST['resumen'] ?? ''),
+                    'contenido' => sanitizarTexto($_POST['contenido'] ?? ''),
+                    'imagen_destacada' => $_POST['imagen_destacada_actual'] ?? '',
+                    'fecha_publicacion' => $_POST['fecha_publicacion'] ?? date('Y-m-d'),
+                    'autor' => sanitizarTexto($_POST['autor'] ?? ''),
+                    'categoria' => sanitizarTexto($_POST['categoria'] ?? ''),
+                    'destacada' => isset($_POST['destacada']) ? 1 : 0,
+                    'activo' => isset($_POST['activo']) ? 1 : 0
+                ];
 
             // Procesar subida de imagen
             if (isset($_FILES['imagen_destacada']) && $_FILES['imagen_destacada']['error'] === UPLOAD_ERR_OK) {
@@ -215,29 +227,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Validar datos
-            $errores = Noticia::validar($datos, $noticia_id);
+                // Validar datos
+                $errores = Noticia::validar($datos, $noticia_id);
 
-            if (empty($errores)) {
-                if (Noticia::update($noticia_id, $datos)) {
-                    registrarActividad(
-                        $usuario['id'],
-                        'actualizar',
-                        'noticias',
-                        $noticia_id,
-                        "Noticia '{$datos['titulo']}' actualizada"
-                    );
+                if (empty($errores)) {
+                    if (Noticia::update($noticia_id, $datos)) {
+                        registrarActividad(
+                            $usuario['id'],
+                            'actualizar',
+                            'noticias',
+                            $noticia_id,
+                            "Noticia '{$datos['titulo']}' actualizada"
+                        );
 
-                    $mensaje = 'Noticia actualizada exitosamente';
-                    $tipo_mensaje = 'success';
-                    $modo = 'listado';
+                        $mensaje = 'Noticia actualizada exitosamente';
+                        $tipo_mensaje = 'success';
+                        $modo = 'listado';
+                    } else {
+                        $mensaje = 'Error al actualizar la noticia';
+                        $tipo_mensaje = 'danger';
+                    }
                 } else {
-                    $mensaje = 'Error al actualizar la noticia';
+                    $mensaje = implode('<br>', $errores);
                     $tipo_mensaje = 'danger';
                 }
-            } else {
-                $mensaje = implode('<br>', $errores);
-                $tipo_mensaje = 'danger';
             }
         }
     }
@@ -254,11 +267,22 @@ if (isset($_GET['crear'])) {
         $mensaje = 'Noticia no encontrada';
         $tipo_mensaje = 'danger';
         $modo = 'listado';
+    } elseif ($es_coordinador && $noticia_editar['area_id'] != $area_permitida) {
+        $mensaje = 'No tienes permisos para editar esta noticia';
+        $tipo_mensaje = 'danger';
+        $modo = 'listado';
     }
 }
 
-// Obtener todas las noticias
-$noticias = Noticia::getAll();
+// Obtener todas las noticias (filtradas por área si es coordinador)
+if ($es_coordinador) {
+    $noticias = Noticia::getAll(false, 0, $area_permitida);
+} else {
+    $noticias = Noticia::getAll();
+}
+
+// Obtener áreas para el selector
+$areas = Noticia::getAreas();
 
 // Obtener categorías para el filtro
 $categorias = Noticia::getCategorias();
