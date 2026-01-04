@@ -1,3 +1,47 @@
+<?php
+/**
+ * Página de Área: Empleo
+ * Coordicanarias CMS
+ */
+
+require_once __DIR__ . '/../php/config.php';
+require_once __DIR__ . '/../php/db/connection.php';
+require_once __DIR__ . '/../php/core/security.php';
+require_once __DIR__ . '/../php/models/Area.php';
+require_once __DIR__ . '/../php/models/Servicio.php';
+require_once __DIR__ . '/../php/models/Beneficio.php';
+require_once __DIR__ . '/../php/models/Configuracion.php';
+
+// Obtener el área actual por slug
+$area_slug = 'empleo';
+$area = fetchOne("SELECT * FROM areas WHERE slug = ? AND activo = 1", [$area_slug]);
+
+// Si no existe el área, redirigir
+if (!$area) {
+    header('Location: ../index.php');
+    exit;
+}
+
+// Obtener servicios y beneficios del área
+$servicios = Servicio::getAll(true, $area['id']);
+$beneficios = Beneficio::getAll(true, $area['id']);
+
+// Obtener configuración del sitio (para redes sociales)
+$config = Configuracion::getAll();
+
+// Helper functions para escapar HTML
+if (!function_exists('e')) {
+    function e($string) {
+        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
+
+if (!function_exists('attr')) {
+    function attr($string) {
+        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es" xmlns="http://www.w3.org/1999/html">
 
@@ -9,6 +53,7 @@
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <!-- Stylesheets -->
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/my.css" rel="stylesheet" type="text/css">
 </head>
@@ -416,48 +461,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <h3 style="margin-bottom: 15px;">Orientación laboral</h3>
-                                <p>Asesoramiento personalizado para identificar tus capacidades, definir tu perfil profesional
-                                    y diseñar un itinerario de inserción laboral adaptado a tus necesidades y objetivos.</p>
+                        <?php if (!empty($servicios)): ?>
+                            <?php foreach ($servicios as $servicio): ?>
+                                <div class="col-md-4 mb-4">
+                                    <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                        <h3 style="margin-bottom: 15px;"><?= e($servicio['titulo']) ?></h3>
+                                        <p><?= e($servicio['descripcion']) ?></p>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="col-12">
+                                <p class="text-center">No hay servicios disponibles en este momento.</p>
                             </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <h3 style="margin-bottom: 15px;">Formación para el empleo</h3>
-                                <p>Programas formativos especializados que desarrollan competencias profesionales y habilidades
-                                    transversales necesarias para acceder al mercado laboral con garantías.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <h3 style="margin-bottom: 15px;">Intermediación laboral</h3>
-                                <p>Conectamos a personas con discapacidad con empresas comprometidas con la diversidad,
-                                    facilitando procesos de selección adaptados y oportunidades reales de empleo.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <h3 style="margin-bottom: 15px;">Preparación de entrevistas</h3>
-                                <p>Talleres y simulaciones para desarrollar habilidades comunicativas y estrategias efectivas
-                                    que aumenten tus posibilidades de éxito en procesos de selección.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <h3 style="margin-bottom: 15px;">Seguimiento en el puesto</h3>
-                                <p>Seguimiento y apoyo continuado durante los primeros meses de incorporación laboral,
-                                    asegurando una adaptación plena al entorno de trabajo.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <h3 style="margin-bottom: 15px;">Asesoría a empresas</h3>
-                                <p>Orientamos a empresas sobre contratación de personas con discapacidad, adaptaciones
-                                    del puesto, ayudas disponibles y buenas prácticas de inclusión laboral.</p>
-                            </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -605,46 +622,29 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
-                                <div>
-                                    <h3 style="margin-bottom: 10px;">Desarrollo profesional</h3>
-                                    <p>Potenciamos tus capacidades y competencias profesionales para que puedas acceder
-                                        a empleos de calidad acordes a tu formación y expectativas.</p>
+                        <?php if (!empty($beneficios)): ?>
+                            <?php foreach ($beneficios as $beneficio): ?>
+                                <div class="col-md-6 mb-4">
+                                    <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                        <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">
+                                            <?php if (!empty($beneficio['icono'])): ?>
+                                                <i class="<?= e($beneficio['icono']) ?>" aria-hidden="true"></i>
+                                            <?php else: ?>
+                                                ✔
+                                            <?php endif; ?>
+                                        </div>
+                                        <div>
+                                            <h3 style="margin-bottom: 10px;"><?= e($beneficio['titulo']) ?></h3>
+                                            <p><?= e($beneficio['descripcion']) ?></p>
+                                        </div>
+                                    </div>
                                 </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="col-12">
+                                <p class="text-center">No hay beneficios disponibles en este momento.</p>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
-                                <div>
-                                    <h3 style="margin-bottom: 10px;">Independencia económica</h3>
-                                    <p>El acceso al empleo te permite alcanzar autonomía económica, mejorando tu calidad
-                                        de vida y tu capacidad para tomar decisiones sobre tu futuro.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
-                                <div>
-                                    <h3 style="margin-bottom: 10px;">Inclusión social</h3>
-                                    <p>El empleo es una herramienta fundamental para la inclusión social plena, facilitando
-                                        la participación activa en la comunidad y el desarrollo de redes sociales.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
-                                <div>
-                                    <h3 style="margin-bottom: 10px;">Apoyo continuo</h3>
-                                    <p>Te acompañamos en todo el proceso, desde la orientación inicial hasta el seguimiento
-                                        en el puesto de trabajo, garantizando tu éxito profesional.</p>
-                                </div>
-                            </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -729,22 +729,29 @@
                                     las personas con discapacidad.</p>
                             </div>
                             <div class="foot-icon">
-                                <a href="https://www.facebook.com/CoordiCanarias/" aria-label="Facebook de Coordicanarias" tabindex="0">
+                                <?php if (!empty($config['redes_facebook'])): ?>
+                                <a href="<?= attr($config['redes_facebook']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 19.253906 2 C 15.311906 2 13 4.0821719 13 8.8261719 L 13 13 L 8 13 L 8 18 L 13 18 L 13 30 L 18 30 L 18 18 L 22 18 L 23 13 L 18 13 L 18 9.671875 C 18 7.884875 18.582766 7 20.259766 7 L 23 7 L 23 2.2050781 C 22.526 2.1410781 21.144906 2 19.253906 2 z" />
                                     </svg>
                                 </a>
-                                <a href="https://x.com/coordicanarias" aria-label="X (antes Twitter) e Coordicanarias" tabindex="0">
+                                <?php endif; ?>
+                                <?php if (!empty($config['redes_twitter'])): ?>
+                                <a href="<?= attr($config['redes_twitter']) ?>" target="_blank" rel="noopener noreferrer" aria-label="X (antes Twitter) de Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 18.42 14.009 L 27.891 3 L 25.703 3 L 17.446 12.588 L 10.894 3 L 3 3 L 12.921 17.411 L 3 29 L 5.188 29 L 13.895 19.006 L 20.806 29 L 28.7 29 L 18.42 14.009 Z M 15.026 17.708 L 14.07 16.393 L 5.95 4.56 L 9.744 4.56 L 16.209 14.011 L 17.165 15.326 L 25.704 27.517 L 21.91 27.517 L 15.026 17.708 Z" />
                                     </svg>
                                 </a>
-                                <a href="https://es.linkedin.com/company/coordicanarias" aria-label="LinkedIn de Coordicanarias" tabindex="0">
+                                <?php endif; ?>
+                                <?php if (!empty($config['redes_linkedin'])): ?>
+                                <a href="<?= attr($config['redes_linkedin']) ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 8.6425781 4 C 7.1835781 4 6 5.181625 6 6.640625 C 6 8.099625 7.182625 9.3085938 8.640625 9.3085938 C 10.098625 9.3085938 11.283203 8.099625 11.283203 6.640625 C 11.283203 5.182625 10.101578 4 8.6425781 4 z M 21.535156 11 C 19.316156 11 18.0465 12.160453 17.4375 13.314453 L 17.373047 13.314453 L 17.373047 11.310547 L 13 11.310547 L 13 26 L 17.556641 26 L 17.556641 18.728516 C 17.556641 16.812516 17.701266 14.960938 20.072266 14.960938 C 22.409266 14.960937 22.443359 17.145609 22.443359 18.849609 L 22.443359 26 L 26.994141 26 L 27 26 L 27 17.931641 C 27 13.983641 26.151156 11 21.535156 11 z M 6.3632812 11.310547 L 6.3632812 26 L 10.923828 26 L 10.923828 11.310547 L 6.3632812 11.310547 z" />
                                     </svg>
                                 </a>
-                                <a href="https://www.instagram.com/coordicanarias"
+                                <?php endif; ?>
+                                <?php if (!empty($config['redes_instagram'])): ?>
+                                <a href="<?= attr($config['redes_instagram']) ?>" target="_blank" rel="noopener noreferrer"
                                    aria-label="Instagram de Coordicanarias"
                                    tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -756,6 +763,7 @@
                                         <path d="M 11.46875 5 C 7.917969 5 5 7.914062 5 11.46875 L 5 20.53125 C 5 24.082031 7.914062 27 11.46875 27 L 20.53125 27 C 24.082031 27 27 24.085938 27 20.53125 L 27 11.46875 C 27 7.917969 24.085938 5 20.53125 5 Z M 11.46875 7 L 20.53125 7 C 23.003906 7 25 8.996094 25 11.46875 L 25 20.53125 C 25 23.003906 23.003906 25 20.53125 25 L 11.46875 25 C 8.996094 25 7 23.003906 7 20.53125 L 7 11.46875 C 7 8.996094 8.996094 7 11.46875 7 Z M 21.90625 9.1875 C 21.402344 9.1875 21 9.589844 21 10.09375 C 21 10.597656 21.402344 11 21.90625 11 C 22.410156 11 22.8125 10.597656 22.8125 10.09375 C 22.8125 9.589844 22.410156 9.1875 21.90625 9.1875 Z M 16 10 C 12.699219 10 10 12.699219 10 16 C 10 19.300781 12.699219 22 16 22 C 19.300781 22 22 19.300781 22 16 C 22 12.699219 19.300781 10 16 10 Z M 16 12 C 18.222656 12 20 13.777344 20 16 C 20 18.222656 18.222656 20 16 20 C 13.777344 20 12 18.222656 12 16 C 12 13.777344 13.777344 12 16 12 Z"/>
                                     </svg>
                                 </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="col-sm-6 col-lg-4" style="padding-top: 20px">
