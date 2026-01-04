@@ -490,7 +490,7 @@ if (!function_exists('attr')) {
                                 <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
                                     <h3 style="margin-bottom: 15px;"><?= e($proyecto['titulo']) ?></h3>
                                     <?php if (!empty($proyecto['imagen'])): ?>
-                                        <img src="<?= e($proyecto['imagen']) ?>"
+                                        <img src="../<?= e($proyecto['imagen']) ?>"
                                              alt="<?= attr($proyecto['titulo']) ?>"
                                              style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
                                     <?php endif; ?>
