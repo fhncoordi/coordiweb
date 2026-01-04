@@ -400,7 +400,7 @@ if (!function_exists('attr')) {
                     <div class="lab-container">
                         <div id="lab-bar-left">
                             <div id="lab-logo">
-                                <a href="../index.html" class="" title="Logo de Coordicanarias" rel="home">
+                                <a href="../index.php" class="" title="Logo de Coordicanarias" rel="home">
                                     <span class="">
                                         <picture>
                                             <img src="../images/brand-coordi-black.svg" width="250" alt="Logo de Coordicanarias" class="" />
@@ -414,7 +414,7 @@ if (!function_exists('attr')) {
                                 <div class="lab-main-menu">
                                     <ul id="menu-main-menu" class="nav-menu">
                                         <li class="menu-item">
-                                            <a href="../index.html" class="">Inicio</a>
+                                            <a href="../index.php" class="">Inicio</a>
                                         </li>
                                         <li class="menu-item">
                                             <a class="" data-scroll href="#objeto-pc">¿Qué son las cookies?</a>
@@ -426,7 +426,7 @@ if (!function_exists('attr')) {
                                             <a class="" data-scroll href="#contacto-pc">Contacto</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="../index.html#features" class="">Áreas</a>
+                                            <a href="../index.php#features" class="">Áreas</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -453,10 +453,10 @@ if (!function_exists('attr')) {
                                         <div class="lab-offcanvas-menu lab-widget">
                                             <ul id="menu-main-menu-1" class="nav-menu">
                                                 <li class="menu-item current-menu-item">
-                                                    <a href="../index.html" class="">Inicio</a>
+                                                    <a href="../index.php" class="">Inicio</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="../transparencia.html">Transparencia</a>
+                                                    <a class="" href="../transparencia.php">Transparencia</a>
                                                 </li>
                                                 <li class="menu-item">
                                                     <a class="" href="#objeto-pc">¿Qué son las cookies?</a>
@@ -468,7 +468,7 @@ if (!function_exists('attr')) {
                                                     <a class="" data-scroll href="#contacto-pc">Contacto</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="../index.html#features">Áreas</a>
+                                                    <a class="" href="../index.php#features">Áreas</a>
                                                 </li>
                                                 <li class="menu-item menu-search-item">
                                                     <form id="mobile-search-form" class="mobile-search-form" role="search" aria-label="Buscar en el sitio">
@@ -993,7 +993,7 @@ if (!function_exists('attr')) {
                                 <div class="col-6 pop-link" style="text-align: center">
                                     <a class="" data-scroll href="#politica-cookies">Política de Cookies</a>
                                     <a class="" data-scroll href="#contacto-pc">Contacto</a>
-                                    <a href="../index.html#features" class="">Áreas</a>
+                                    <a href="../index.php#features" class="">Áreas</a>
                                 </div>
                             </div>
                         </div>
@@ -1003,8 +1003,8 @@ if (!function_exists('attr')) {
                             <div class="row">
                                 <div class="col-12 pop-link" style="text-align: center">
                                     <a href="#home">Política de cookies</a>
-                                    <a href="politica-privacidad.html">Política de privacidad</a>
-                                    <a href="alegal.html">Aviso legal</a>
+                                    <a href="politica-privacidad.php">Política de privacidad</a>
+                                    <a href="alegal.php">Aviso legal</a>
                                 </div>
                             </div>
                         </div>
@@ -1022,7 +1022,7 @@ if (!function_exists('attr')) {
                             <a href="https://www.gobiernodecanarias.org/bienestarsocial/dependencia/" target="_blank" rel="noopener">
                                 <img src="../images/logos_gobcan/Logo_GobCan_claim_negro_mod1.png" alt="Gobierno de Canarias - Dirección General de Dependencia" width="120" style="margin: 15px 20px 30px 15px">
                             </a>
-                            <a href="accesibilidad.html" class="accesibilidad-badge">
+                            <a href="accesibilidad.php" class="accesibilidad-badge">
                                         <span class="wcag-badge">
                                             <strong>accesibilidad WCAG 2.2 AA</strong>
                                         </span>
@@ -1052,7 +1052,7 @@ if (!function_exists('attr')) {
                 <p id="cookie-banner-description">
                     Este sitio web utiliza cookies propias para mejorar su experiencia de navegación y recordar sus preferencias de accesibilidad.
                     Al continuar navegando, acepta su uso.
-                    <a href="politica-cookies.html" target="_blank" rel="noopener">Más información sobre cookies</a>
+                    <a href="politica-cookies.php" target="_blank" rel="noopener">Más información sobre cookies</a>
                 </p>
             </div>
             <div class="cookie-banner-buttons">

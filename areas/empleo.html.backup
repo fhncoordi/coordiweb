@@ -1,47 +1,3 @@
-<?php
-/**
- * Página de Área: Formación e Innovación
- * Coordicanarias CMS
- */
-
-require_once __DIR__ . '/../php/config.php';
-require_once __DIR__ . '/../php/db/connection.php';
-require_once __DIR__ . '/../php/core/security.php';
-require_once __DIR__ . '/../php/models/Area.php';
-require_once __DIR__ . '/../php/models/Servicio.php';
-require_once __DIR__ . '/../php/models/Beneficio.php';
-require_once __DIR__ . '/../php/models/Configuracion.php';
-
-// Obtener el área actual por slug
-$area_slug = 'forminno';
-$area = fetchOne("SELECT * FROM areas WHERE slug = ? AND activo = 1", [$area_slug]);
-
-// Si no existe el área, redirigir
-if (!$area) {
-    header('Location: ../index.php');
-    exit;
-}
-
-// Obtener servicios y beneficios del área
-$servicios = Servicio::getAll(true, $area['id']);
-$beneficios = Beneficio::getAll(true, $area['id']);
-
-// Obtener configuración del sitio (para redes sociales)
-$config = Configuracion::getAll();
-
-// Helper functions para escapar HTML
-if (!function_exists('e')) {
-    function e($string) {
-        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
-    }
-}
-
-if (!function_exists('attr')) {
-    function attr($string) {
-        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="es" xmlns="http://www.w3.org/1999/html">
 
@@ -53,7 +9,6 @@ if (!function_exists('attr')) {
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <!-- Stylesheets -->
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="../css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/my.css" rel="stylesheet" type="text/css">
 </head>
@@ -297,7 +252,7 @@ if (!function_exists('attr')) {
                     <div class="lab-container">
                         <div id="lab-bar-left">
                             <div id="lab-logo">
-                                <a href="../index.php" class="" title="Logo de Coordicanarias" rel="home">
+                                <a href="../index.html" class="" title="Logo de Coordicanarias" rel="home">
                                     <span class="">
                                         <picture>
                                             <img src="../images/brand-coordi-black.svg" width="250" alt="Logo de Coordicanarias" class="" />
@@ -311,28 +266,28 @@ if (!function_exists('attr')) {
                                 <div class="lab-main-menu">
                                     <ul id="menu-main-menu" class="nav-menu">
                                         <li class="menu-item">
-                                            <a href="../index.php" class="">Inicio</a>
+                                            <a href="../index.html" class="">Inicio</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="../transparencia.php" class="">Transparencia</a>
+                                            <a href="../transparencia.html" class="">Transparencia</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" data-scroll href="#about-fi">Formación e innovación</a>
+                                            <a class="" data-scroll href="#about-em">Empleo</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" data-scroll href="#services-fi">Servicios</a>
+                                            <a class="" data-scroll href="#services-em">Servicios</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" data-scroll href="#portfolios-fi">Proyectos</a>
+                                            <a class="" data-scroll href="#portfolios-em">Proyectos</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" data-scroll href="#beneficios-fi">Beneficios</a>
+                                            <a class="" data-scroll href="#beneficios-em">Beneficios</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" data-scroll href="#participa-fi">Participa</a>
+                                            <a class="" data-scroll href="#participa-em">Participa</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="../index.php#features" class="">Áreas</a>
+                                            <a href="../index.html#features" class="">Áreas</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -359,28 +314,28 @@ if (!function_exists('attr')) {
                                         <div class="lab-offcanvas-menu lab-widget">
                                             <ul id="menu-main-menu-1" class="nav-menu">
                                                 <li class="menu-item current-menu-item">
-                                                    <a href="../index.php" class="">Inicio</a>
+                                                    <a href="../index.html" class="">Inicio</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="../transparencia.php">Transparencia</a>
+                                                    <a class="" href="../transparencia.html">Transparencia</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="#about-fi">Formación e innovación</a>
+                                                    <a class="" href="#about-em">Empleo</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="#services-fi">Servicios</a>
+                                                    <a class="" href="#services-em">Servicios</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="#portfolios-fi">Proyectos</a>
+                                                    <a class="" href="#portfolios-em">Proyectos</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="#beneficios-fi">Beneficios</a>
+                                                    <a class="" href="#beneficios-em">Beneficios</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" data-scroll href="#participa-fi">Participa</a>
+                                                    <a class="" data-scroll href="#participa-em">Participa</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="../index.php#features">Áreas</a>
+                                                    <a class="" href="../index.html#features">Áreas</a>
                                                 </li>
                                                 <li class="menu-item menu-search-item">
                                                     <form id="mobile-search-form" class="mobile-search-form" role="search" aria-label="Buscar en el sitio">
@@ -415,34 +370,33 @@ if (!function_exists('attr')) {
         <!--Header end-->
         <main>
         <!--Jumbotron-->
-        <div class="jumbotron_fi" id="jumbotron">
-            <h1 class="display-4" style="padding-left: 20px; padding-right: 20px">Formación e innovación</h1>
-            <p class="lead" style="padding-bottom: 60px;">Cursos y talleres para el desarrollo de habilidades personales y profesionales</p>
+        <div class="jumbotron_em" id="jumbotron">
+            <h1 class="display-4" style="padding-left: 20px; padding-right: 20px">Empleo</h1>
+            <p class="lead" style="padding-bottom: 60px;">Orientación, formación y apoyo para la inclusión laboral de personas con discapacidad</p>
             <!--<hr class="my-4">-->
             <!--<p>Me cago en todo lo que se menea</p>-->
-            <!--<a class="wm-button button" href="#about-fi" role="button">Formación e innovación</a>-->
+            <!--<a class="wm-button button" href="#about-em" role="button">Empleo</a>-->
         </div>
         <!--Jumbotron end-->
 
         <!--About section-->
         <!--Descripción del Área-->
-        <section id="about-fi" class="section">
+        <section id="about-em" class="section">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
                         <div class="col-12">
-                            <h2 style="margin-bottom: 30px;">¿Qué es el área de formación e innovación?</h2>
+                            <h2 style="margin-bottom: 30px;">¿Qué es el area de Empleo?</h2>
                             <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
-                                El área de formación e innovación de Coordicanarias está dedicada a proporcionar programas
-                                formativos y de capacitación diseñados específicamente para personas con discapacidad,
-                                sus familias y voluntarios. Trabajamos para desarrollar competencias que faciliten la
-                                autonomía personal, la inclusión social y el acceso al empleo.
+                                El área de Empleo de Coordicanarias está dedicada a facilitar la inclusión laboral de las personas
+                                con discapacidad a través de servicios especializados de orientación, formación y acompañamiento.
+                                Trabajamos para eliminar barreras y crear oportunidades reales de empleo que permitan el desarrollo
+                                profesional y personal de cada individuo.
                             </p>
                             <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
-                                Nuestro enfoque combina metodologías innovadoras con la incorporación de nuevas tecnologías,
-                                ofreciendo formación actualizada y relevante que responde a las necesidades reales de las
-                                personas con discapacidad en un mundo en constante transformación. Cada programa está
-                                diseñado con criterios de accesibilidad universal y participación activa.
+                                Nuestro equipo de profesionales especializados en orientación laboral e inserción sociolaboral
+                                ofrece un acompañamiento integral, desde la preparación para el empleo hasta el seguimiento
+                                en el puesto de trabajo, garantizando una transición plena al mundo laboral.
                             </p>
                         </div>
                     </div>
@@ -453,36 +407,64 @@ if (!function_exists('attr')) {
 
 
         <!--Servicios section-->
-        <section id="services-fi" class="section section-bg">
+        <section id="services-em" class="section section-bg">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
                         <div class="col-12">
-                            <h2 style="margin-bottom: 40px;">Nuestros servicios</h2>
+                            <h2 style="margin-bottom: 40px;">Nuestros Servicios</h2>
                         </div>
                     </div>
                     <div class="row">
-                        <?php if (!empty($servicios)): ?>
-                            <?php foreach ($servicios as $servicio): ?>
-                                <div class="col-md-4 mb-4">
-                                    <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                        <h3 style="margin-bottom: 15px;"><?= e($servicio['titulo']) ?></h3>
-                                        <p><?= e($servicio['descripcion']) ?></p>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="col-12">
-                                <p class="text-center">No hay servicios disponibles en este momento.</p>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Orientación laboral</h3>
+                                <p>Asesoramiento personalizado para identificar tus capacidades, definir tu perfil profesional
+                                    y diseñar un itinerario de inserción laboral adaptado a tus necesidades y objetivos.</p>
                             </div>
-                        <?php endif; ?>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Formación para el empleo</h3>
+                                <p>Programas formativos especializados que desarrollan competencias profesionales y habilidades
+                                    transversales necesarias para acceder al mercado laboral con garantías.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Intermediación laboral</h3>
+                                <p>Conectamos a personas con discapacidad con empresas comprometidas con la diversidad,
+                                    facilitando procesos de selección adaptados y oportunidades reales de empleo.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Preparación de entrevistas</h3>
+                                <p>Talleres y simulaciones para desarrollar habilidades comunicativas y estrategias efectivas
+                                    que aumenten tus posibilidades de éxito en procesos de selección.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Seguimiento en el puesto</h3>
+                                <p>Seguimiento y apoyo continuado durante los primeros meses de incorporación laboral,
+                                    asegurando una adaptación plena al entorno de trabajo.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Asesoría a empresas</h3>
+                                <p>Orientamos a empresas sobre contratación de personas con discapacidad, adaptaciones
+                                    del puesto, ayudas disponibles y buenas prácticas de inclusión laboral.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Proyectos del área Section-->
-        <section id="portfolios-fi" class="section">
+        <section id="portfolios-em" class="section">
             <!-- Container Starts -->
             <div class="main-container">
                 <div class="inside-container">
@@ -494,31 +476,31 @@ if (!function_exists('attr')) {
                     <div class="row">
                         <div class="col-lg-6 mb-4">
                             <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                                <h3 style="margin-bottom: 15px;">DRACAENA 14 - Acciones formativas</h3>
-                                <img src="../images/portfolio/dracaena14.jpg" alt="Proyecto: DRACAENA 14" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                                <h3 style="margin-bottom: 15px;">Proyecto DRACAENA</h3>
+                                <img src="../images/portfolio/dracaena14.jpg" alt="Imagen del Proyecto DRACAENA" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
                                 <p style="margin-bottom: 15px;">
-                                    Programa integral de formación para la inserción laboral que incluye certificados de
-                                    profesionalidad, especialidades propias en diversos sectores (turismo, tecnología, sanitario,
-                                    agrario, energías renovables) y formación a la carta adaptada a empresas colaboradoras.
+                                    Proyecto experimental de empleo cofinanciado por el Servicio Canario de Empleo que ofrece
+                                    itinerarios personalizados de inserción laboral. Incluye orientación especializada, formación
+                                    en competencias clave y prácticas profesionales en empresas colaboradoras.
                                 </p>
                                 <p>
-                                    Este programa combina formación profesional de calidad con itinerarios personalizados,
-                                    favoreciendo la empleabilidad y el acceso al mercado laboral de personas con discapacidad.
+                                    DRACAENA ha facilitado la inserción laboral de decenas de personas con discapacidad,
+                                    convirtiéndose en un modelo de éxito en inclusión laboral en Canarias.
                                 </p>
                             </article>
                         </div>
                         <div class="col-lg-6 mb-4">
                             <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                                <h3 style="margin-bottom: 15px;">Análisis de impacto de la teleasistencia avanzada</h3>
-                                <img src="../images/portfolio/teleasistencia_avanzada2.jpg" alt="Proyecto: Impacto de la teleasistencia avanzada" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                                <h3 style="margin-bottom: 15px;">Bolsa de empleo</h3>
+                                <img src="../images/portfolio/bolsa_empleo.jpg" alt="Imagen de la Bolsa de Empleo" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
                                 <p style="margin-bottom: 15px;">
-                                    Proyecto de investigación que evalúa la efectividad de los servicios de teleasistencia avanzada
-                                    en la mejora de la calidad de vida, autonomía personal y seguridad de las personas usuarias
-                                    del servicio, analizando su impacto social y económico.
+                                    Servicio permanente de intermediación laboral que conecta a personas con discapacidad en búsqueda
+                                    activa de empleo con empresas que buscan incorporar talento diverso. Gestionamos ofertas laborales
+                                    y facilitamos procesos de selección adaptados.
                                 </p>
                                 <p>
-                                    A través de metodología rigurosa, generamos evidencia sobre los beneficios de la teleasistencia
-                                    y contribuimos a la mejora continua de este servicio esencial para la vida independiente.
+                                    Nuestra bolsa de empleo funciona como un puente efectivo entre candidatos cualificados
+                                    y empresas comprometidas con la inclusión laboral real.
                                 </p>
                             </article>
                         </div>
@@ -613,11 +595,8 @@ if (!function_exists('attr')) {
         Team Section end-->
 
 
-
-
-
         <!--Beneficios-->
-        <section id="beneficios-fi" class="section section-bg">
+        <section id="beneficios-em" class="section section-bg">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -626,25 +605,46 @@ if (!function_exists('attr')) {
                         </div>
                     </div>
                     <div class="row">
-                        <?php if (!empty($beneficios)): ?>
-                            <?php foreach ($beneficios as $beneficio): ?>
-                                <div class="col-md-6 mb-4">
-                                    <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                                        <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">
-                                            <?php if (!empty($beneficio['icono'])): ?>
-                                                <i class="<?= e($beneficio['icono']) ?>" aria-hidden="true"></i>
-                                            <?php else: ?>
-                                                ✔
-                                            <?php endif; ?>
-                                        </div>
-                                        <div>
-                                            <h3 style="margin-bottom: 10px;"><?= e($beneficio['titulo']) ?></h3>
-                                            <p><?= e($beneficio['descripcion']) ?></p>
-                                        </div>
-                                    </div>
+                        <div class="col-md-6 mb-4">
+                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px;">Desarrollo profesional</h3>
+                                    <p>Potenciamos tus capacidades y competencias profesionales para que puedas acceder
+                                        a empleos de calidad acordes a tu formación y expectativas.</p>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px;">Independencia económica</h3>
+                                    <p>El acceso al empleo te permite alcanzar autonomía económica, mejorando tu calidad
+                                        de vida y tu capacidad para tomar decisiones sobre tu futuro.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px;">Inclusión social</h3>
+                                    <p>El empleo es una herramienta fundamental para la inclusión social plena, facilitando
+                                        la participación activa en la comunidad y el desarrollo de redes sociales.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px;">Apoyo continuo</h3>
+                                    <p>Te acompañamos en todo el proceso, desde la orientación inicial hasta el seguimiento
+                                        en el puesto de trabajo, garantizando tu éxito profesional.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -654,33 +654,33 @@ if (!function_exists('attr')) {
 
 
         <!--Contact section-->
-        <section id="participa-fi" class="section">
+        <section id="participa-em" class="section">
             <div class="main-container section-bg">
                 <div class="inside-container">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="contact-con">
-                                <h2>¿Cómo puedo acceder a estos proyectos?</h2>
+                                <h2>¿Cómo puedo acceder a estos servicios?</h2>
                                 <p style="margin-bottom: 10px;">
-                                    Si estás interesado en participar en nuestros proyectos de Formación,
+                                    Si estás interesado en participar en nuestros proyectos de empleo,
                                     el proceso es sencillo:
                                 </p>
                                 <ol style="line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
                                     <li style="margin-bottom: 15px;">
-                                        <strong>Contacta con nosotros:</strong> Rellena este formulario o llámanos para
-                                        expresar tu interés en nuestros programas formativos.
+                                        <strong>Contacta con nosotros:</strong> Rellena este formulario y nos pondremos en contacto
+                                        contigo lo antes posible.
                                     </li>
                                     <li style="margin-bottom: 15px;">
-                                        <strong>Entrevista inicial:</strong> Realizaremos una entrevista para conocer tus
-                                        intereses, necesidades formativas y expectativas.
+                                        <strong>Entrevista inicial:</strong> Realizaremos una primera entrevista para conocer tu
+                                        situación, experiencia y objetivos profesionales.
                                     </li>
                                     <li style="margin-bottom: 15px;">
-                                        <strong>Inscripción en programas:</strong> Te informaremos sobre los cursos y talleres
-                                        disponibles y te ayudaremos con el proceso de inscripción.
+                                        <strong>Plan personalizado:</strong> Diseñaremos juntos un itinerario de inserción laboral
+                                        adaptado a tus necesidades y aspiraciones.
                                     </li>
                                     <li>
-                                        <strong>Comienza tu formación:</strong> Participa en los programas con el apoyo de
-                                        nuestro equipo de formadores especializados.
+                                        <strong>Acompañamiento continuo:</strong> Te acompañaremos en cada paso del proceso hasta
+                                        conseguir tu inserción laboral y consolidación en el empleo.
                                     </li>
                                 </ol>
                             </div>
@@ -694,7 +694,7 @@ if (!function_exists('attr')) {
 
                             <div class="contact-form">
                                 <form method="post" action="../php/enviar_correo.php" id="contact-form">
-                                    <input type="hidden" name="area" value="formacion">
+                                    <input type="hidden" name="area" value="empleo">
                                     <label for="fname">Nombre:</label>
                                     <input type="text" id="fname" name="txtName" placeholder="Tu nombre y apellidos" title="Nombre" required />
                                     <label for="email">Email:</label>
@@ -729,35 +729,33 @@ if (!function_exists('attr')) {
                                     las personas con discapacidad.</p>
                             </div>
                             <div class="foot-icon">
-                                <?php if (!empty($config['redes_facebook'])): ?>
-                                <a href="<?= attr($config['redes_facebook']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Coordicanarias" tabindex="0">
+                                <a href="https://www.facebook.com/CoordiCanarias/" aria-label="Facebook de Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 19.253906 2 C 15.311906 2 13 4.0821719 13 8.8261719 L 13 13 L 8 13 L 8 18 L 13 18 L 13 30 L 18 30 L 18 18 L 22 18 L 23 13 L 18 13 L 18 9.671875 C 18 7.884875 18.582766 7 20.259766 7 L 23 7 L 23 2.2050781 C 22.526 2.1410781 21.144906 2 19.253906 2 z" />
                                     </svg>
                                 </a>
-                                <?php endif; ?>
-                                <?php if (!empty($config['redes_twitter'])): ?>
-                                <a href="<?= attr($config['redes_twitter']) ?>" target="_blank" rel="noopener noreferrer" aria-label="X (antes Twitter) de Coordicanarias" tabindex="0">
+                                <a href="https://x.com/coordicanarias" aria-label="X (antes Twitter) e Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 18.42 14.009 L 27.891 3 L 25.703 3 L 17.446 12.588 L 10.894 3 L 3 3 L 12.921 17.411 L 3 29 L 5.188 29 L 13.895 19.006 L 20.806 29 L 28.7 29 L 18.42 14.009 Z M 15.026 17.708 L 14.07 16.393 L 5.95 4.56 L 9.744 4.56 L 16.209 14.011 L 17.165 15.326 L 25.704 27.517 L 21.91 27.517 L 15.026 17.708 Z" />
                                     </svg>
                                 </a>
-                                <?php endif; ?>
-                                <?php if (!empty($config['redes_linkedin'])): ?>
-                                <a href="<?= attr($config['redes_linkedin']) ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Coordicanarias" tabindex="0">
+                                <a href="https://es.linkedin.com/company/coordicanarias" aria-label="LinkedIn de Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 8.6425781 4 C 7.1835781 4 6 5.181625 6 6.640625 C 6 8.099625 7.182625 9.3085938 8.640625 9.3085938 C 10.098625 9.3085938 11.283203 8.099625 11.283203 6.640625 C 11.283203 5.182625 10.101578 4 8.6425781 4 z M 21.535156 11 C 19.316156 11 18.0465 12.160453 17.4375 13.314453 L 17.373047 13.314453 L 17.373047 11.310547 L 13 11.310547 L 13 26 L 17.556641 26 L 17.556641 18.728516 C 17.556641 16.812516 17.701266 14.960938 20.072266 14.960938 C 22.409266 14.960937 22.443359 17.145609 22.443359 18.849609 L 22.443359 26 L 26.994141 26 L 27 26 L 27 17.931641 C 27 13.983641 26.151156 11 21.535156 11 z M 6.3632812 11.310547 L 6.3632812 26 L 10.923828 26 L 10.923828 11.310547 L 6.3632812 11.310547 z" />
                                     </svg>
                                 </a>
-                                <?php endif; ?>
-                                <?php if (!empty($config['redes_instagram'])): ?>
-                                <a href="<?= attr($config['redes_instagram']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Coordicanarias" tabindex="0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="instagram-icon" focusable="false">
+                                <a href="https://www.instagram.com/coordicanarias"
+                                   aria-label="Instagram de Coordicanarias"
+                                   tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 32 32"
+                                         role="img"
+                                         aria-labelledby="instagram-icon"
+                                         focusable="false">
                                         <title id="instagram-icon">Instagram</title>
                                         <path d="M 11.46875 5 C 7.917969 5 5 7.914062 5 11.46875 L 5 20.53125 C 5 24.082031 7.914062 27 11.46875 27 L 20.53125 27 C 24.082031 27 27 24.085938 27 20.53125 L 27 11.46875 C 27 7.917969 24.085938 5 20.53125 5 Z M 11.46875 7 L 20.53125 7 C 23.003906 7 25 8.996094 25 11.46875 L 25 20.53125 C 25 23.003906 23.003906 25 20.53125 25 L 11.46875 25 C 8.996094 25 7 23.003906 7 20.53125 L 7 11.46875 C 7 8.996094 8.996094 7 11.46875 7 Z M 21.90625 9.1875 C 21.402344 9.1875 21 9.589844 21 10.09375 C 21 10.597656 21.402344 11 21.90625 11 C 22.410156 11 22.8125 10.597656 22.8125 10.09375 C 22.8125 9.589844 22.410156 9.1875 21.90625 9.1875 Z M 16 10 C 12.699219 10 10 12.699219 10 16 C 10 19.300781 12.699219 22 16 22 C 19.300781 22 22 19.300781 22 16 C 22 12.699219 19.300781 10 16 10 Z M 16 12 C 18.222656 12 20 13.777344 20 16 C 20 18.222656 18.222656 20 16 20 C 13.777344 20 12 18.222656 12 16 C 12 13.777344 13.777344 12 16 12 Z"/>
                                     </svg>
                                 </a>
-                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="col-sm-6 col-lg-4" style="padding-top: 20px">
@@ -767,14 +765,14 @@ if (!function_exists('attr')) {
                             <div class="row">
                                 <div class="col-6 pop-link" style="text-align: center">
                                     <a class="" data-scroll href="#home">Inicio</a>
-                                    <a class="" data-scroll href="#about-fi">Formación e innovación</a>
-                                    <a class="" data-scroll href="#services-fi">Servicios</a>
+                                    <a class="" data-scroll href="#about-em">Empleo</a>
+                                    <a class="" data-scroll href="#services-em">Servicios</a>
                                 </div>
                                 <div class="col-6 pop-link" style="text-align: center">
-                                    <a class="" data-scroll href="#portfolios-fi">Proyectos</a>
-                                    <a class="" data-scroll href="#beneficios-fi">Beneficios</a>
-                                    <a class="" data-scroll href="#participa-fi">Participa</a>
-                                    <a href="../index.php#features" class="">Áreas</a>
+                                    <a class="" data-scroll href="#portfolios-em">Proyectos</a>
+                                    <a class="" data-scroll href="#beneficios-em">Beneficios</a>
+                                    <a class="" data-scroll href="#participa-em">Participa</a>
+                                    <a href="../index.html#features" class="">Áreas</a>
                                 </div>
                             </div>
                         </div>
@@ -783,9 +781,9 @@ if (!function_exists('attr')) {
                             border-bottom: 1px solid #000; margin-bottom: 20px">Información Legal</h3>
                             <div class="row">
                                 <div class="col-12 pop-link" style="text-align: center">
-                                    <a href="politica-cookies.php">Política de cookies</a>
-                                    <a href="politica-privacidad.php">Política de privacidad</a>
-                                    <a href="alegal.php">Aviso legal</a>
+                                    <a href="politica-cookies.html">Política de cookies</a>
+                                    <a href="politica-privacidad.html">Política de privacidad</a>
+                                    <a href="alegal.html">Aviso legal</a>
                                 </div>
                             </div>
                         </div>
@@ -888,22 +886,22 @@ if (!function_exists('attr')) {
                         <div class="lab-footer-menu">
                             <ul id="footer-menu" class="nav-menu footer-nav">
                                 <li class="menu-item">
-                                    <a href="../index.php" class="">Inicio</a>
+                                    <a href="../index.html" class="">Inicio</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="" data-scroll href="#about-fi">Formación e innovación</a>
+                                    <a class="" data-scroll href="#about-em">Empleo</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="" data-scroll href="#services-fi">Servicios</a>
+                                    <a class="" data-scroll href="#services-em">Servicios</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="" data-scroll href="#portfolios-fi">Proyectos</a>
+                                    <a class="" data-scroll href="#portfolios-em">Proyectos</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="" data-scroll href="#beneficios-fi">Beneficios</a>
+                                    <a class="" data-scroll href="#beneficios-em">Beneficios</a>
                                 </li>
                                 <li class="menu-item">
-                                    <a class="" data-scroll href="#participa-fi">Participa</a>
+                                    <a class="" data-scroll href="#participa-em">Participa</a>
                                 </li>
                             </ul>
                         </div>
@@ -921,7 +919,7 @@ if (!function_exists('attr')) {
                             <a href="https://www.gobiernodecanarias.org/bienestarsocial/dependencia/" target="_blank" rel="noopener">
                                 <img src="../images/logos_gobcan/Logo_GobCan_claim_negro_mod1.png" alt="Gobierno de Canarias - Dirección General de Dependencia" width="120" style="margin: 15px 20px 30px 15px">
                             </a>
-                            <a href="accesibilidad.php" class="accesibilidad-badge">
+                            <a href="accesibilidad.html" class="accesibilidad-badge">
                                         <span class="wcag-badge">
                                             <strong>accesibilidad WCAG 2.2 AA</strong>
                                         </span>
@@ -951,7 +949,7 @@ if (!function_exists('attr')) {
                 <p id="cookie-banner-description">
                     Este sitio web utiliza cookies propias para mejorar su experiencia de navegación y recordar sus preferencias de accesibilidad.
                     Al continuar navegando, acepta su uso.
-                    <a href="politica-cookies.php" target="_blank" rel="noopener">Más información sobre cookies</a>
+                    <a href="politica-cookies.html" target="_blank" rel="noopener">Más información sobre cookies</a>
                 </p>
             </div>
             <div class="cookie-banner-buttons">

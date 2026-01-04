@@ -3,7 +3,11 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(for file in *.html)",
+      "Bash(do cp \"$file\" \"$file.backup\")",
+      "Bash(done)",
+      "Bash(ls:*)"
     ]
   }
 }

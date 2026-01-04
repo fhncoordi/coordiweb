@@ -1,47 +1,3 @@
-<?php
-/**
- * Página de Área: Formación e Innovación
- * Coordicanarias CMS
- */
-
-require_once __DIR__ . '/../php/config.php';
-require_once __DIR__ . '/../php/db/connection.php';
-require_once __DIR__ . '/../php/core/security.php';
-require_once __DIR__ . '/../php/models/Area.php';
-require_once __DIR__ . '/../php/models/Servicio.php';
-require_once __DIR__ . '/../php/models/Beneficio.php';
-require_once __DIR__ . '/../php/models/Configuracion.php';
-
-// Obtener el área actual por slug
-$area_slug = 'forminno';
-$area = fetchOne("SELECT * FROM areas WHERE slug = ? AND activo = 1", [$area_slug]);
-
-// Si no existe el área, redirigir
-if (!$area) {
-    header('Location: ../index.php');
-    exit;
-}
-
-// Obtener servicios y beneficios del área
-$servicios = Servicio::getAll(true, $area['id']);
-$beneficios = Beneficio::getAll(true, $area['id']);
-
-// Obtener configuración del sitio (para redes sociales)
-$config = Configuracion::getAll();
-
-// Helper functions para escapar HTML
-if (!function_exists('e')) {
-    function e($string) {
-        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
-    }
-}
-
-if (!function_exists('attr')) {
-    function attr($string) {
-        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="es" xmlns="http://www.w3.org/1999/html">
 
@@ -53,7 +9,6 @@ if (!function_exists('attr')) {
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <!-- Stylesheets -->
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="../css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/my.css" rel="stylesheet" type="text/css">
 </head>
@@ -297,7 +252,7 @@ if (!function_exists('attr')) {
                     <div class="lab-container">
                         <div id="lab-bar-left">
                             <div id="lab-logo">
-                                <a href="../index.php" class="" title="Logo de Coordicanarias" rel="home">
+                                <a href="../index.html" class="" title="Logo de Coordicanarias" rel="home">
                                     <span class="">
                                         <picture>
                                             <img src="../images/brand-coordi-black.svg" width="250" alt="Logo de Coordicanarias" class="" />
@@ -311,10 +266,10 @@ if (!function_exists('attr')) {
                                 <div class="lab-main-menu">
                                     <ul id="menu-main-menu" class="nav-menu">
                                         <li class="menu-item">
-                                            <a href="../index.php" class="">Inicio</a>
+                                            <a href="../index.html" class="">Inicio</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="../transparencia.php" class="">Transparencia</a>
+                                            <a href="../transparencia.html" class="">Transparencia</a>
                                         </li>
                                         <li class="menu-item">
                                             <a class="" data-scroll href="#about-fi">Formación e innovación</a>
@@ -332,7 +287,7 @@ if (!function_exists('attr')) {
                                             <a class="" data-scroll href="#participa-fi">Participa</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="../index.php#features" class="">Áreas</a>
+                                            <a href="../index.html#features" class="">Áreas</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -359,10 +314,10 @@ if (!function_exists('attr')) {
                                         <div class="lab-offcanvas-menu lab-widget">
                                             <ul id="menu-main-menu-1" class="nav-menu">
                                                 <li class="menu-item current-menu-item">
-                                                    <a href="../index.php" class="">Inicio</a>
+                                                    <a href="../index.html" class="">Inicio</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="../transparencia.php">Transparencia</a>
+                                                    <a class="" href="../transparencia.html">Transparencia</a>
                                                 </li>
                                                 <li class="menu-item">
                                                     <a class="" href="#about-fi">Formación e innovación</a>
@@ -380,7 +335,7 @@ if (!function_exists('attr')) {
                                                     <a class="" data-scroll href="#participa-fi">Participa</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="../index.php#features">Áreas</a>
+                                                    <a class="" href="../index.html#features">Áreas</a>
                                                 </li>
                                                 <li class="menu-item menu-search-item">
                                                     <form id="mobile-search-form" class="mobile-search-form" role="search" aria-label="Buscar en el sitio">
@@ -462,20 +417,48 @@ if (!function_exists('attr')) {
                         </div>
                     </div>
                     <div class="row">
-                        <?php if (!empty($servicios)): ?>
-                            <?php foreach ($servicios as $servicio): ?>
-                                <div class="col-md-4 mb-4">
-                                    <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                        <h3 style="margin-bottom: 15px;"><?= e($servicio['titulo']) ?></h3>
-                                        <p><?= e($servicio['descripcion']) ?></p>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="col-12">
-                                <p class="text-center">No hay servicios disponibles en este momento.</p>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Formación para la autonomía</h3>
+                                <p>Talleres y cursos orientados a desarrollar habilidades de vida independiente,
+                                    gestión personal y toma de decisiones para aumentar la autonomía en el día a día.</p>
                             </div>
-                        <?php endif; ?>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Competencias digitales</h3>
+                                <p>Programas de alfabetización digital y uso de tecnologías adaptadas que facilitan
+                                    la comunicación, el acceso a información y la participación en la sociedad digital.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Habilidades sociales</h3>
+                                <p>Talleres de comunicación efectiva, trabajo en equipo y relaciones interpersonales
+                                    que potencian la integración social y comunitaria.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Formación profesional</h3>
+                                <p>Cursos especializados que desarrollan competencias técnicas y transversales necesarias
+                                    para mejorar la empleabilidad y el acceso a oportunidades laborales.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Formación a familias</h3>
+                                <p>Programas educativos para familiares que proporcionan herramientas, estrategias y
+                                    recursos para apoyar mejor a sus seres queridos con discapacidad.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h3 style="margin-bottom: 15px;">Capacitación de voluntarios</h3>
+                                <p>Formación especializada para voluntarios que desean colaborar con la organización,
+                                    proporcionando conocimientos sobre discapacidad, apoyo y buenas prácticas.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -626,25 +609,46 @@ if (!function_exists('attr')) {
                         </div>
                     </div>
                     <div class="row">
-                        <?php if (!empty($beneficios)): ?>
-                            <?php foreach ($beneficios as $beneficio): ?>
-                                <div class="col-md-6 mb-4">
-                                    <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                                        <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">
-                                            <?php if (!empty($beneficio['icono'])): ?>
-                                                <i class="<?= e($beneficio['icono']) ?>" aria-hidden="true"></i>
-                                            <?php else: ?>
-                                                ✔
-                                            <?php endif; ?>
-                                        </div>
-                                        <div>
-                                            <h3 style="margin-bottom: 10px;"><?= e($beneficio['titulo']) ?></h3>
-                                            <p><?= e($beneficio['descripcion']) ?></p>
-                                        </div>
-                                    </div>
+                        <div class="col-md-6 mb-4">
+                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px;">Desarrollo de capacidades</h3>
+                                    <p>Adquieres nuevas habilidades y competencias que amplían tus posibilidades de
+                                        participación activa en la sociedad y el mercado laboral.</p>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px;">Mejora de la autonomía personal</h3>
+                                    <p>Los programas están diseñados para potenciar tu independencia y capacidad de
+                                        gestión en diferentes áreas de tu vida cotidiana.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px;">Adaptación a las nuevas tecnologías</h3>
+                                    <p>Te familiarizas con herramientas tecnológicas accesibles que facilitan tu
+                                        comunicación, aprendizaje y acceso a servicios y oportunidades.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✔</div>
+                                <div>
+                                    <h3 style="margin-bottom: 10px;">Redes de apoyo</h3>
+                                    <p>Participar en nuestros programas te conecta con otras personas en situaciones
+                                        similares, creando vínculos de apoyo mutuo y enriquecimiento personal.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -729,35 +733,33 @@ if (!function_exists('attr')) {
                                     las personas con discapacidad.</p>
                             </div>
                             <div class="foot-icon">
-                                <?php if (!empty($config['redes_facebook'])): ?>
-                                <a href="<?= attr($config['redes_facebook']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Coordicanarias" tabindex="0">
+                                <a href="https://www.facebook.com/CoordiCanarias/" aria-label="Facebook de Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 19.253906 2 C 15.311906 2 13 4.0821719 13 8.8261719 L 13 13 L 8 13 L 8 18 L 13 18 L 13 30 L 18 30 L 18 18 L 22 18 L 23 13 L 18 13 L 18 9.671875 C 18 7.884875 18.582766 7 20.259766 7 L 23 7 L 23 2.2050781 C 22.526 2.1410781 21.144906 2 19.253906 2 z" />
                                     </svg>
                                 </a>
-                                <?php endif; ?>
-                                <?php if (!empty($config['redes_twitter'])): ?>
-                                <a href="<?= attr($config['redes_twitter']) ?>" target="_blank" rel="noopener noreferrer" aria-label="X (antes Twitter) de Coordicanarias" tabindex="0">
+                                <a href="https://x.com/coordicanarias" aria-label="X (antes Twitter) e Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 18.42 14.009 L 27.891 3 L 25.703 3 L 17.446 12.588 L 10.894 3 L 3 3 L 12.921 17.411 L 3 29 L 5.188 29 L 13.895 19.006 L 20.806 29 L 28.7 29 L 18.42 14.009 Z M 15.026 17.708 L 14.07 16.393 L 5.95 4.56 L 9.744 4.56 L 16.209 14.011 L 17.165 15.326 L 25.704 27.517 L 21.91 27.517 L 15.026 17.708 Z" />
                                     </svg>
                                 </a>
-                                <?php endif; ?>
-                                <?php if (!empty($config['redes_linkedin'])): ?>
-                                <a href="<?= attr($config['redes_linkedin']) ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Coordicanarias" tabindex="0">
+                                <a href="https://es.linkedin.com/company/coordicanarias" aria-label="LinkedIn de Coordicanarias" tabindex="0">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                         <path d="M 8.6425781 4 C 7.1835781 4 6 5.181625 6 6.640625 C 6 8.099625 7.182625 9.3085938 8.640625 9.3085938 C 10.098625 9.3085938 11.283203 8.099625 11.283203 6.640625 C 11.283203 5.182625 10.101578 4 8.6425781 4 z M 21.535156 11 C 19.316156 11 18.0465 12.160453 17.4375 13.314453 L 17.373047 13.314453 L 17.373047 11.310547 L 13 11.310547 L 13 26 L 17.556641 26 L 17.556641 18.728516 C 17.556641 16.812516 17.701266 14.960938 20.072266 14.960938 C 22.409266 14.960937 22.443359 17.145609 22.443359 18.849609 L 22.443359 26 L 26.994141 26 L 27 26 L 27 17.931641 C 27 13.983641 26.151156 11 21.535156 11 z M 6.3632812 11.310547 L 6.3632812 26 L 10.923828 26 L 10.923828 11.310547 L 6.3632812 11.310547 z" />
                                     </svg>
                                 </a>
-                                <?php endif; ?>
-                                <?php if (!empty($config['redes_instagram'])): ?>
-                                <a href="<?= attr($config['redes_instagram']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Coordicanarias" tabindex="0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="instagram-icon" focusable="false">
+                                <a href="https://www.instagram.com/coordicanarias"
+                                   aria-label="Instagram de Coordicanarias"
+                                   tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 32 32"
+                                         role="img"
+                                         aria-labelledby="instagram-icon"
+                                         focusable="false">
                                         <title id="instagram-icon">Instagram</title>
                                         <path d="M 11.46875 5 C 7.917969 5 5 7.914062 5 11.46875 L 5 20.53125 C 5 24.082031 7.914062 27 11.46875 27 L 20.53125 27 C 24.082031 27 27 24.085938 27 20.53125 L 27 11.46875 C 27 7.917969 24.085938 5 20.53125 5 Z M 11.46875 7 L 20.53125 7 C 23.003906 7 25 8.996094 25 11.46875 L 25 20.53125 C 25 23.003906 23.003906 25 20.53125 25 L 11.46875 25 C 8.996094 25 7 23.003906 7 20.53125 L 7 11.46875 C 7 8.996094 8.996094 7 11.46875 7 Z M 21.90625 9.1875 C 21.402344 9.1875 21 9.589844 21 10.09375 C 21 10.597656 21.402344 11 21.90625 11 C 22.410156 11 22.8125 10.597656 22.8125 10.09375 C 22.8125 9.589844 22.410156 9.1875 21.90625 9.1875 Z M 16 10 C 12.699219 10 10 12.699219 10 16 C 10 19.300781 12.699219 22 16 22 C 19.300781 22 22 19.300781 22 16 C 22 12.699219 19.300781 10 16 10 Z M 16 12 C 18.222656 12 20 13.777344 20 16 C 20 18.222656 18.222656 20 16 20 C 13.777344 20 12 18.222656 12 16 C 12 13.777344 13.777344 12 16 12 Z"/>
                                     </svg>
                                 </a>
-                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="col-sm-6 col-lg-4" style="padding-top: 20px">
@@ -774,7 +776,7 @@ if (!function_exists('attr')) {
                                     <a class="" data-scroll href="#portfolios-fi">Proyectos</a>
                                     <a class="" data-scroll href="#beneficios-fi">Beneficios</a>
                                     <a class="" data-scroll href="#participa-fi">Participa</a>
-                                    <a href="../index.php#features" class="">Áreas</a>
+                                    <a href="../index.html#features" class="">Áreas</a>
                                 </div>
                             </div>
                         </div>
@@ -783,9 +785,9 @@ if (!function_exists('attr')) {
                             border-bottom: 1px solid #000; margin-bottom: 20px">Información Legal</h3>
                             <div class="row">
                                 <div class="col-12 pop-link" style="text-align: center">
-                                    <a href="politica-cookies.php">Política de cookies</a>
-                                    <a href="politica-privacidad.php">Política de privacidad</a>
-                                    <a href="alegal.php">Aviso legal</a>
+                                    <a href="politica-cookies.html">Política de cookies</a>
+                                    <a href="politica-privacidad.html">Política de privacidad</a>
+                                    <a href="alegal.html">Aviso legal</a>
                                 </div>
                             </div>
                         </div>
@@ -888,7 +890,7 @@ if (!function_exists('attr')) {
                         <div class="lab-footer-menu">
                             <ul id="footer-menu" class="nav-menu footer-nav">
                                 <li class="menu-item">
-                                    <a href="../index.php" class="">Inicio</a>
+                                    <a href="../index.html" class="">Inicio</a>
                                 </li>
                                 <li class="menu-item">
                                     <a class="" data-scroll href="#about-fi">Formación e innovación</a>
@@ -921,7 +923,7 @@ if (!function_exists('attr')) {
                             <a href="https://www.gobiernodecanarias.org/bienestarsocial/dependencia/" target="_blank" rel="noopener">
                                 <img src="../images/logos_gobcan/Logo_GobCan_claim_negro_mod1.png" alt="Gobierno de Canarias - Dirección General de Dependencia" width="120" style="margin: 15px 20px 30px 15px">
                             </a>
-                            <a href="accesibilidad.php" class="accesibilidad-badge">
+                            <a href="accesibilidad.html" class="accesibilidad-badge">
                                         <span class="wcag-badge">
                                             <strong>accesibilidad WCAG 2.2 AA</strong>
                                         </span>
@@ -951,7 +953,7 @@ if (!function_exists('attr')) {
                 <p id="cookie-banner-description">
                     Este sitio web utiliza cookies propias para mejorar su experiencia de navegación y recordar sus preferencias de accesibilidad.
                     Al continuar navegando, acepta su uso.
-                    <a href="politica-cookies.php" target="_blank" rel="noopener">Más información sobre cookies</a>
+                    <a href="politica-cookies.html" target="_blank" rel="noopener">Más información sobre cookies</a>
                 </p>
             </div>
             <div class="cookie-banner-buttons">
