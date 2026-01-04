@@ -625,7 +625,7 @@ if (!function_exists('attr')) {
                     <div id="portfolio" class="row">
                         <?php if (!empty($proyectos)): ?>
                             <?php foreach ($proyectos as $proyecto): ?>
-                                <div class="col-lg-4 col-md-6 col-xs-12 mix <?= e($proyecto['categorias'] ?? '') ?>">
+                                <div class="col-lg-4 col-md-6 col-xs-12 mix <?= e(str_replace(',', ' ', $proyecto['categorias'] ?? '')) ?>">
                                     <a href="areas/<?= e($proyecto['area_slug']) ?>.php#portfolios-<?= e(strtolower(substr($proyecto['area_slug'], 0, 3))) ?>" class="portfolio-link">
                                         <div class="portfolio-item" tabindex="0">
                                             <div class="shot-item">
