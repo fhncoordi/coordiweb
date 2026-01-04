@@ -44,6 +44,17 @@ class Proyecto {
     }
 
     /**
+     * Obtener proyectos de un área específica
+     *
+     * @param int $area_id ID del área
+     * @param bool $solo_activos Si true, solo proyectos activos
+     * @return array Lista de proyectos del área
+     */
+    public static function getByArea($area_id, $solo_activos = true) {
+        return self::getAll($solo_activos, $area_id, false);
+    }
+
+    /**
      * Obtener proyectos agrupados por área
      *
      * @param bool $solo_activos Si true, solo proyectos y áreas activas
