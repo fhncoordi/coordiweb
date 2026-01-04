@@ -42,10 +42,11 @@ class Servicio {
      * Obtener servicios agrupados por área
      *
      * @param bool $solo_activos Si true, solo servicios y áreas activas
+     * @param int $area_id Si se especifica, filtra por área
      * @return array Array asociativo con áreas como keys y servicios como values
      */
-    public static function getAllAgrupados($solo_activos = true) {
-        $servicios = self::getAll($solo_activos);
+    public static function getAllAgrupados($solo_activos = true, $area_id = null) {
+        $servicios = self::getAll($solo_activos, $area_id);
         $agrupados = [];
 
         foreach ($servicios as $servicio) {
@@ -237,20 +238,33 @@ class Servicio {
      * Contar servicios por área
      *
      * @param bool $solo_activos Si true, solo cuenta servicios activos
+     * @param int $area_id Si se especifica, filtra por área
      * @return array Array asociativo con area_id como key y count como value
      */
-    public static function contarPorArea($solo_activos = true) {
+    public static function contarPorArea($solo_activos = true, $area_id = null) {
         $sql = "SELECT a.id, a.nombre, COUNT(s.id) as total_servicios
                 FROM areas a
                 LEFT JOIN servicios s ON a.id = s.area_id";
 
+        $params = [];
+        $where_conditions = [];
+
         if ($solo_activos) {
-            $sql .= " AND s.activo = 1";
+            $where_conditions[] = "s.activo = 1";
+        }
+
+        if ($area_id !== null) {
+            $where_conditions[] = "a.id = ?";
+            $params[] = $area_id;
+        }
+
+        if (!empty($where_conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $where_conditions);
         }
 
         $sql .= " GROUP BY a.id, a.nombre ORDER BY a.orden ASC";
 
-        return fetchAll($sql);
+        return fetchAll($sql, $params);
     }
 
     /**

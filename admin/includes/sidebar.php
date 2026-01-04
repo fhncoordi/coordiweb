@@ -23,10 +23,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <div class="nav-section">
                 <div class="nav-section-title">Contenido</div>
 
+                <?php if (puedeGestionarAreas()): ?>
                 <a href="<?= url('admin/areas.php') ?>" class="nav-link <?= $current_page === 'areas.php' ? 'active' : '' ?>">
                     <i class="fas fa-th-large"></i>
                     <span>Áreas</span>
                 </a>
+                <?php elseif (getCurrentUser()['rol'] === 'coordinador'): ?>
+                <a href="<?= url('admin/areas.php') ?>" class="nav-link <?= $current_page === 'areas.php' ? 'active' : '' ?>">
+                    <i class="fas fa-th-large"></i>
+                    <span>Mi Área</span>
+                </a>
+                <?php endif; ?>
 
                 <a href="<?= url('admin/proyectos.php') ?>" class="nav-link <?= $current_page === 'proyectos.php' ? 'active' : '' ?>">
                     <i class="fas fa-folder-open"></i>
@@ -48,35 +55,41 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <span>Noticias</span>
                 </a>
 
+                <?php if (getCurrentUser()['rol'] !== 'coordinador'): ?>
                 <a href="<?= url('admin/testimonios.php') ?>" class="nav-link <?= $current_page === 'testimonios.php' ? 'active' : '' ?>">
                     <i class="fas fa-quote-left"></i>
                     <span>Testimonios</span>
                 </a>
+                <?php endif; ?>
             </div>
 
-            <!-- Sección: Sistema -->
+            <!-- Sección: Sistema (solo admin) -->
+            <?php if (puedeGestionarUsuarios() || puedeGestionarConfiguracion() || puedeVerRegistroActividad()): ?>
             <div class="nav-section">
                 <div class="nav-section-title">Sistema</div>
 
-                <?php if ($usuario['rol'] === 'admin'): ?>
+                <?php if (puedeGestionarUsuarios()): ?>
                 <a href="<?= url('admin/usuarios.php') ?>" class="nav-link <?= $current_page === 'usuarios.php' ? 'active' : '' ?>">
                     <i class="fas fa-users"></i>
                     <span>Usuarios</span>
                 </a>
                 <?php endif; ?>
 
+                <?php if (puedeGestionarConfiguracion()): ?>
                 <a href="<?= url('admin/configuracion.php') ?>" class="nav-link <?= $current_page === 'configuracion.php' ? 'active' : '' ?>">
                     <i class="fas fa-cog"></i>
                     <span>Configuración</span>
                 </a>
+                <?php endif; ?>
 
-                <?php if ($usuario['rol'] === 'admin'): ?>
+                <?php if (puedeVerRegistroActividad()): ?>
                 <a href="<?= url('admin/actividad.php') ?>" class="nav-link <?= $current_page === 'actividad.php' ? 'active' : '' ?>">
                     <i class="fas fa-history"></i>
                     <span>Registro de Actividad</span>
                 </a>
                 <?php endif; ?>
             </div>
+            <?php endif; ?>
 
             <!-- Separador -->
             <hr class="sidebar-divider">

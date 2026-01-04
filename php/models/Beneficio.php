@@ -42,10 +42,11 @@ class Beneficio {
      * Obtener beneficios agrupados por área
      *
      * @param bool $solo_activos Si true, solo beneficios y áreas activas
+     * @param int $area_id Si se especifica, filtra por área
      * @return array Array asociativo con áreas como keys y beneficios como values
      */
-    public static function getAllAgrupados($solo_activos = true) {
-        $beneficios = self::getAll($solo_activos);
+    public static function getAllAgrupados($solo_activos = true, $area_id = null) {
+        $beneficios = self::getAll($solo_activos, $area_id);
         $agrupados = [];
 
         foreach ($beneficios as $beneficio) {
@@ -228,20 +229,33 @@ class Beneficio {
      * Contar beneficios por área
      *
      * @param bool $solo_activos Si true, solo cuenta beneficios activos
+     * @param int $area_id Si se especifica, filtra por área
      * @return array Array asociativo con area_id como key y count como value
      */
-    public static function contarPorArea($solo_activos = true) {
+    public static function contarPorArea($solo_activos = true, $area_id = null) {
         $sql = "SELECT a.id, a.nombre, COUNT(b.id) as total_beneficios
                 FROM areas a
                 LEFT JOIN beneficios b ON a.id = b.area_id";
 
+        $params = [];
+        $where_conditions = [];
+
         if ($solo_activos) {
-            $sql .= " AND b.activo = 1";
+            $where_conditions[] = "b.activo = 1";
+        }
+
+        if ($area_id !== null) {
+            $where_conditions[] = "a.id = ?";
+            $params[] = $area_id;
+        }
+
+        if (!empty($where_conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $where_conditions);
         }
 
         $sql .= " GROUP BY a.id, a.nombre ORDER BY a.orden ASC";
 
-        return fetchAll($sql);
+        return fetchAll($sql, $params);
     }
 
     /**

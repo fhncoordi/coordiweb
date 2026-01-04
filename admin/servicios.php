@@ -18,6 +18,10 @@ setSecurityHeaders();
 // Obtener usuario actual
 $usuario = getCurrentUser();
 
+// Verificar permisos por rol
+$es_coordinador = ($usuario['rol'] === 'coordinador');
+$area_permitida = $es_coordinador ? $usuario['area_id'] : null;
+
 // Variables para mensajes
 $mensaje = '';
 $tipo_mensaje = '';
@@ -33,6 +37,12 @@ if (isset($_GET['crear'])) {
 
     if (!$servicio) {
         header('Location: ' . url('admin/servicios.php?error=not_found'));
+        exit;
+    }
+
+    // Verificar permisos: coordinador solo puede editar servicios de su área
+    if (!puedeGestionarServicio($servicio_id)) {
+        header('Location: ' . url('admin/servicios.php?error=permission_denied'));
         exit;
     }
 }
@@ -51,8 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $servicio_id = (int)$_POST['servicio_id'];
             $nuevo_estado = (int)$_POST['nuevo_estado'];
 
-            if (Servicio::toggleActivo($servicio_id, $nuevo_estado)) {
-                registrarActividad('update', 'servicios', $servicio_id, 'Cambió estado a ' . ($nuevo_estado ? 'activo' : 'inactivo'));
+            // Verificar permisos
+            if (!puedeGestionarServicio($servicio_id)) {
+                $mensaje = 'No tienes permisos para modificar este servicio';
+                $tipo_mensaje = 'danger';
+            } elseif (Servicio::toggleActivo($servicio_id, $nuevo_estado)) {
+                registrarActividad(getCurrentUserId(), 'actualizar', 'servicios', $servicio_id, 'Cambió estado a ' . ($nuevo_estado ? 'activo' : 'inactivo'));
                 $mensaje = 'Estado actualizado correctamente';
                 $tipo_mensaje = 'success';
             } else {
@@ -65,8 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif ($accion === 'eliminar' && isset($_POST['servicio_id'])) {
             $servicio_id = (int)$_POST['servicio_id'];
 
-            if (Servicio::delete($servicio_id)) {
-                registrarActividad('delete', 'servicios', $servicio_id, 'Eliminó servicio (soft delete)');
+            // Verificar permisos
+            if (!puedeGestionarServicio($servicio_id)) {
+                $mensaje = 'No tienes permisos para eliminar este servicio';
+                $tipo_mensaje = 'danger';
+            } elseif (Servicio::delete($servicio_id)) {
+                registrarActividad(getCurrentUserId(), 'eliminar', 'servicios', $servicio_id, 'Eliminó servicio (soft delete)');
                 $mensaje = 'Servicio eliminado correctamente';
                 $tipo_mensaje = 'success';
             } else {
@@ -79,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif ($accion === 'crear') {
             // Preparar datos
             $datos = [
-                'area_id' => (int)($_POST['area_id'] ?? 0),
+                'area_id' => $es_coordinador ? $area_permitida : (int)($_POST['area_id'] ?? 0),
                 'titulo' => trim($_POST['titulo'] ?? ''),
                 'descripcion' => trim($_POST['descripcion'] ?? ''),
                 'icono' => trim($_POST['icono'] ?? ''),
@@ -115,10 +133,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$servicio_actual) {
                 $mensaje = 'Servicio no encontrado';
                 $tipo_mensaje = 'danger';
+            } elseif (!puedeGestionarServicio($servicio_id)) {
+                $mensaje = 'No tienes permisos para editar este servicio';
+                $tipo_mensaje = 'danger';
             } else {
                 // Preparar datos
                 $datos = [
-                    'area_id' => (int)($_POST['area_id'] ?? 0),
+                    'area_id' => $es_coordinador ? $area_permitida : (int)($_POST['area_id'] ?? 0),
                     'titulo' => trim($_POST['titulo'] ?? ''),
                     'descripcion' => trim($_POST['descripcion'] ?? ''),
                     'icono' => trim($_POST['icono'] ?? ''),
@@ -162,14 +183,24 @@ if (isset($_GET['error'])) {
     if ($_GET['error'] === 'not_found') {
         $mensaje = 'Servicio no encontrado';
         $tipo_mensaje = 'danger';
+    } elseif ($_GET['error'] === 'permission_denied') {
+        $mensaje = 'No tienes permisos para acceder a este servicio';
+        $tipo_mensaje = 'danger';
     }
 }
 
 // Obtener datos para vista de listado
 if ($modo === 'listado') {
-    $servicios_agrupados = Servicio::getAllAgrupados(false); // Mostrar todos (activos e inactivos)
-    $total_servicios = count(Servicio::getAll(false));
-    $contador_areas = Servicio::contarPorArea(false);
+    // Filtrar por área si es coordinador
+    if ($es_coordinador) {
+        $servicios_agrupados = Servicio::getAllAgrupados(false, $area_permitida);
+        $total_servicios = count(Servicio::getAll(false, $area_permitida));
+        $contador_areas = Servicio::contarPorArea(false, $area_permitida);
+    } else {
+        $servicios_agrupados = Servicio::getAllAgrupados(false);
+        $total_servicios = count(Servicio::getAll(false));
+        $contador_areas = Servicio::contarPorArea(false);
+    }
 }
 
 // Obtener áreas para el selector
@@ -340,16 +371,33 @@ include __DIR__ . '/includes/sidebar.php';
                                 <label for="area_id" class="form-label">
                                     Área Temática <span class="text-danger">*</span>
                                 </label>
-                                <select class="form-select" id="area_id" name="area_id" required onchange="actualizarOrden()">
-                                    <option value="">Selecciona un área...</option>
-                                    <?php foreach ($areas as $area): ?>
-                                    <option value="<?= $area['id'] ?>"
-                                            data-siguiente-orden="<?= Servicio::getSiguienteOrden($area['id']) ?>"
-                                            <?= ($modo === 'editar' && $servicio['area_id'] == $area['id']) ? 'selected' : '' ?>>
-                                        <?= e($area['nombre']) ?>
-                                    </option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <?php if ($es_coordinador): ?>
+                                    <!-- Coordinador: área fija -->
+                                    <?php
+                                    $area_coordinador = null;
+                                    foreach ($areas as $area) {
+                                        if ($area['id'] == $area_permitida) {
+                                            $area_coordinador = $area;
+                                            break;
+                                        }
+                                    }
+                                    ?>
+                                    <input type="text" class="form-control" value="<?= e($area_coordinador['nombre'] ?? 'N/A') ?>" disabled>
+                                    <input type="hidden" name="area_id" value="<?= $area_permitida ?>">
+                                    <div class="form-text">Solo puedes gestionar servicios de tu área asignada</div>
+                                <?php else: ?>
+                                    <!-- Admin/Editor: selector normal -->
+                                    <select class="form-select" id="area_id" name="area_id" required onchange="actualizarOrden()">
+                                        <option value="">Selecciona un área...</option>
+                                        <?php foreach ($areas as $area): ?>
+                                        <option value="<?= $area['id'] ?>"
+                                                data-siguiente-orden="<?= Servicio::getSiguienteOrden($area['id']) ?>"
+                                                <?= ($modo === 'editar' && $servicio['area_id'] == $area['id']) ? 'selected' : '' ?>>
+                                            <?= e($area['nombre']) ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                <?php endif; ?>
                             </div>
 
                             <!-- Título -->

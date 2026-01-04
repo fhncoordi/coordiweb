@@ -17,35 +17,71 @@ setSecurityHeaders();
 // Obtener usuario actual
 $usuario = getCurrentUser();
 
+// Verificar si es coordinador y obtener su área
+$es_coordinador = ($usuario['rol'] === 'coordinador');
+$area_permitida = $es_coordinador ? $usuario['area_id'] : null;
+
 // Obtener estadísticas
 try {
-    // Total de proyectos
-    $total_proyectos = fetchOne("SELECT COUNT(*) as total FROM proyectos")['total'];
-    $proyectos_activos = fetchOne("SELECT COUNT(*) as total FROM proyectos WHERE activo = 1")['total'];
+    // Total de proyectos (filtrado por área si es coordinador)
+    if ($es_coordinador) {
+        $total_proyectos = fetchOne("SELECT COUNT(*) as total FROM proyectos WHERE area_id = ?", [$area_permitida])['total'];
+        $proyectos_activos = fetchOne("SELECT COUNT(*) as total FROM proyectos WHERE activo = 1 AND area_id = ?", [$area_permitida])['total'];
+    } else {
+        $total_proyectos = fetchOne("SELECT COUNT(*) as total FROM proyectos")['total'];
+        $proyectos_activos = fetchOne("SELECT COUNT(*) as total FROM proyectos WHERE activo = 1")['total'];
+    }
 
-    // Total de áreas
-    $total_areas = fetchOne("SELECT COUNT(*) as total FROM areas WHERE activo = 1")['total'];
+    // Total de áreas (coordinador solo ve su área)
+    if ($es_coordinador) {
+        $total_areas = 1; // El coordinador solo gestiona su área
+    } else {
+        $total_areas = fetchOne("SELECT COUNT(*) as total FROM areas WHERE activo = 1")['total'];
+    }
 
-    // Total de servicios
-    $total_servicios = fetchOne("SELECT COUNT(*) as total FROM servicios WHERE activo = 1")['total'];
+    // Total de servicios (filtrado por área si es coordinador)
+    if ($es_coordinador) {
+        $total_servicios = fetchOne("SELECT COUNT(*) as total FROM servicios WHERE activo = 1 AND area_id = ?", [$area_permitida])['total'];
+    } else {
+        $total_servicios = fetchOne("SELECT COUNT(*) as total FROM servicios WHERE activo = 1")['total'];
+    }
 
-    // Total de beneficios
-    $total_beneficios = fetchOne("SELECT COUNT(*) as total FROM beneficios WHERE activo = 1")['total'];
+    // Total de beneficios (filtrado por área si es coordinador)
+    if ($es_coordinador) {
+        $total_beneficios = fetchOne("SELECT COUNT(*) as total FROM beneficios WHERE activo = 1 AND area_id = ?", [$area_permitida])['total'];
+    } else {
+        $total_beneficios = fetchOne("SELECT COUNT(*) as total FROM beneficios WHERE activo = 1")['total'];
+    }
 
-    // Total de testimonios
+    // Total de testimonios (no se filtran por área)
     $total_testimonios = fetchOne("SELECT COUNT(*) as total FROM testimonios WHERE activo = 1")['total'];
 
-    // Total de usuarios
-    $total_usuarios = fetchOne("SELECT COUNT(*) as total FROM usuarios WHERE activo = 1")['total'];
+    // Total de usuarios (solo admin puede ver esto)
+    if ($usuario['rol'] === 'admin') {
+        $total_usuarios = fetchOne("SELECT COUNT(*) as total FROM usuarios WHERE activo = 1")['total'];
+    } else {
+        $total_usuarios = 0;
+    }
 
-    // Últimos proyectos creados
-    $ultimos_proyectos = fetchAll("
-        SELECT p.titulo, p.fecha_creacion, a.nombre as area_nombre
-        FROM proyectos p
-        LEFT JOIN areas a ON p.area_id = a.id
-        ORDER BY p.fecha_creacion DESC
-        LIMIT 5
-    ");
+    // Últimos proyectos creados (filtrado por área si es coordinador)
+    if ($es_coordinador) {
+        $ultimos_proyectos = fetchAll("
+            SELECT p.titulo, p.fecha_creacion, a.nombre as area_nombre
+            FROM proyectos p
+            LEFT JOIN areas a ON p.area_id = a.id
+            WHERE p.area_id = ?
+            ORDER BY p.fecha_creacion DESC
+            LIMIT 5
+        ", [$area_permitida]);
+    } else {
+        $ultimos_proyectos = fetchAll("
+            SELECT p.titulo, p.fecha_creacion, a.nombre as area_nombre
+            FROM proyectos p
+            LEFT JOIN areas a ON p.area_id = a.id
+            ORDER BY p.fecha_creacion DESC
+            LIMIT 5
+        ");
+    }
 
     // Últimas actividades (si el usuario es admin)
     if ($usuario['rol'] === 'admin') {

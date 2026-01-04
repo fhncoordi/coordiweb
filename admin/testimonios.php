@@ -18,6 +18,12 @@ setSecurityHeaders();
 // Obtener usuario actual
 $usuario = getCurrentUser();
 
+// Los coordinadores no pueden gestionar testimonios
+if ($usuario['rol'] === 'coordinador') {
+    header('Location: ' . url('admin/index.php'));
+    exit;
+}
+
 // Variables para mensajes
 $mensaje = '';
 $tipo_mensaje = '';

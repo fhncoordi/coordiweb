@@ -18,6 +18,12 @@ setSecurityHeaders();
 // Obtener usuario actual
 $usuario = getCurrentUser();
 
+// Si es coordinador, redirigir automáticamente a editar SU área
+if ($usuario['rol'] === 'coordinador' && !isset($_GET['editar']) && !isset($_POST['accion'])) {
+    header('Location: ' . url('admin/areas.php?editar=' . $usuario['area_id']));
+    exit;
+}
+
 // Variables
 $mensaje = '';
 $tipo_mensaje = '';
@@ -63,8 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif ($accion === 'actualizar' && isset($_POST['area_id'])) {
             $area_id = (int)$_POST['area_id'];
 
-            // Preparar datos
-            $datos = [
+            // Verificar permisos
+            if (!puedeGestionarArea($area_id)) {
+                $mensaje = 'No tienes permisos para editar esta área';
+                $tipo_mensaje = 'danger';
+            } else {
+                // Preparar datos
+                $datos = [
                 'nombre' => sanitizarTexto($_POST['nombre'] ?? ''),
                 'slug' => sanitizarTexto($_POST['slug'] ?? ''),
                 'descripcion' => sanitizarTexto($_POST['descripcion'] ?? ''),
@@ -108,30 +119,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Validar datos
-            $errores = Area::validar($datos, $area_id);
+                // Validar datos
+                $errores = Area::validar($datos, $area_id);
 
-            if (empty($errores)) {
-                // Actualizar área
-                if (Area::update($area_id, $datos)) {
-                    // Registrar actividad
-                    registrarActividad(
-                        $usuario['id'],
-                        'actualizar',
-                        'areas',
-                        $area_id,
-                        "Área '{$datos['nombre']}' actualizada"
-                    );
+                if (empty($errores)) {
+                    // Actualizar área
+                    if (Area::update($area_id, $datos)) {
+                        // Registrar actividad
+                        registrarActividad(
+                            $usuario['id'],
+                            'actualizar',
+                            'areas',
+                            $area_id,
+                            "Área '{$datos['nombre']}' actualizada"
+                        );
 
-                    $mensaje = 'Área actualizada exitosamente';
-                    $tipo_mensaje = 'success';
+                        $mensaje = 'Área actualizada exitosamente';
+                        $tipo_mensaje = 'success';
+                    } else {
+                        $mensaje = 'Error al actualizar el área';
+                        $tipo_mensaje = 'danger';
+                    }
                 } else {
-                    $mensaje = 'Error al actualizar el área';
+                    $mensaje = implode('<br>', $errores);
                     $tipo_mensaje = 'danger';
                 }
-            } else {
-                $mensaje = implode('<br>', $errores);
-                $tipo_mensaje = 'danger';
             }
         }
     }
@@ -139,13 +151,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Modo edición
 if (isset($_GET['editar'])) {
-    $modo_edicion = true;
-    $area_editar = Area::getById((int)$_GET['editar']);
+    $area_id_editar = (int)$_GET['editar'];
 
-    if (!$area_editar) {
-        $mensaje = 'Área no encontrada';
+    // Verificar permisos
+    if (!puedeGestionarArea($area_id_editar)) {
+        $mensaje = 'No tienes permisos para editar esta área';
         $tipo_mensaje = 'danger';
         $modo_edicion = false;
+    } else {
+        $modo_edicion = true;
+        $area_editar = Area::getById($area_id_editar);
+
+        if (!$area_editar) {
+            $mensaje = 'Área no encontrada';
+            $tipo_mensaje = 'danger';
+            $modo_edicion = false;
+        }
     }
 }
 
@@ -187,11 +208,13 @@ include __DIR__ . '/includes/sidebar.php';
                 <div class="admin-table-wrapper">
                     <div class="table-header">
                         <h3 class="table-title">
-                            <i class="fas fa-edit me-2"></i>Editar Área: <?= e($area_editar['nombre']) ?>
+                            <i class="fas fa-edit me-2"></i><?= $usuario['rol'] === 'coordinador' ? 'Mi Área' : 'Editar Área' ?>: <?= e($area_editar['nombre']) ?>
                         </h3>
+                        <?php if ($usuario['rol'] !== 'coordinador'): ?>
                         <a href="<?= url('admin/areas.php') ?>" class="btn btn-sm btn-secondary">
                             <i class="fas fa-arrow-left me-1"></i>Volver al listado
                         </a>
+                        <?php endif; ?>
                     </div>
 
                     <form method="POST" enctype="multipart/form-data" class="p-4">
