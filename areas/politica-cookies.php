@@ -1,0 +1,1130 @@
+<?php
+require_once __DIR__ . '/../php/config.php';
+require_once __DIR__ . '/../php/db/connection.php';
+require_once __DIR__ . '/../php/core/security.php';
+require_once __DIR__ . '/../php/models/Configuracion.php';
+
+$config = Configuracion::getAll();
+
+if (!function_exists('e')) {
+    function e($string) {
+        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
+
+if (!function_exists('attr')) {
+    function attr($string) {
+        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Política de Cookies - Coordicanarias</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <!-- Stylesheets -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/style.css" rel="stylesheet" type="text/css">
+    <link href="../css/my.css" rel="stylesheet" type="text/css">
+    <style>
+        /* Scroll suave nativo */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ============================================
+           TABS DE AVISO LEGAL - CON ICONOS FONT AWESOME
+           ============================================ */
+
+        .category-tabs {
+            margin: 60px 0 40px;
+        }
+
+        .nav-tabs-transparency {
+            border-bottom: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+
+        .nav-tabs-transparency .nav-item {
+            flex: 0 1 auto;
+        }
+
+        .nav-tabs-transparency .nav-link {
+            /* Estilo base */
+            color: #ffffff;
+            background-color: #2d353c;
+            border: 2px solid #2d353c;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Iconos de Font Awesome */
+        .nav-tabs-transparency .nav-link .tab-icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .nav-tabs-transparency .nav-link:hover {
+            color: #000000;
+            background-color: #ffffff;
+            border-color: #2d353c;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tabs-transparency .nav-link.active,
+        .nav-tabs-transparency .nav-link[aria-selected="true"] {
+            color: #000000;
+            background-color: #ffffff;
+            border-color: #2d353c;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Mantener el focus ring rojo para accesibilidad */
+        .nav-tabs-transparency .nav-link:focus {
+            outline: 2px dotted #f00;
+            outline-offset: 0;
+        }
+
+        /* Cards de contenido */
+        .transparency-card {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .transparency-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .transparency-card h3 {
+            color: #2d353c;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2d353c;
+        }
+
+        .transparency-card .card-icon {
+            width: 50px;
+            height: 50px;
+            background: #2d353c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .transparency-card p {
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+
+        @media (max-width: 768px) {
+            .nav-tabs-transparency .nav-link .tab-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .nav-tabs-transparency {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-tabs-transparency .nav-item {
+                width: 100%;
+            }
+
+            .nav-tabs-transparency .nav-link {
+                width: 100%;
+            }
+        }
+
+        /* Respetar preferencias de movimiento reducido (WCAG 2.3.3) */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
+</head>
+
+<body id="home" class="sticky-bar menu-standard ">
+    <div id="lab-main">
+        <!--Accessibility skip menu-->
+        <nav id="lab-skip-menu" role="navigation" aria-label="Saltar sección">
+            <div class="lab-skip-menu">
+                <ul id="menu-skip-menu" class="menu">
+                    <li class="menu-item">
+                        <a href="#jumbotron">Saltar al contenido principal</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#block_settings">Saltar al menú de accesibilidad</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#lab-main-menu">Saltar al menú principal</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#lab-footer">Saltar al pie de página</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--Accessibility skip menu end-->
+        <!--Accessibility-->
+        <div class="block-settings-wrapper">
+            <div id="block_settings" class="block_settings">
+                <a id="settings_close" tabindex="0">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor" width="1em">
+                        <path d="M50 8.1c23.2 0 41.9 18.8 41.9 41.9 0 23.2-18.8 41.9-41.9 41.9C26.8 91.9 8.1 73.2 8.1 50S26.8 8.1 50 8.1M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 11.3c-21.4 0-38.7 17.3-38.7 38.7S28.6 88.7 50 88.7 88.7 71.4 88.7 50 71.4 11.3 50 11.3zm0 8.9c4 0 7.3 3.2 7.3 7.3S54 34.7 50 34.7s-7.3-3.2-7.3-7.3 3.3-7.2 7.3-7.2zm23.7 19.7c-5.8 1.4-11.2 2.6-16.6 3.2.2 20.4 2.5 24.8 5 31.4.7 1.9-.2 4-2.1 4.7-1.9.7-4-.2-4.7-2.1-1.8-4.5-3.4-8.2-4.5-15.8h-2c-1 7.6-2.7 11.3-4.5 15.8-.7 1.9-2.8 2.8-4.7 2.1-1.9-.7-2.8-2.8-2.1-4.7 2.6-6.6 4.9-11 5-31.4-5.4-.6-10.8-1.8-16.6-3.2-1.7-.4-2.8-2.1-2.4-3.9.4-1.7 2.1-2.8 3.9-2.4 19.5 4.6 25.1 4.6 44.5 0 1.7-.4 3.5.7 3.9 2.4.7 1.8-.3 3.5-2.1 3.9z">
+                        </path>
+                    </svg>
+                </a>
+                <div class="open-accessibility">
+                    <ul class="lab-wcag-settings clearfix">
+                        <!--Font type accessibility menu-->
+                        <li class="fontfamily-label">Tipo de fuente</li>
+                        <li>
+                            <ul class="access-float-fontfamily">
+                                <li>
+                                    <button class="lab-link-default">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">Open Sans</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-inter">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">Inter</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-andika">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">Andika</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-fsme">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">FSMe</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-tiresias">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">Tiresias</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-opendyslexic">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 15 6 L 8 26 L 10 26 L 12.09375 20 L 19.90625 20 L 22 26 L 24 26 L 17 6 Z M 16 8.84375 L 19.1875 18 L 12.8125 18 Z" />
+                                        </svg>
+                                        <span class="lab-only">OpenDyslexic</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Font type accessibility menu end-->
+                        <!--Font size accessibility menu-->
+                        <li class="resizer-label">Ajustes de fuente</li>
+                        <li>
+                            <ul class="access-float-font">
+                                <li>
+                                    <button class="lab-font-smaller">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 22.085938 5 27 9.914063 27 16 C 27 22.085938 22.085938 27 16 27 C 9.914063 27 5 22.085938 5 16 C 5 9.914063 9.914063 5 16 5 Z M 10 15 L 10 17 L 22 17 L 22 15 Z" />
+                                        </svg>
+                                        <span class="lab-only">Reducir</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-larger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 22.085938 5 27 9.914063 27 16 C 27 22.085938 22.085938 27 16 27 C 9.914063 27 5 22.085938 5 16 C 5 9.914063 9.914063 5 16 5 Z M 15 10 L 15 15 L 10 15 L 10 17 L 15 17 L 15 22 L 17 22 L 17 17 L 22 17 L 22 15 L 17 15 L 17 10 Z" />
+                                        </svg>
+                                        <span class="lab-only">Aumentar</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-link-underline">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 21.75 4 C 20.078125 4 18.492188 4.660156 17.3125 5.84375 L 15.84375 7.3125 C 14.660156 8.496094 14 10.078125 14 11.75 C 14 12.542969 14.152344 13.316406 14.4375 14.03125 L 16.0625 12.40625 C 15.859375 11.109375 16.253906 9.714844 17.25 8.71875 L 18.71875 7.25 C 19.523438 6.445313 20.613281 6 21.75 6 C 22.886719 6 23.945313 6.445313 24.75 7.25 C 26.410156 8.910156 26.410156 11.621094 24.75 13.28125 L 23.28125 14.75 C 22.476563 15.554688 21.386719 16 20.25 16 C 20.027344 16 19.808594 15.976563 19.59375 15.9375 L 17.96875 17.5625 C 18.683594 17.847656 19.457031 18 20.25 18 C 21.921875 18 23.507813 17.339844 24.6875 16.15625 L 26.15625 14.6875 C 27.339844 13.503906 28 11.921875 28 10.25 C 28 8.578125 27.339844 7.027344 26.15625 5.84375 C 24.976563 4.660156 23.421875 4 21.75 4 Z M 19.28125 11.28125 L 11.28125 19.28125 L 12.71875 20.71875 L 20.71875 12.71875 Z M 11.75 14 C 10.078125 14 8.492188 14.660156 7.3125 15.84375 L 5.84375 17.3125 C 4.660156 18.496094 4 20.078125 4 21.75 C 4 23.421875 4.660156 24.972656 5.84375 26.15625 C 7.023438 27.339844 8.578125 28 10.25 28 C 11.921875 28 13.507813 27.339844 14.6875 26.15625 L 16.15625 24.6875 C 17.339844 23.503906 18 21.921875 18 20.25 C 18 19.457031 17.847656 18.683594 17.5625 17.96875 L 15.9375 19.59375 C 16.140625 20.890625 15.746094 22.285156 14.75 23.28125 L 13.28125 24.75 C 12.476563 25.554688 11.386719 26 10.25 26 C 9.113281 26 8.054688 25.554688 7.25 24.75 C 5.589844 23.089844 5.589844 20.378906 7.25 18.71875 L 8.71875 17.25 C 9.523438 16.445313 10.613281 16 11.75 16 C 11.972656 16 12.191406 16.023438 12.40625 16.0625 L 14.03125 14.4375 C 13.316406 14.152344 12.542969 14 11.75 14 Z" />
+                                        </svg>
+                                        <span class="lab-only">Subrayar enlaces</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-readable">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 8 6 L 8 8 L 15 8 L 15 22 L 17 22 L 17 8 L 24 8 L 24 6 Z M 10 21.5 L 5.625 25 L 10 28.5 L 10 26 L 22 26 L 22 28.5 L 26.375 25 L 22 21.5 L 22 24 L 10 24 Z" />
+                                        </svg>
+                                        <span class="lab-only">Legible</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-font-normal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 12.78125 5.28125 L 4.78125 13.28125 L 4.09375 14 L 4.78125 14.71875 L 12.78125 22.71875 L 14.21875 21.28125 L 7.9375 15 L 21 15 C 23.753906 15 26 17.246094 26 20 L 26 27 L 28 27 L 28 20 C 28 16.15625 24.84375 13 21 13 L 7.9375 13 L 14.21875 6.71875 Z" />
+                                        </svg>
+                                        <span class="lab-only">Fuente por defecto</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--Font size accessibility menu-->
+                        <!--Accessibility reset-->
+                        <li>
+                            <button class="lab-reset">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                    <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 L 27 16 C 27 22.085938 22.085938 27 16 27 C 9.914063 27 5 22.085938 5 16 C 5 9.914063 9.914063 5 16 5 C 19.875 5 23.261719 6.984375 25.21875 10 L 20 10 L 20 12 L 28 12 L 28 4 L 26 4 L 26 7.71875 C 23.617188 4.84375 20.019531 3 16 3 Z" />
+                                </svg>
+                                <span class="lab-only">Restablecer todo</span>
+                            </button>
+                        </li>
+                        <!--Accessibility reset end-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--Accessibility end-->
+        <!--Header-->
+        <header id="lab-header" class="header-full topbar-mode-default topbar-shadow-default" style="padding-top: 112px;">
+            <div id="lab-header-in">
+                <div id="lab-logo-nav">
+                    <!--Header top bar-->
+                    <div id="lab-wcag" class="lab-container">
+                        <div class="icon-scp-top-left">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                    <path d="M 8.65625 3 C 8.132813 3 7.617188 3.1875 7.1875 3.53125 L 7.125 3.5625 L 7.09375 3.59375 L 3.96875 6.8125 L 4 6.84375 C 3.035156 7.734375 2.738281 9.066406 3.15625 10.21875 C 3.160156 10.226563 3.152344 10.242188 3.15625 10.25 C 4.003906 12.675781 6.171875 17.359375 10.40625 21.59375 C 14.65625 25.84375 19.402344 27.925781 21.75 28.84375 L 21.78125 28.84375 C 22.996094 29.25 24.3125 28.960938 25.25 28.15625 L 28.40625 25 C 29.234375 24.171875 29.234375 22.734375 28.40625 21.90625 L 24.34375 17.84375 L 24.3125 17.78125 C 23.484375 16.953125 22.015625 16.953125 21.1875 17.78125 L 19.1875 19.78125 C 18.464844 19.433594 16.742188 18.542969 15.09375 16.96875 C 13.457031 15.40625 12.621094 13.609375 12.3125 12.90625 L 14.3125 10.90625 C 15.152344 10.066406 15.167969 8.667969 14.28125 7.84375 L 14.3125 7.8125 L 14.21875 7.71875 L 10.21875 3.59375 L 10.1875 3.5625 L 10.125 3.53125 C 9.695313 3.1875 9.179688 3 8.65625 3 Z M 8.65625 5 C 8.730469 5 8.804688 5.035156 8.875 5.09375 L 12.875 9.1875 L 12.96875 9.28125 C 12.960938 9.273438 13.027344 9.378906 12.90625 9.5 L 10.40625 12 L 9.9375 12.4375 L 10.15625 13.0625 C 10.15625 13.0625 11.304688 16.136719 13.71875 18.4375 L 13.9375 18.625 C 16.261719 20.746094 19 21.90625 19 21.90625 L 19.625 22.1875 L 22.59375 19.21875 C 22.765625 19.046875 22.734375 19.046875 22.90625 19.21875 L 27 23.3125 C 27.171875 23.484375 27.171875 23.421875 27 23.59375 L 23.9375 26.65625 C 23.476563 27.050781 22.988281 27.132813 22.40625 26.9375 C 20.140625 26.046875 15.738281 24.113281 11.8125 20.1875 C 7.855469 16.230469 5.789063 11.742188 5.03125 9.5625 C 4.878906 9.15625 4.988281 8.554688 5.34375 8.25 L 5.40625 8.1875 L 8.4375 5.09375 C 8.507813 5.035156 8.582031 5 8.65625 5 Z" />
+                                </svg>922 21 59 09 | info@coordicanarias.com </div>
+                        </div>
+                        <div class="ml-auto icon-scp-top">
+                            <a href="https://www.facebook.com/CoordiCanarias/" aria-label="Facebook de Coordicanarias" tabindex="0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                    <path d="M 19.253906 2 C 15.311906 2 13 4.0821719 13 8.8261719 L 13 13 L 8 13 L 8 18 L 13 18 L 13 30 L 18 30 L 18 18 L 22 18 L 23 13 L 18 13 L 18 9.671875 C 18 7.884875 18.582766 7 20.259766 7 L 23 7 L 23 2.2050781 C 22.526 2.1410781 21.144906 2 19.253906 2 z" />
+                                </svg>
+                            </a>
+                            <a href="https://x.com/coordicanarias" aria-label="X (antes Twitter) de Coordicanarias" tabindex="0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                    <path d="M 18.42 14.009 L 27.891 3 L 25.703 3 L 17.446 12.588 L 10.894 3 L 3 3 L 12.921 17.411 L 3 29 L 5.188 29 L 13.895 19.006 L 20.806 29 L 28.7 29 L 18.42 14.009 Z M 15.026 17.708 L 14.07 16.393 L 5.95 4.56 L 9.744 4.56 L 16.209 14.011 L 17.165 15.326 L 25.704 27.517 L 21.91 27.517 L 15.026 17.708 Z" />
+                                </svg>
+                            </a>
+                            <a href="https://es.linkedin.com/company/coordicanarias" aria-label="LinkedIn de Coordicanarias" tabindex="0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                    <path d="M 8.6425781 4 C 7.1835781 4 6 5.181625 6 6.640625 C 6 8.099625 7.182625 9.3085938 8.640625 9.3085938 C 10.098625 9.3085938 11.283203 8.099625 11.283203 6.640625 C 11.283203 5.182625 10.101578 4 8.6425781 4 z M 21.535156 11 C 19.316156 11 18.0465 12.160453 17.4375 13.314453 L 17.373047 13.314453 L 17.373047 11.310547 L 13 11.310547 L 13 26 L 17.556641 26 L 17.556641 18.728516 C 17.556641 16.812516 17.701266 14.960938 20.072266 14.960938 C 22.409266 14.960937 22.443359 17.145609 22.443359 18.849609 L 22.443359 26 L 26.994141 26 L 27 26 L 27 17.931641 C 27 13.983641 26.151156 11 21.535156 11 z M 6.3632812 11.310547 L 6.3632812 26 L 10.923828 26 L 10.923828 11.310547 L 6.3632812 11.310547 z" />
+                                </svg>
+                            </a>
+                            <a href="https://www.instagram.com/coordicanarias"
+                               aria-label="Instagram de Coordicanarias"
+                               tabindex="0">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 32 32"
+                                     role="img"
+                                     aria-labelledby="instagram-icon"
+                                     focusable="false">
+                                    <title id="instagram-icon">Instagram</title>
+                                    <path d="M 11.46875 5 C 7.917969 5 5 7.914062 5 11.46875 L 5 20.53125 C 5 24.082031 7.914062 27 11.46875 27 L 20.53125 27 C 24.082031 27 27 24.085938 27 20.53125 L 27 11.46875 C 27 7.917969 24.085938 5 20.53125 5 Z M 11.46875 7 L 20.53125 7 C 23.003906 7 25 8.996094 25 11.46875 L 25 20.53125 C 25 23.003906 23.003906 25 20.53125 25 L 11.46875 25 C 8.996094 25 7 23.003906 7 20.53125 L 7 11.46875 C 7 8.996094 8.996094 7 11.46875 7 Z M 21.90625 9.1875 C 21.402344 9.1875 21 9.589844 21 10.09375 C 21 10.597656 21.402344 11 21.90625 11 C 22.410156 11 22.8125 10.597656 22.8125 10.09375 C 22.8125 9.589844 22.410156 9.1875 21.90625 9.1875 Z M 16 10 C 12.699219 10 10 12.699219 10 16 C 10 19.300781 12.699219 22 16 22 C 19.300781 22 22 19.300781 22 16 C 22 12.699219 19.300781 10 16 10 Z M 16 12 C 18.222656 12 20 13.777344 20 16 C 20 18.222656 18.222656 20 16 20 C 13.777344 20 12 18.222656 12 16 C 12 13.777344 13.777344 12 16 12 Z"/>
+                                </svg>
+                            </a>
+                            <!-- Icono de búsqueda -->
+                            <a href="#"
+                               id="search-icon-trigger"
+                               aria-label="Buscar en el sitio"
+                               tabindex="0"
+                               role="button"
+                               aria-expanded="false"
+                               aria-controls="search-modal">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                    <path d="M 19 3 C 13.488281 3 9 7.488281 9 13 C 9 15.394531 9.839844 17.589844 11.25 19.3125 L 3.28125 27.28125 L 4.71875 28.71875 L 12.6875 20.75 C 14.410156 22.160156 16.605469 23 19 23 C 24.511719 23 29 18.511719 29 13 C 29 7.488281 24.511719 3 19 3 Z M 19 5 C 23.429688 5 27 8.570313 27 13 C 27 17.429688 23.429688 21 19 21 C 14.570313 21 11 17.429688 11 13 C 11 8.570313 14.570313 5 19 5 Z"/>
+                                </svg>
+                            </a>
+                            <!--<a aria-label="Pinterest" tabindex="0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                    <path d="M 16.09375 4 C 11.01675 4 6 7.3833281 6 12.861328 C 6 16.344328 7.9584844 18.324219 9.1464844 18.324219 C 9.6364844 18.324219 9.9199219 16.958266 9.9199219 16.572266 C 9.9199219 16.112266 8.7460938 15.131797 8.7460938 13.216797 C 8.7460938 9.2387969 11.774359 6.4199219 15.693359 6.4199219 C 19.063359 6.4199219 21.556641 8.3335625 21.556641 11.851562 C 21.556641 14.478563 20.501891 19.40625 17.087891 19.40625 C 15.855891 19.40625 14.802734 18.516234 14.802734 17.240234 C 14.802734 15.370234 16 13.558906 16 11.628906 C 16 8.3529063 11.462891 8.94725 11.462891 12.90625 C 11.462891 13.73725 11.5665 14.657063 11.9375 15.414062 C 11.2555 18.353063 10 23.037406 10 26.066406 C 10 27.001406 10.133656 27.921422 10.222656 28.857422 C 10.390656 29.045422 10.307453 29.025641 10.564453 28.931641 C 13.058453 25.517641 12.827078 24.544172 13.955078 20.076172 C 14.564078 21.234172 16.137766 21.857422 17.384766 21.857422 C 22.639766 21.857422 25 16.736141 25 12.119141 C 25 7.2061406 20.75475 4 16.09375 4 z" />
+                                </svg>
+                            </a>-->
+                        </div>
+                    </div>
+                    <!--Header top bar end-->
+                    <!--Header middle bar-->
+                    <div class="lab-container">
+                        <div id="lab-bar-left">
+                            <div id="lab-logo">
+                                <a href="../index.html" class="" title="Logo de Coordicanarias" rel="home">
+                                    <span class="">
+                                        <picture>
+                                            <img src="../images/brand-coordi-black.svg" width="250" alt="Logo de Coordicanarias" class="" />
+                                        </picture>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="lab-bar-right">
+                            <nav id="lab-main-menu" tabindex="-1" aria-label="Primary menu">
+                                <div class="lab-main-menu">
+                                    <ul id="menu-main-menu" class="nav-menu">
+                                        <li class="menu-item">
+                                            <a href="../index.html" class="">Inicio</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="" data-scroll href="#objeto-pc">¿Qué son las cookies?</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="" data-scroll href="#politica-cookies">Política de Cookies</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="" data-scroll href="#contacto-pc">Contacto</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="../index.html#features" class="">Áreas</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                            <div id="lab-offcanvas-button">
+                                <a class="toggle-nav open" tabindex="1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 4 7 L 4 9 L 28 9 L 28 7 Z M 4 15 L 4 17 L 28 17 L 28 15 Z M 4 23 L 4 25 L 28 25 L 28 23 Z" />
+                                    </svg>
+                                    <span class="sr-only">Menú lateral</span>
+                                </a>
+                            </div>
+                            <div id="lab-offcanvas" class="off-canvas-right">
+                                <div id="lab-offcanvas-toolbar">
+                                    <a class="toggle-nav-close close" tabindex="1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 7.21875 5.78125 L 5.78125 7.21875 L 14.5625 16 L 5.78125 24.78125 L 7.21875 26.21875 L 16 17.4375 L 24.78125 26.21875 L 26.21875 24.78125 L 17.4375 16 L 26.21875 7.21875 L 24.78125 5.78125 L 16 14.5625 Z" />
+                                        </svg>
+                                        <span class="sr-only">Cerrar menú lateral</span>
+                                    </a>
+                                </div>
+                                <div id="lab-offcanvas-content" class="">
+                                    <div class="row">
+                                        <div class="lab-offcanvas-menu lab-widget">
+                                            <ul id="menu-main-menu-1" class="nav-menu">
+                                                <li class="menu-item current-menu-item">
+                                                    <a href="../index.html" class="">Inicio</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a class="" href="../transparencia.html">Transparencia</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a class="" href="#objeto-pc">¿Qué son las cookies?</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a class="" href="#politica-cookies">Política de Cookies</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a class="" data-scroll href="#contacto-pc">Contacto</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a class="" href="../index.html#features">Áreas</a>
+                                                </li>
+                                                <li class="menu-item menu-search-item">
+                                                    <form id="mobile-search-form" class="mobile-search-form" role="search" aria-label="Buscar en el sitio">
+                                                        <div class="search-input-wrapper">
+                                                            <input
+                                                                type="search"
+                                                                id="mobile-search-input"
+                                                                class="mobile-search-input"
+                                                                placeholder="Buscar..."
+                                                                aria-label="Buscar en Coordicanarias"
+                                                                autocomplete="off"
+                                                                required>
+                                                            <button type="submit" class="mobile-search-button" aria-label="Buscar">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                                                    <path d="M 19 3 C 13.488281 3 9 7.488281 9 13 C 9 15.394531 9.839844 17.589844 11.25 19.3125 L 3.28125 27.28125 L 4.71875 28.71875 L 12.6875 20.75 C 14.410156 22.160156 16.605469 23 19 23 C 24.511719 23 29 18.511719 29 13 C 29 7.488281 24.511719 3 19 3 Z M 19 5 C 23.429688 5 27 8.570313 27 13 C 27 17.429688 23.429688 21 19 21 C 14.570313 21 11 17.429688 11 13 C 11 8.570313 14.570313 5 19 5 Z"/>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Header middle bar end-->
+                </div>
+            </div>
+        </header>
+
+        <!-- Modal de búsqueda -->
+        <div id="search-modal" class="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+            <div class="search-modal-overlay"></div>
+            <div class="search-modal-content">
+                <div class="search-modal-header">
+                    <h2 id="search-modal-title" class="sr-only">Buscar en Coordicanarias</h2>
+                    <button id="search-modal-close"
+                            class="search-modal-close"
+                            aria-label="Cerrar búsqueda">
+                    </button>
+                </div>
+                <div class="search-modal-body">
+                    <script async src="https://cse.google.com/cse.js?cx=406aa1d8b8d294efe"></script>
+                    <div class="gcse-search" data-enableAutoComplete="true"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--Header end-->
+        <main>
+        <!--Jumbotron-->
+        <div class="jumbotron_cookies" id="jumbotron">
+            <h1 class="display-4" style="padding-left: 20px; padding-right: 20px">Política de Cookies</h1>
+            <p class="lead" style="padding-bottom: 60px;">Información sobre el uso de cookies en nuestro sitio web</p>
+            <!--<hr class="my-4">-->
+            <!--<p>Me cago en todo lo que se menea</p>-->
+            <!--<a class="wm-button button" href="#identificacion-al" role="button">Identificación</a>-->
+        </div>
+        <!--Jumbotron end-->
+
+        <!--About section-->
+        <!--Descripción del Área-->
+        <!--<section id="identificacion-al" class="section">
+            <div class="main-container">
+                <div class="inside-container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 style="margin-bottom: 30px;">1. Identificación del titular del sitio web</h2>
+                            <p>En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa a los usuarios de los datos identificativos del titular del sitio web:</p>
+
+                            <div class="contact-info">
+                                <p><strong>Denominación Social:</strong> Coordinadora de Personas con Discapacidad Física de Canarias (COORDICANARIAS)</p>
+                                <p><strong>CIF:</strong> G-38027264</p>
+                                <p><strong>Domicilio Social:</strong> C/ Zurbarán, 7, Local 3, Los Andenes 38108<br>San Cristóbal de La Laguna, Santa Cruz de Tenerife</p>
+                                <p><strong>Teléfono:</strong> 922 21 59 09</p>
+                                <p><strong>Email:</strong> <a href="mailto:info@coordicanarias.com">info@coordicanarias.com</a></p>
+                                <p><strong>Sitio Web:</strong> <a href="https://coordicanarias.com" target="_blank">https://coordicanarias.com</a></p>
+                                <p><strong>Horario de Atención:</strong> Lunes a viernes de 8:00 a 15:00</p>
+                            </div>
+
+                            <div class="highlight-box">
+                                <p><strong>Nota:</strong> Recuerde completar el CIF de la entidad antes de publicar este aviso legal.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>-->
+        <!--About section end-->
+
+
+        <!--¿Qué son las cookies? section-->
+        <section id="objeto-pc" class="section section-bg">
+            <div class="main-container">
+                <div class="inside-container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 style="margin-bottom: 40px;">¿Qué son las cookies?</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p>Las cookies son pequeños archivos de texto que los sitios web que visita colocan en su dispositivo (ordenador, smartphone, tablet, etc.) para almacenar información sobre su navegación y permitir ciertas funcionalidades.</p>
+                        <p>En <strong>coordicanarias.com</strong> utilizamos cookies propias y de terceros para mejorar la experiencia de navegación, analizar el uso del sitio web y ofrecer contenidos y funcionalidades adaptados a sus preferencias.</p>
+                        <p>Esta Política de Cookies tiene por objeto informarle de manera clara y precisa sobre las cookies que utilizamos, su finalidad y cómo puede gestionarlas o desactivarlas si lo desea.</p>
+                        <p><strong>COORDICANARIAS</strong> se compromete a utilizar las cookies de manera transparente y respetuosa con su privacidad, cumpliendo con la legislación vigente en materia de protección de datos y servicios de la sociedad de la información.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--¿Qué son las cookies? end section-->
+
+        <!--Main Content-->
+        <section id="politica-cookies" class="section">
+            <div class="main-container">
+                <div class="inside-container">
+                    <div class="col-12">
+                        <h2 style="margin-bottom: 30px;">Política de Cookies</h2>
+                    </div>
+                    <!--Category Tabs-->
+                    <div class="category-tabs">
+
+                        <ul class="nav nav-tabs-transparency" role="tablist" aria-label="Secciones de política de cookies">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active"
+                                        id="tipos-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="tipos-pc"
+                                        aria-selected="true"
+                                        data-target="#tipos-pc">
+                                    <i class="fas fa-list tab-icon" aria-hidden="true"></i>
+                                    <span>Tipos de cookies</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        id="usamos-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="usamos-pc"
+                                        aria-selected="false"
+                                        data-target="#usamos-pc">
+                                    <i class="fas fa-cookie-bite tab-icon" aria-hidden="true"></i>
+                                    <span>Cookies que utilizamos</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        id="gestion-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="gestion-pc"
+                                        aria-selected="false"
+                                        data-target="#gestion-pc">
+                                    <i class="fas fa-cog tab-icon" aria-hidden="true"></i>
+                                    <span>Gestión de cookies</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link"
+                                        id="masinfo-tab"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="masinfo-pc"
+                                        aria-selected="false"
+                                        data-target="#masinfo-pc">
+                                    <i class="fas fa-info-circle tab-icon" aria-hidden="true"></i>
+                                    <span>Más información</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" id="legalTabContent">
+
+                        <!--TAB 1: TIPOS DE COOKIES-->
+                        <div class="tab-pane fade show active" id="tipos-pc" role="tabpanel" aria-labelledby="tipos-tab">
+
+                            <!--Tipos section-->
+                            <section class="section">
+                                <div class="main-container">
+                                    <div class="inside-container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h2 style="margin-bottom: 40px;">Tipos de cookies</h2>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <p>Las cookies se pueden clasificar según diferentes criterios:</p>
+
+                                            <h3>Según su titularidad</h3>
+                                            <ul>
+                                                <li><strong>Cookies propias:</strong> Son aquellas que se envían al equipo terminal del usuario desde un equipo o dominio gestionado por el propio editor (COORDICANARIAS) y desde el que se presta el servicio solicitado por el usuario.</li>
+                                                <li><strong>Cookies de terceros:</strong> Son aquellas que se envían al equipo terminal del usuario desde un equipo o dominio que no es gestionado por el editor, sino por otra entidad que trata los datos obtenidos a través de las cookies.</li>
+                                            </ul>
+
+                                            <h3>Según su finalidad</h3>
+                                            <ul>
+                                                <li><strong>Cookies técnicas:</strong> Permiten al usuario la navegación a través del sitio web y la utilización de las diferentes opciones o servicios que en ella existen. Son necesarias para el funcionamiento del sitio web.</li>
+                                                <li><strong>Cookies de personalización:</strong> Permiten al usuario acceder al servicio con algunas características generales predefinidas en función de una serie de criterios, como idioma, tipo de navegador, etc.</li>
+                                                <li><strong>Cookies de análisis o medición:</strong> Permiten al responsable de las mismas el seguimiento y análisis del comportamiento de los usuarios de los sitios web a los que están vinculadas, con el fin de introducir mejoras.</li>
+                                                <li><strong>Cookies de publicidad comportamental:</strong> Almacenan información del comportamiento de los usuarios obtenida a través de la observación continuada de sus hábitos de navegación, lo que permite desarrollar un perfil específico para mostrar publicidad.</li>
+                                            </ul>
+
+                                            <h3>Según su duración</h3>
+                                            <ul>
+                                                <li><strong>Cookies de sesión:</strong> Diseñadas para recabar y almacenar datos mientras el usuario accede a una página web. Se eliminan al cerrar el navegador.</li>
+                                                <li><strong>Cookies persistentes:</strong> Los datos siguen almacenados en el terminal y pueden ser accedidos y tratados durante un periodo definido por el responsable de la cookie, que puede ir de unos minutos a varios años.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <!--Tipos end section-->
+
+                        </div>
+                        <!--TAB 1 END-->
+
+                        <!--TAB 2: COOKIES QUE UTILIZAMOS-->
+                        <div class="tab-pane fade" id="usamos-pc" role="tabpanel" aria-labelledby="usamos-tab">
+
+                            <!--Usamos section-->
+                            <section class="section section-bg">
+                                <div class="main-container">
+                                    <div class="inside-container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h2 style="margin-bottom: 40px;">Cookies que utilizamos</h2>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <p>A continuación, detallamos las cookies que utiliza este sitio web:</p>
+
+                                            <h3>Cookies técnicas y de personalización</h3>
+                                            <p>Estas cookies son necesarias para el correcto funcionamiento del sitio web y permiten personalizar su experiencia de navegación:</p>
+
+                                            <div style="overflow-x: auto; margin: 20px 0;">
+                                                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                                                    <thead>
+                                                    <tr style="background-color: #2d353c; color: white;">
+                                                        <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Nombre</th>
+                                                        <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Finalidad</th>
+                                                        <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Duración</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;"><strong>lab_font_family</strong></td>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;">Almacena la preferencia de tipo de fuente seleccionada por el usuario en el menú de accesibilidad</td>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;">7 días</td>
+                                                    </tr>
+                                                    <tr style="background-color: #f9f9f9;">
+                                                        <td style="border: 1px solid #ddd; padding: 8px;"><strong>lab_font_size</strong></td>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;">Almacena el tamaño de fuente preferido por el usuario</td>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;">7 días</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;"><strong>lab_accessibility_settings</strong></td>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;">Guarda las configuraciones de accesibilidad (legibilidad, subrayado de enlaces, contraste)</td>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;">7 días</td>
+                                                    </tr>
+                                                    <tr style="background-color: #f9f9f9;">
+                                                        <td style="border: 1px solid #ddd; padding: 8px;"><strong>session_id</strong></td>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;">Identificador de sesión técnico para el funcionamiento del sitio</td>
+                                                        <td style="border: 1px solid #ddd; padding: 8px;">Sesión</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <h3>Cookies de análisis</h3>
+                                            <p><strong>Nota:</strong> Actualmente este sitio web no utiliza cookies de análisis o seguimiento de terceros. En caso de implementarse en el futuro (como Google Analytics), se solicitará el consentimiento previo del usuario y se detallará aquí su uso.</p>
+
+                                            <h3>Cookies de terceros</h3>
+                                            <p>Este sitio web no utiliza cookies de terceros con finalidades publicitarias o de marketing.</p>
+
+                                            <p><strong>Importante:</strong> La información anterior sobre las cookies utilizadas puede estar sujeta a cambios. Recomendamos consultar periódicamente esta política para mantenerse informado.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <!--Usamos end section-->
+
+                        </div>
+                        <!--TAB 2 END-->
+
+                        <!--TAB 3: GESTIÓN DE COOKIES-->
+                        <div class="tab-pane fade" id="gestion-pc" role="tabpanel" aria-labelledby="gestion-tab">
+
+                            <!--Gestion section-->
+                            <section class="section">
+                                <div class="main-container">
+                                    <div class="inside-container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h2 style="margin-bottom: 40px;">Gestión de cookies</h2>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <h3>Aceptación y rechazo de cookies</h3>
+                                            <p>Puede aceptar, rechazar o eliminar las cookies de este sitio web en cualquier momento mediante la configuración de su navegador. La mayoría de navegadores permiten gestionar las cookies de tres maneras:</p>
+                                            <ul>
+                                                <li>Las cookies no se aceptan nunca</li>
+                                                <li>El navegador pregunta al usuario si se debe aceptar cada cookie</li>
+                                                <li>Las cookies se aceptan siempre</li>
+                                            </ul>
+
+                                            <h3>Configuración de cookies por navegador</h3>
+                                            <p>A continuación, le indicamos cómo acceder a la configuración de cookies en los navegadores más utilizados:</p>
+
+                                            <ul>
+                                                <li><strong>Google Chrome:</strong> Configuración > Privacidad y seguridad > Cookies y otros datos de sitios
+                                                    <br><a href="https://support.google.com/chrome/answer/95647?hl=es" target="_blank" rel="noopener">Más información</a></li>
+
+                                                <li><strong>Mozilla Firefox:</strong> Opciones > Privacidad y seguridad > Cookies y datos del sitio
+                                                    <br><a href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-sitios-web-rastrear-preferencias" target="_blank" rel="noopener">Más información</a></li>
+
+                                                <li><strong>Safari (macOS):</strong> Preferencias > Privacidad > Cookies y datos de sitios web
+                                                    <br><a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Más información</a></li>
+
+                                                <li><strong>Microsoft Edge:</strong> Configuración > Cookies y permisos del sitio > Cookies y datos del sitio
+                                                    <br><a href="https://support.microsoft.com/es-es/microsoft-edge/eliminar-las-cookies-en-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener">Más información</a></li>
+
+                                                <li><strong>Opera:</strong> Configuración > Privacidad y seguridad > Cookies
+                                                    <br><a href="https://help.opera.com/en/latest/web-preferences/#cookies" target="_blank" rel="noopener">Más información</a></li>
+                                            </ul>
+
+                                            <h3>Consecuencias de deshabilitar las cookies</h3>
+                                            <p>Si decide deshabilitar las cookies, algunas funcionalidades del sitio web pueden verse afectadas:</p>
+                                            <ul>
+                                                <li>No se guardarán sus preferencias de accesibilidad (tipo de fuente, tamaño, configuraciones especiales)</li>
+                                                <li>Es posible que tenga que configurar nuevamente sus preferencias cada vez que visite el sitio</li>
+                                                <li>Algunas características del sitio pueden no funcionar correctamente</li>
+                                            </ul>
+
+                                            <p><strong>Importante:</strong> Las cookies técnicas son necesarias para el funcionamiento básico del sitio. Si las deshabilita, algunas funciones no estarán disponibles.</p>
+
+                                            <h3>Consentimiento</h3>
+                                            <p>Al navegar y continuar en nuestro sitio web, usted estará consintiendo el uso de las cookies en las condiciones contenidas en esta Política de Cookies. COORDICANARIAS proporciona información sobre su Política de Cookies de manera accesible para que pueda estar plenamente informado.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <!--Gestion end section-->
+
+                        </div>
+                        <!--TAB 3 END-->
+
+                        <!--TAB 4: MÁS INFORMACIÓN-->
+                        <div class="tab-pane fade" id="masinfo-pc" role="tabpanel" aria-labelledby="masinfo-tab">
+
+                            <!--Mas info section-->
+                            <section class="section section-bg">
+                                <div class="main-container">
+                                    <div class="inside-container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h2 style="margin-bottom: 40px;">Más información</h2>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <h3>Enlaces de interés</h3>
+                                            <p>Si desea ampliar información sobre cookies y su uso, puede consultar los siguientes enlaces:</p>
+                                            <ul>
+                                                <li><strong>Agencia Española de Protección de Datos (AEPD):</strong>
+                                                    <br><a href="https://www.aepd.es/es/guias/guia-cookies" target="_blank" rel="noopener">Guía sobre el uso de las cookies</a></li>
+
+                                                <li><strong>Oficina de Seguridad del Internauta:</strong>
+                                                    <br><a href="https://www.osi.es/es" target="_blank" rel="noopener">Información sobre seguridad en Internet</a></li>
+
+                                                <li><strong>All About Cookies:</strong>
+                                                    <br><a href="https://www.allaboutcookies.org/es/" target="_blank" rel="noopener">Información detallada sobre cookies</a></li>
+                                            </ul>
+
+                                            <h3>Normativa aplicable</h3>
+                                            <p>La utilización de cookies en este sitio web se rige por la siguiente normativa:</p>
+                                            <ul>
+                                                <li>Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE)</li>
+                                                <li>Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo, de 27 de abril de 2016 (RGPD)</li>
+                                                <li>Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD)</li>
+                                            </ul>
+
+                                            <h3>Contacto</h3>
+                                            <p>Si tiene alguna duda sobre esta Política de Cookies, puede contactar con nosotros en:</p>
+                                            <div class="contact-info" style="margin: 20px 0;">
+                                                <p><strong>Email:</strong> <a href="mailto:info@coordicanarias.com">info@coordicanarias.com</a></p>
+                                                <p><strong>Teléfono:</strong> 922 21 59 09</p>
+                                                <p><strong>Dirección postal:</strong> C/ Zurbarán, 7, Local 3, Los Andenes 38108<br>San Cristóbal de La Laguna, Santa Cruz de Tenerife</p>
+                                            </div>
+
+                                            <h3>Actualización de esta política</h3>
+                                            <p>COORDICANARIAS puede modificar esta Política de Cookies en función de nuevos requisitos legislativos, reglamentarios, o con la finalidad de adaptar dicha política a las instrucciones dictadas por la Agencia Española de Protección de Datos.</p>
+                                            <p>Cuando se produzcan cambios significativos en esta Política de Cookies, se comunicará a los usuarios a través del sitio web.</p>
+
+                                            <p><strong>Última actualización:</strong> Diciembre 2025</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <!--Mas info end section-->
+
+                        </div>
+                        <!--TAB 4 END-->
+
+                    </div>
+                    <!--Tab content end-->
+                </div>
+            </div>
+        </section>
+        <!--Main content end-->
+
+        <!--Contact section-->
+        <section id="contacto-pc" class="section">
+            <div class="main-container">
+                <div class="inside-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="contact-con">
+                                <h2>Contacto</h2>
+                                <p><strong>Correo electrónico:</strong> <a href="mailto:info@coordicanarias.com">info@coordicanarias.com</a></p>
+                                <p><strong>Teléfono:</strong> 922 21 59 09</p>
+                                <p><strong>Dirección postal:</strong><br>
+                                    C/ Zurbarán, 7, Local 3, Los Andenes 38108<br>
+                                    San Cristóbal de La Laguna<br>
+                                    Santa Cruz de Tenerife</p>
+                                <p><strong>Horario de atención:</strong> Lunes a viernes de 8:00 a 15:00</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Formulario de contacto</h3>
+                            <br>
+
+                            <!-- Mensaje de éxito/error -->
+                            <div id="form-message" class="form-message" style="display: none;"></div>
+
+                            <div class="contact-form">
+                                <form method="post" action="../php/enviar_correo.php" id="contact-form">
+                                    <input type="hidden" name="area" value="politica-cookies">
+                                    <label for="fname">Nombre:</label>
+                                    <input type="text" id="fname" name="txtName" placeholder="Tu nombre y apellidos" title="Nombre" required />
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" name="txtEmail" placeholder="Tu correo electrónico" title="Email" required />
+                                    <label for="subject">Mensaje:</label>
+                                    <textarea id="subject" name="txtMsg" placeholder="Tu mensaje" title="Mensaje" style="height:200px" required></textarea>
+                                    <input type="submit" value="Enviar">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--Contact section end-->
+        </main>
+
+
+        <!--Footer-->
+        <footer id="lab-footer" class="page-footer footer-bg">
+            <!--Footer Three columns-->
+            <div class="main-container">
+                <div class="inside-container">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4 foot-col-padd">
+                            <div class="foot-logo">
+                                <img src="../images/brand-coordi-black.svg" width="250" alt="Logotipo de Coordicanarias" class="float-center img-fluid">
+                            </div>
+                            <div class="dream-text">
+                                <p>Coordinadora de Personas con Discapacidad Física de Canarias.
+                                    Acompañamos, defendemos los derechos y promovemos la inclusión de
+                                    las personas con discapacidad.</p>
+                            </div>
+                            <div class="foot-icon">
+                                <?php if (!empty($config['redes_facebook'])): ?>
+                                <a href="<?= attr($config['redes_facebook']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Coordicanarias" tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 19.253906 2 C 15.311906 2 13 4.0821719 13 8.8261719 L 13 13 L 8 13 L 8 18 L 13 18 L 13 30 L 18 30 L 18 18 L 22 18 L 23 13 L 18 13 L 18 9.671875 C 18 7.884875 18.582766 7 20.259766 7 L 23 7 L 23 2.2050781 C 22.526 2.1410781 21.144906 2 19.253906 2 z" />
+                                    </svg>
+                                </a>
+                                <?php endif; ?>
+                                <?php if (!empty($config['redes_twitter'])): ?>
+                                <a href="<?= attr($config['redes_twitter']) ?>" target="_blank" rel="noopener noreferrer" aria-label="X (antes Twitter) de Coordicanarias" tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 18.42 14.009 L 27.891 3 L 25.703 3 L 17.446 12.588 L 10.894 3 L 3 3 L 12.921 17.411 L 3 29 L 5.188 29 L 13.895 19.006 L 20.806 29 L 28.7 29 L 18.42 14.009 Z M 15.026 17.708 L 14.07 16.393 L 5.95 4.56 L 9.744 4.56 L 16.209 14.011 L 17.165 15.326 L 25.704 27.517 L 21.91 27.517 L 15.026 17.708 Z" />
+                                    </svg>
+                                </a>
+                                <?php endif; ?>
+                                <?php if (!empty($config['redes_linkedin'])): ?>
+                                <a href="<?= attr($config['redes_linkedin']) ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Coordicanarias" tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                        <path d="M 8.6425781 4 C 7.1835781 4 6 5.181625 6 6.640625 C 6 8.099625 7.182625 9.3085938 8.640625 9.3085938 C 10.098625 9.3085938 11.283203 8.099625 11.283203 6.640625 C 11.283203 5.182625 10.101578 4 8.6425781 4 z M 21.535156 11 C 19.316156 11 18.0465 12.160453 17.4375 13.314453 L 17.373047 13.314453 L 17.373047 11.310547 L 13 11.310547 L 13 26 L 17.556641 26 L 17.556641 18.728516 C 17.556641 16.812516 17.701266 14.960938 20.072266 14.960938 C 22.409266 14.960937 22.443359 17.145609 22.443359 18.849609 L 22.443359 26 L 26.994141 26 L 27 26 L 27 17.931641 C 27 13.983641 26.151156 11 21.535156 11 z M 6.3632812 11.310547 L 6.3632812 26 L 10.923828 26 L 10.923828 11.310547 L 6.3632812 11.310547 z" />
+                                    </svg>
+                                </a>
+                                <?php endif; ?>
+                                <?php if (!empty($config['redes_instagram'])): ?>
+                                <a href="<?= attr($config['redes_instagram']) ?>"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   aria-label="Instagram de Coordicanarias"
+                                   tabindex="0">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 32 32"
+                                         role="img"
+                                         aria-labelledby="instagram-icon"
+                                         focusable="false">
+                                        <title id="instagram-icon">Instagram</title>
+                                        <path d="M 11.46875 5 C 7.917969 5 5 7.914062 5 11.46875 L 5 20.53125 C 5 24.082031 7.914062 27 11.46875 27 L 20.53125 27 C 24.082031 27 27 24.085938 27 20.53125 L 27 11.46875 C 27 7.917969 24.085938 5 20.53125 5 Z M 11.46875 7 L 20.53125 7 C 23.003906 7 25 8.996094 25 11.46875 L 25 20.53125 C 25 23.003906 23.003906 25 20.53125 25 L 11.46875 25 C 8.996094 25 7 23.003906 7 20.53125 L 7 11.46875 C 7 8.996094 8.996094 7 11.46875 7 Z M 21.90625 9.1875 C 21.402344 9.1875 21 9.589844 21 10.09375 C 21 10.597656 21.402344 11 21.90625 11 C 22.410156 11 22.8125 10.597656 22.8125 10.09375 C 22.8125 9.589844 22.410156 9.1875 21.90625 9.1875 Z M 16 10 C 12.699219 10 10 12.699219 10 16 C 10 19.300781 12.699219 22 16 22 C 19.300781 22 22 19.300781 22 16 C 22 12.699219 19.300781 10 16 10 Z M 16 12 C 18.222656 12 20 13.777344 20 16 C 20 18.222656 18.222656 20 16 20 C 13.777344 20 12 18.222656 12 16 C 12 13.777344 13.777344 12 16 12 Z"/>
+                                    </svg>
+                                </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4" style="padding-top: 20px">
+                            <h3 style="text-align: center; padding-bottom: 15px;
+                            border-bottom: 1px solid #000; margin-bottom: 20px">Enlaces Rápidos</h3>
+
+                            <div class="row">
+                                <div class="col-6 pop-link" style="text-align: center">
+                                    <a class="" data-scroll href="#home">Inicio</a>
+                                    <a class="" data-scroll href="#objeto-pc">¿Qué son las cookies?</a>
+                                </div>
+                                <div class="col-6 pop-link" style="text-align: center">
+                                    <a class="" data-scroll href="#politica-cookies">Política de Cookies</a>
+                                    <a class="" data-scroll href="#contacto-pc">Contacto</a>
+                                    <a href="../index.html#features" class="">Áreas</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4" style="padding-top: 20px">
+                            <h3 style="text-align: center; padding-bottom: 15px;
+                            border-bottom: 1px solid #000; margin-bottom: 20px">Información Legal</h3>
+                            <div class="row">
+                                <div class="col-12 pop-link" style="text-align: center">
+                                    <a href="#home">Política de cookies</a>
+                                    <a href="politica-privacidad.html">Política de privacidad</a>
+                                    <a href="alegal.html">Aviso legal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Footer three columns end-->
+
+
+            <!--Footer copyright-->
+            <div class="footer-container footer-dark">
+                <div class="inside-container">
+                    <div class="row footer-dark">
+                        <div class="col-12 copyright-text" style="text-align: center;">
+                            <a href="https://www.gobiernodecanarias.org/bienestarsocial/dependencia/" target="_blank" rel="noopener">
+                                <img src="../images/logos_gobcan/Logo_GobCan_claim_negro_mod1.png" alt="Gobierno de Canarias - Dirección General de Dependencia" width="120" style="margin: 15px 20px 30px 15px">
+                            </a>
+                            <a href="accesibilidad.html" class="accesibilidad-badge">
+                                        <span class="wcag-badge">
+                                            <strong>accesibilidad WCAG 2.2 AA</strong>
+                                        </span>
+                            </a>
+                            <p>&#169; <script>document.write(new Date().getFullYear());</script> <a href="https://coordicanarias.com/" target="_blank" rel="noopener">Coordicanarias</a><br> Sitio Web subvencionado por la Consejería de Bienestar Social, Igualdad, Juventud, Infancia y Discapacidad del Gobierno de Canarias.</p>
+                            <div id="lab-back-top" style="display: none;">
+                                <a id="backtotop" tabindex="0" aria-label="Volver arriba">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="isolation:isolate" viewBox="0 0 285 285">
+                                        <defs />
+                                        <path fill="#FFF" d="M282 195L149 62a9 9 0 00-13 0L3 195a9 9 0 000 13l14 15a9 9 0 0013 0l112-113 113 113a9 9 0 0013 0l14-15a9 9 0 000-13z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Footer copyright-->
+        </footer>
+        <!--Footer end-->
+    </div>
+
+    <!-- Banner de Cookies -->
+    <div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Aviso de cookies" aria-describedby="cookie-banner-description">
+        <div class="cookie-banner-content">
+            <div class="cookie-banner-text">
+                <p id="cookie-banner-description">
+                    Este sitio web utiliza cookies propias para mejorar su experiencia de navegación y recordar sus preferencias de accesibilidad.
+                    Al continuar navegando, acepta su uso.
+                    <a href="politica-cookies.html" target="_blank" rel="noopener">Más información sobre cookies</a>
+                </p>
+            </div>
+            <div class="cookie-banner-buttons">
+                <button id="cookie-accept" class="cookie-btn cookie-accept" aria-label="Aceptar cookies">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Fin Banner de Cookies -->
+
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/mixitup.min.js"></script>
+    <script src="../js/js-cookie.js"></script>
+    <script src="../js/main.js"></script>
+
+<!-- Script para tabs de aviso legal -->
+<script>
+    $(document).ready(function() {
+        // Manejar clic en tabs
+        $('.nav-tabs-transparency .nav-link').on('click', function(e) {
+            e.preventDefault();
+
+            // Remover active de todos los tabs y contenidos
+            $('.nav-tabs-transparency .nav-link').removeClass('active');
+            $('.tab-pane').removeClass('show active');
+
+            // Añadir active al tab clickeado
+            $(this).addClass('active');
+
+            // Mostrar el contenido correspondiente
+            var target = $(this).data('target');
+            $(target).addClass('show active');
+
+            // Actualizar aria-selected
+            $('.nav-tabs-transparency .nav-link').attr('aria-selected', 'false');
+            $(this).attr('aria-selected', 'true');
+        });
+
+        // Soporte para navegación por teclado
+        $('.nav-tabs-transparency .nav-link').on('keydown', function(e) {
+            var $this = $(this);
+            var $items = $('.nav-tabs-transparency .nav-link');
+            var index = $items.index($this);
+
+            // Flecha derecha o abajo
+            if (e.which === 39 || e.which === 40) {
+                e.preventDefault();
+                var $next = $items.eq(index + 1).length ? $items.eq(index + 1) : $items.eq(0);
+                $next.focus().click();
+            }
+            // Flecha izquierda o arriba
+            else if (e.which === 37 || e.which === 38) {
+                e.preventDefault();
+                var $prev = $items.eq(index - 1).length ? $items.eq(index - 1) : $items.eq($items.length - 1);
+                $prev.focus().click();
+            }
+            // Home
+            else if (e.which === 36) {
+                e.preventDefault();
+                $items.eq(0).focus().click();
+            }
+            // End
+            else if (e.which === 35) {
+                e.preventDefault();
+                $items.eq($items.length - 1).focus().click();
+            }
+        });
+    });
+</script>
+
+</body>
+
+</html>
