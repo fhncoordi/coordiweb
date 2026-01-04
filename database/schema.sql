@@ -10,44 +10,10 @@
 USE coordica_crc;
 
 -- ============================================
--- TABLA: usuarios
--- Sistema de autenticación con roles
+-- NOTA: La tabla usuarios se crea DESPUÉS de la tabla areas
+-- para poder establecer la foreign key correctamente.
+-- Ver definición completa al final del archivo.
 -- ============================================
-CREATE TABLE IF NOT EXISTS usuarios (
-    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    nombre_completo VARCHAR(100) NOT NULL,
-    rol ENUM('admin', 'editor') DEFAULT 'editor',
-    activo TINYINT(1) DEFAULT 1,
-    ultimo_acceso DATETIME NULL,
-    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    fecha_modificacion DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_username (username),
-    INDEX idx_email (email),
-    INDEX idx_rol (rol),
-    INDEX idx_activo (activo)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ============================================
--- CREAR USUARIO ADMINISTRADOR INICIAL
--- ============================================
--- IMPORTANTE: Después de ejecutar este schema, debes crear el usuario admin manualmente
--- desde el panel de phpMyAdmin o ejecutando este SQL con TU PROPIA contraseña:
---
--- INSERT INTO usuarios (username, email, password_hash, nombre_completo, rol, activo)
--- VALUES (
---     'admin',
---     'admin@coordicanarias.com',
---     '$2y$10$TU_PASSWORD_HASH_AQUI',  -- Generar con: password_hash('tu_password', PASSWORD_DEFAULT)
---     'Administrador',
---     'admin',
---     1
--- );
---
--- Para generar el hash de tu contraseña, ejecuta en PHP:
--- echo password_hash('tu_password_seguro', PASSWORD_DEFAULT);
 
 -- ============================================
 -- TABLA: areas
@@ -188,6 +154,7 @@ ON DUPLICATE KEY UPDATE clave = clave;
 -- ============================================
 -- TABLA: registro_actividad
 -- Log de acciones administrativas para auditoría
+-- NOTA: La FK a usuarios se agrega en migration_usuarios.sql
 -- ============================================
 CREATE TABLE IF NOT EXISTS registro_actividad (
     id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -199,7 +166,6 @@ CREATE TABLE IF NOT EXISTS registro_actividad (
     ip_address VARCHAR(45),
     user_agent VARCHAR(255),
     fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL,
     INDEX idx_usuario (usuario_id),
     INDEX idx_fecha (fecha_hora),
     INDEX idx_accion (accion)

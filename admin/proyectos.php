@@ -18,6 +18,10 @@ setSecurityHeaders();
 // Obtener usuario actual
 $usuario = getCurrentUser();
 
+// Verificar permisos por rol
+$es_coordinador = ($usuario['rol'] === 'coordinador');
+$area_permitida = $es_coordinador ? $usuario['area_id'] : null;
+
 // Variables para mensajes
 $mensaje = '';
 $tipo_mensaje = '';
@@ -33,6 +37,12 @@ if (isset($_GET['crear'])) {
 
     if (!$proyecto) {
         header('Location: ' . url('admin/proyectos.php?error=not_found'));
+        exit;
+    }
+
+    // Verificar permisos: coordinador solo puede editar proyectos de su área
+    if (!puedeGestionarProyecto($proyecto_id)) {
+        header('Location: ' . url('admin/proyectos.php?error=permission_denied'));
         exit;
     }
 }
@@ -51,8 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proyecto_id = (int)$_POST['proyecto_id'];
             $nuevo_estado = (int)$_POST['nuevo_estado'];
 
-            if (Proyecto::toggleActivo($proyecto_id, $nuevo_estado)) {
-                registrarActividad('update', 'proyectos', $proyecto_id, 'Cambió estado a ' . ($nuevo_estado ? 'activo' : 'inactivo'));
+            // Verificar permisos
+            if (!puedeGestionarProyecto($proyecto_id)) {
+                $mensaje = 'No tienes permisos para modificar este proyecto';
+                $tipo_mensaje = 'danger';
+            } elseif (Proyecto::toggleActivo($proyecto_id, $nuevo_estado)) {
+                registrarActividad(getCurrentUserId(), 'actualizar', 'proyectos', $proyecto_id, 'Cambió estado a ' . ($nuevo_estado ? 'activo' : 'inactivo'));
                 $mensaje = 'Estado actualizado correctamente';
                 $tipo_mensaje = 'success';
             } else {
@@ -66,8 +80,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proyecto_id = (int)$_POST['proyecto_id'];
             $nuevo_estado = (int)$_POST['nuevo_estado'];
 
-            if (Proyecto::toggleDestacado($proyecto_id, $nuevo_estado)) {
-                registrarActividad('update', 'proyectos', $proyecto_id, 'Cambió destacado a ' . ($nuevo_estado ? 'sí' : 'no'));
+            // Verificar permisos
+            if (!puedeGestionarProyecto($proyecto_id)) {
+                $mensaje = 'No tienes permisos para modificar este proyecto';
+                $tipo_mensaje = 'danger';
+            } elseif (Proyecto::toggleDestacado($proyecto_id, $nuevo_estado)) {
+                registrarActividad(getCurrentUserId(), 'actualizar', 'proyectos', $proyecto_id, 'Cambió destacado a ' . ($nuevo_estado ? 'sí' : 'no'));
                 $mensaje = 'Proyecto ' . ($nuevo_estado ? 'marcado como destacado' : 'desmarcado como destacado');
                 $tipo_mensaje = 'success';
             } else {
@@ -80,8 +98,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif ($accion === 'eliminar' && isset($_POST['proyecto_id'])) {
             $proyecto_id = (int)$_POST['proyecto_id'];
 
-            if (Proyecto::delete($proyecto_id)) {
-                registrarActividad('delete', 'proyectos', $proyecto_id, 'Eliminó proyecto (soft delete)');
+            // Verificar permisos
+            if (!puedeGestionarProyecto($proyecto_id)) {
+                $mensaje = 'No tienes permisos para eliminar este proyecto';
+                $tipo_mensaje = 'danger';
+            } elseif (Proyecto::delete($proyecto_id)) {
+                registrarActividad(getCurrentUserId(), 'eliminar', 'proyectos', $proyecto_id, 'Eliminó proyecto (soft delete)');
                 $mensaje = 'Proyecto eliminado correctamente';
                 $tipo_mensaje = 'success';
             } else {
@@ -97,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'titulo' => trim($_POST['titulo'] ?? ''),
                 'descripcion' => trim($_POST['descripcion'] ?? ''),
                 'imagen' => '', // Se actualizará después de subir
-                'area_id' => (int)($_POST['area_id'] ?? 0),
+                'area_id' => $es_coordinador ? $area_permitida : (int)($_POST['area_id'] ?? 0),
                 'categorias' => trim($_POST['categorias'] ?? ''),
                 'destacado' => isset($_POST['destacado']) ? 1 : 0,
                 'orden' => (int)($_POST['orden'] ?? Proyecto::getSiguienteOrden()),
@@ -143,13 +165,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$proyecto_actual) {
                 $mensaje = 'Proyecto no encontrado';
                 $tipo_mensaje = 'danger';
+            } elseif (!puedeGestionarProyecto($proyecto_id)) {
+                $mensaje = 'No tienes permisos para editar este proyecto';
+                $tipo_mensaje = 'danger';
             } else {
                 // Preparar datos
                 $datos = [
                     'titulo' => trim($_POST['titulo'] ?? ''),
                     'descripcion' => trim($_POST['descripcion'] ?? ''),
                     'imagen' => $proyecto_actual['imagen'], // Mantener imagen actual por defecto
-                    'area_id' => (int)($_POST['area_id'] ?? 0),
+                    'area_id' => $es_coordinador ? $area_permitida : (int)($_POST['area_id'] ?? 0),
                     'categorias' => trim($_POST['categorias'] ?? ''),
                     'destacado' => isset($_POST['destacado']) ? 1 : 0,
                     'orden' => (int)($_POST['orden'] ?? $proyecto_actual['orden']),
@@ -207,13 +232,23 @@ if (isset($_GET['error'])) {
     if ($_GET['error'] === 'not_found') {
         $mensaje = 'Proyecto no encontrado';
         $tipo_mensaje = 'danger';
+    } elseif ($_GET['error'] === 'permission_denied') {
+        $mensaje = 'No tienes permisos para acceder a este proyecto';
+        $tipo_mensaje = 'danger';
     }
 }
 
 // Obtener datos para vista de listado
 if ($modo === 'listado') {
-    $proyectos_agrupados = Proyecto::getAllAgrupados(false); // Mostrar todos (activos e inactivos) agrupados por área
-    $total_proyectos = count(Proyecto::getAll(false));
+    // Filtrar por área si es coordinador
+    if ($es_coordinador) {
+        $proyectos_todos = Proyecto::getAll(false, $area_permitida);
+        $proyectos_agrupados = Proyecto::getAllAgrupados(false, $area_permitida);
+    } else {
+        $proyectos_todos = Proyecto::getAll(false);
+        $proyectos_agrupados = Proyecto::getAllAgrupados(false);
+    }
+    $total_proyectos = count($proyectos_todos);
 }
 
 // Obtener áreas para el selector
@@ -420,15 +455,32 @@ include __DIR__ . '/includes/sidebar.php';
                                 <label for="area_id" class="form-label">
                                     Área Temática <span class="text-danger">*</span>
                                 </label>
-                                <select class="form-select" id="area_id" name="area_id" required>
-                                    <option value="">Selecciona un área...</option>
-                                    <?php foreach ($areas as $area): ?>
-                                    <option value="<?= $area['id'] ?>"
-                                            <?= ($modo === 'editar' && $proyecto['area_id'] == $area['id']) ? 'selected' : '' ?>>
-                                        <?= e($area['nombre']) ?>
-                                    </option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <?php if ($es_coordinador): ?>
+                                    <!-- Coordinador: área fija -->
+                                    <?php
+                                    $area_coordinador = null;
+                                    foreach ($areas as $area) {
+                                        if ($area['id'] == $area_permitida) {
+                                            $area_coordinador = $area;
+                                            break;
+                                        }
+                                    }
+                                    ?>
+                                    <input type="text" class="form-control" value="<?= e($area_coordinador['nombre'] ?? 'N/A') ?>" disabled>
+                                    <input type="hidden" name="area_id" value="<?= $area_permitida ?>">
+                                    <div class="form-text">Solo puedes gestionar proyectos de tu área asignada</div>
+                                <?php else: ?>
+                                    <!-- Admin/Editor: selector normal -->
+                                    <select class="form-select" id="area_id" name="area_id" required>
+                                        <option value="">Selecciona un área...</option>
+                                        <?php foreach ($areas as $area): ?>
+                                        <option value="<?= $area['id'] ?>"
+                                                <?= ($modo === 'editar' && $proyecto['area_id'] == $area['id']) ? 'selected' : '' ?>>
+                                            <?= e($area['nombre']) ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                <?php endif; ?>
                             </div>
 
                             <!-- Categorías -->

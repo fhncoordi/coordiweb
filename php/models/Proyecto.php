@@ -47,10 +47,11 @@ class Proyecto {
      * Obtener proyectos agrupados por área
      *
      * @param bool $solo_activos Si true, solo proyectos y áreas activas
+     * @param int $area_id Si se especifica, filtra por área
      * @return array Array asociativo con áreas como keys y proyectos como values
      */
-    public static function getAllAgrupados($solo_activos = true) {
-        $proyectos = self::getAll($solo_activos);
+    public static function getAllAgrupados($solo_activos = true, $area_id = null) {
+        $proyectos = self::getAll($solo_activos, $area_id);
         $agrupados = [];
 
         foreach ($proyectos as $proyecto) {
