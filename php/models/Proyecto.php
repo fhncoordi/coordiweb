@@ -47,11 +47,13 @@ class Proyecto {
      * Obtener proyectos de un área específica
      *
      * @param int $area_id ID del área
-     * @param bool $solo_activos Si true, solo proyectos activos
-     * @return array Lista de proyectos del área
+     * @param bool $solo_destacados Si true, solo proyectos destacados (por defecto true)
+     * @return array Lista de proyectos del área (destacados, activos o históricos)
      */
-    public static function getByArea($area_id, $solo_activos = true) {
-        return self::getAll($solo_activos, $area_id, false);
+    public static function getByArea($area_id, $solo_destacados = true) {
+        // Obtener proyectos del área filtrados por destacado
+        // NO filtramos por activo para permitir proyectos históricos
+        return self::getAll(false, $area_id, $solo_destacados);
     }
 
     /**

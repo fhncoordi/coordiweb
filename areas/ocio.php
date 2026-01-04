@@ -26,7 +26,8 @@ if (!$area) {
 // Obtener servicios, beneficios y proyectos del área
 $servicios = Servicio::getAll(true, $area['id']);
 $beneficios = Beneficio::getAll(true, $area['id']);
-$proyectos = Proyecto::getByArea($area['id'], true);
+// Obtener proyectos destacados (activos e históricos)
+$proyectos = Proyecto::getByArea($area['id']);
 
 // Obtener configuración del sitio (para redes sociales)
 $config = Configuracion::getAll();
@@ -488,7 +489,12 @@ if (!function_exists('attr')) {
                         <?php foreach ($proyectos as $proyecto): ?>
                             <div class="col-lg-6 mb-4">
                                 <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                                    <h3 style="margin-bottom: 15px;"><?= e($proyecto['titulo']) ?></h3>
+                                    <h3 style="margin-bottom: 15px;">
+                                        <?= e($proyecto['titulo']) ?>
+                                        <?php if ($proyecto['activo'] == 0): ?>
+                                            <span class="badge bg-secondary ms-2" style="font-size: 0.6em; vertical-align: middle;">Finalizado</span>
+                                        <?php endif; ?>
+                                    </h3>
                                     <?php if (!empty($proyecto['imagen'])): ?>
                                         <img src="../<?= e($proyecto['imagen']) ?>"
                                              alt="<?= attr($proyecto['titulo']) ?>"
