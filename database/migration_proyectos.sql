@@ -26,7 +26,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Programa destinado a promover la autonomía personal de las personas con discapacidad intelectual mediante actividades de desarrollo de habilidades sociales, educación para la salud y ocio inclusivo.',
 'images/portfolio/autonomia_personal1.jpg',
 3,
-'integral,aintegral',
+'integral',
 1,
 1,
 1);
@@ -37,7 +37,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Proyecto de radio escolar que fomenta la participación ciudadana de jóvenes a través de la comunicación audiovisual y el periodismo comunitario.',
 'images/portfolio/taida_radio.jpg',
 6,
-'participacion,participaca',
+'part-cultura-accesible',
 1,
 2,
 1);
@@ -48,7 +48,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Programa de empoderamiento femenino que promueve la creatividad, el emprendimiento y la igualdad de oportunidades para mujeres en situación de vulnerabilidad.',
 'images/portfolio/magarza_crea.jpg',
 4,
-'igualdad,igualdadpm',
+'igualdad',
 1,
 3,
 1);
@@ -59,7 +59,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Espacio de sensibilización y prevención de violencias sexuales en espacios de ocio y eventos culturales.',
 'images/portfolio/punto_naranja.jpg',
 6,
-'participacion,participaca,ocio',
+'part-cultura-accesible',
 0,
 4,
 1);
@@ -70,7 +70,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Servicio de intermediación laboral que conecta a personas en búsqueda activa de empleo con empresas que requieren personal cualificado.',
 'images/portfolio/bolsa_empleo.jpg',
 1,
-'empleo,orientacion',
+'empleo',
 1,
 5,
 1);
@@ -81,7 +81,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Programa de promoción de hábitos saludables, autocuidado y prevención de enfermedades dirigido a personas mayores y colectivos vulnerables.',
 'images/portfolio/cuidate.jpg',
 3,
-'integral,aintegral,salud',
+'integral',
 1,
 6,
 1);
@@ -92,7 +92,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Servicio de teleasistencia domiciliaria con tecnologías avanzadas para la atención y seguimiento de personas mayores y dependientes.',
 'images/portfolio/teleasistencia.jpg',
 2,
-'formacion,forminno,innovacion',
+'integral,forma-innova',
 1,
 7,
 1);
@@ -103,7 +103,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Centro de día para personas con discapacidad intelectual que ofrece actividades de ocio, estimulación cognitiva y habilidades sociales.',
 'images/portfolio/la_estancia.jpg',
 3,
-'integral,aintegral,ocio',
+'integral,ocio',
 0,
 8,
 1);
@@ -114,7 +114,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Espacio de encuentro y participación para mujeres donde se promueve el empoderamiento, la autoestima y el desarrollo personal.',
 'images/portfolio/voz_magarzas.jpg',
 4,
-'igualdad,igualdadpm,participacion',
+'igualdad,part-cultura-accesible',
 0,
 9,
 1);
@@ -125,7 +125,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Iniciativa que promueve la participación política de las mujeres canarias y su representación en espacios de toma de decisiones.',
 'images/portfolio/parlamento_mujer.jpg',
 4,
-'igualdad,igualdadpm,participacion',
+'igualdad,part-cultura-accesible',
 1,
 10,
 1);
@@ -136,7 +136,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Programa de ocio inclusivo que fomenta el conocimiento del patrimonio cultural y natural de las ciudades canarias mediante actividades adaptadas.',
 'images/portfolio/sintiendo_ciudad.jpg',
 5,
-'ocio,cultura,accesibilidad',
+'ocio,part-cultura-accesible',
 1,
 11,
 1);
@@ -147,7 +147,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Creación de materiales informativos en lectura fácil y formatos accesibles sobre derechos de la mujer, igualdad y prevención de violencias.',
 'images/portfolio/materiales_adaptados.jpg',
 4,
-'igualdad,igualdadpm,accesibilidad',
+'igualdad,part-cultura-accesible',
 0,
 12,
 1);
@@ -158,7 +158,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Programa de inserción laboral para personas con discapacidad que incluye formación, intermediación y seguimiento en el empleo.',
 'images/portfolio/dracaena14.jpg',
 1,
-'empleo,formacion,insercion',
+'empleo,forma-innova',
 1,
 13,
 1);
@@ -169,7 +169,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Programa de actividades deportivas y recreativas adaptadas que promueve la vida activa, el deporte inclusivo y los hábitos saludables.',
 'images/portfolio/activados.jpg',
 5,
-'ocio,deporte,salud',
+'ocio',
 1,
 14,
 1);
@@ -180,7 +180,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Proyecto de comunicación audiovisual y alfabetización digital que empodera a jóvenes en situación de vulnerabilidad mediante la creación de contenidos.',
 'images/portfolio/birmagen.jpg',
 6,
-'participacion,participaca,formacion',
+'part-cultura-accesible',
 0,
 15,
 1);
@@ -191,7 +191,7 @@ INSERT INTO proyectos (titulo, descripcion, imagen, area_id, categorias, destaca
 'Encuentro anual de jóvenes participantes que promueve el intercambio de experiencias, el trabajo en red y la participación ciudadana juvenil.',
 'images/portfolio/tenique2024.jpg',
 6,
-'participacion,participaca,juventud',
+'part-cultura-accesible',
 1,
 16,
 1);
