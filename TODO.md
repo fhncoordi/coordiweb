@@ -305,4 +305,121 @@ Archivos a crear:
 
 ---
 
-*Última actualización: 2026-01-03 - Módulos completados: Áreas, Noticias, Proyectos*
+## FASE 6: Sistema de Donaciones con Stripe
+
+**Documentación completa:** `/docs/STRIPE_IMPLEMENTACION.md`
+
+### Preparación (Días 1-3)
+- [ ] Crear cuenta de Stripe (https://dashboard.stripe.com/register)
+- [ ] Verificar cuenta con documentación de la asociación
+- [ ] Obtener API keys de TEST (pk_test_XXX y sk_test_XXX)
+- [ ] Instalar Composer en el servidor
+- [ ] Instalar librería de Stripe: `composer require stripe/stripe-php`
+- [ ] Agregar `/vendor/` a .gitignore
+
+### Base de datos (Día 4)
+- [ ] Crear tabla `donaciones` (ejecutar `/database/donaciones.sql`)
+- [ ] Crear tabla `socios` (para fase 2 - membresías)
+- [ ] Agregar configuración de Stripe en tabla `configuracion`
+- [ ] Guardar API keys de TEST en BD
+- [ ] Verificar conexión a Stripe con script de prueba
+
+### Backend (Días 5-7)
+- [ ] Crear `/php/stripe_config.php` - Configuración central
+- [ ] Crear `/php/crear_sesion_pago.php` - Procesar donaciones
+- [ ] Crear `/php/webhooks/stripe_webhook.php` - Recibir eventos
+- [ ] Configurar webhook en Stripe Dashboard (TEST mode)
+- [ ] Obtener webhook signing secret y guardarlo en BD
+
+### Frontend (Días 8-9)
+- [ ] Crear `/donaciones.php` - Formulario de donación
+- [ ] Crear `/gracias.php` - Página de confirmación
+- [ ] Agregar validación JavaScript en formulario
+- [ ] Agregar checkbox de política de privacidad
+- [ ] Personalizar importes predefinidos (10€, 25€, 50€, 100€)
+
+### Testing (Días 10-12)
+- [ ] Probar donación con tarjeta de prueba `4242 4242 4242 4242`
+- [ ] Verificar redirección a Stripe Checkout
+- [ ] Verificar redirección a página de gracias
+- [ ] Verificar estado "completado" en BD
+- [ ] Verificar recepción de email de confirmación
+- [ ] Probar tarjeta rechazada `4000 0000 0000 0002`
+- [ ] Probar cancelación de pago (usuario hace clic en "Back")
+- [ ] Probar webhook manualmente desde Stripe Dashboard
+- [ ] Verificar logs de webhooks
+
+### Migración a Producción (Días 13-15)
+- [ ] Cambiar cuenta bancaria a la de la asociación (si aplicó)
+- [ ] Verificar cuenta bancaria con micro-depósitos
+- [ ] Obtener API keys de LIVE (pk_live_XXX y sk_live_XXX)
+- [ ] Actualizar claves en BD (modo LIVE)
+- [ ] Configurar webhook de producción
+- [ ] Actualizar webhook signing secret
+- [ ] Hacer pago de prueba REAL (10€ con tarjeta real)
+- [ ] Verificar que llega a Stripe Dashboard
+- [ ] Verificar que se deposita en cuenta bancaria (2-7 días)
+- [ ] Descomentar sección "Colabora" en index.php (líneas 1120-1280)
+- [ ] Actualizar link del botón "Donar ahora" → `/donaciones.php`
+- [ ] Activar sistema: `UPDATE configuracion SET valor='1' WHERE clave='donaciones_activo'`
+
+### Panel Admin (Día 16 - Opcional)
+- [ ] Crear `/admin/donaciones.php` - Ver listado de donaciones
+- [ ] Agregar filtros (por estado, fecha, importe)
+- [ ] Agregar estadísticas (total recaudado, promedio, etc)
+- [ ] Agregar exportación a CSV
+- [ ] Agregar gráficos de donaciones por mes
+
+### Fase 2 - Membresías Recurrentes (Futuro)
+- [ ] Crear productos recurrentes en Stripe
+- [ ] Implementar Stripe Subscriptions
+- [ ] Crear página de alta como socio (5€/mes)
+- [ ] Gestionar cancelaciones de membresías
+- [ ] Panel admin para ver socios activos
+- [ ] Emails de renovación automáticos
+
+### Fase 3 - Bizum (Futuro - si se justifica)
+- [ ] Contratar Redsys o TPV bancario
+- [ ] Integrar pasarela Bizum
+- [ ] Agregar botón "Donar con Bizum" en donaciones.php
+
+---
+
+## 📝 NOTAS IMPORTANTES - STRIPE
+
+### Archivos críticos creados:
+- ✅ `/docs/STRIPE_IMPLEMENTACION.md` - Tutorial completo (15,000+ palabras)
+- ⏳ `/database/donaciones.sql` - Esquema de tablas (pendiente crear)
+- ⏳ `/php/stripe_config.php` - Configuración (pendiente crear)
+- ⏳ `/donaciones.php` - Formulario público (pendiente crear)
+- ⏳ `/php/crear_sesion_pago.php` - Backend de pagos (pendiente crear)
+- ⏳ `/php/webhooks/stripe_webhook.php` - Receptor de eventos (pendiente crear)
+- ⏳ `/gracias.php` - Confirmación (pendiente crear)
+
+### Precios de Stripe (España):
+- **Tarjetas EEA:** 1.5% + 0.25€ por transacción
+- **SEPA Direct Debit:** 0.35€ fijo
+- **Sin cuota mensual**
+- **Sin periodo de permanencia**
+
+### Cuenta bancaria:
+- ✅ Puedes empezar con cuenta personal durante desarrollo (modo TEST)
+- ⚠️ DEBES cambiar a cuenta de la asociación ANTES de producción
+- ℹ️ Stripe permite cambiar cuenta bancaria en cualquier momento desde Dashboard
+
+### Seguridad:
+- ✅ PCI DSS Compliant (Stripe maneja datos de tarjeta)
+- ✅ Checkout alojado en Stripe (no en tu servidor)
+- ✅ Webhooks con verificación de firma HMAC
+- ✅ CSRF tokens en formularios
+- ✅ Preparación para GDPR (consentimiento, derecho al olvido)
+
+### Consideraciones legales:
+- 📄 Actualizar Política de Privacidad (mencionar Stripe como procesador)
+- 📄 Crear Términos de Donaciones (política de reembolsos)
+- 📄 Emitir certificados de donación para deducción fiscal
+- 📄 Modelo 182 anual (donantes > 150€/año)
+
+---
+
+*Última actualización: 2026-01-04 - Documentación Stripe creada - Fase 6 agregada*
