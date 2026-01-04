@@ -1,3 +1,47 @@
+<?php
+/**
+ * Página de Área: Participación y Cultura Accesible
+ * Coordicanarias CMS
+ */
+
+require_once __DIR__ . '/../php/config.php';
+require_once __DIR__ . '/../php/db/connection.php';
+require_once __DIR__ . '/../php/core/security.php';
+require_once __DIR__ . '/../php/models/Area.php';
+require_once __DIR__ . '/../php/models/Servicio.php';
+require_once __DIR__ . '/../php/models/Beneficio.php';
+require_once __DIR__ . '/../php/models/Configuracion.php';
+
+// Obtener el área actual por slug
+$area_slug = 'participaca';
+$area = fetchOne("SELECT * FROM areas WHERE slug = ? AND activo = 1", [$area_slug]);
+
+// Si no existe el área, redirigir
+if (!$area) {
+    header('Location: ../index.php');
+    exit;
+}
+
+// Obtener servicios y beneficios del área
+$servicios = Servicio::getAll(true, $area['id']);
+$beneficios = Beneficio::getAll(true, $area['id']);
+
+// Obtener configuración del sitio (para redes sociales)
+$config = Configuracion::getAll();
+
+// Helper functions para escapar HTML
+if (!function_exists('e')) {
+    function e($string) {
+        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
+
+if (!function_exists('attr')) {
+    function attr($string) {
+        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es" xmlns="http://www.w3.org/1999/html">
 
@@ -5,10 +49,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Coordicanarias - Igualdad y Promoción de la Mujer</title>
+    <title>Coordicanarias - Participación y Cultura Accesible</title>
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <!-- Stylesheets -->
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
     <link href="../css/style.css" rel="stylesheet" type="text/css">
     <link href="../css/my.css" rel="stylesheet" type="text/css">
 </head>
@@ -230,19 +275,19 @@
                                         <a href="../transparencia.html" class="">Transparencia</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="" data-scroll href="#about-ipm">Igualdad</a>
+                                        <a class="" data-scroll href="#about-pca">Participación</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="" data-scroll href="#services-ipm">Servicios</a>
+                                        <a class="" data-scroll href="#services-pca">Servicios</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="" data-scroll href="#portfolios-ipm">Proyectos</a>
+                                        <a class="" data-scroll href="#portfolios-pca">Proyectos</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="" data-scroll href="#beneficios-ipm">Beneficios</a>
+                                        <a class="" data-scroll href="#beneficios-pca">Beneficios</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="" data-scroll href="#participa-ipm">Participa</a>
+                                        <a class="" data-scroll href="#participa-pca">Participa</a>
                                     </li>
                                     <li class="menu-item">
                                         <a href="../index.html#features" class="">Áreas</a>
@@ -278,19 +323,19 @@
                                                 <a class="" href="../transparencia.html">Transparencia</a>
                                             </li>
                                             <li class="menu-item">
-                                                <a class="" href="#about-ipm">Igualdad</a>
+                                                <a class="" href="#about-pca">Participación</a>
                                             </li>
                                             <li class="menu-item">
-                                                <a class="" href="#services-ipm">Servicios</a>
+                                                <a class="" href="#services-pca">Servicios</a>
                                             </li>
                                             <li class="menu-item">
-                                                <a class="" href="#portfolios-ipm">Proyectos</a>
+                                                <a class="" href="#portfolios-pca">Proyectos</a>
                                             </li>
                                             <li class="menu-item">
-                                                <a class="" href="#beneficios-ipm">Beneficios</a>
+                                                <a class="" href="#beneficios-pca">Beneficios</a>
                                             </li>
                                             <li class="menu-item">
-                                                <a class="" data-scroll href="#participa-ipm">Participa</a>
+                                                <a class="" data-scroll href="#participa-pca">Participa</a>
                                             </li>
                                             <li class="menu-item">
                                                 <a class="" href="../index.html#features">Áreas</a>
@@ -328,30 +373,30 @@
     <!--Header end-->
     <main>
     <!--Jumbotron-->
-    <div class="jumbotron_ipm" id="jumbotron">
-        <h1 class="display-4" style="padding-left: 20px; padding-right: 20px">Igualdad y Promoción de la Mujer</h1>
-        <p class="lead" style="padding-bottom: 60px;">Trabajando por la igualdad de género y el empoderamiento de las mujeres con discapacidad</p>
+    <div class="jumbotron_pca" id="jumbotron">
+        <h1 class="display-4" style="padding-left: 20px; padding-right: 20px">Participación y cultura accesible</h1>
+        <p class="lead" style="padding-bottom: 60px;">Fomentando la participación ciudadana y el acceso universal a la cultura</p>
     </div>
     <!--Jumbotron end-->
 
     <!--About section-->
     <!--Descripción del Área-->
-    <section id="about-ipm" class="section">
+    <section id="about-pca" class="section">
         <div class="main-container">
             <div class="inside-container">
                 <div class="row">
                     <div class="col-12">
-                        <h2 style="margin-bottom: 30px;">¿Qué es el Área de Igualdad y Promoción de la Mujer?</h2>
+                        <h2 style="margin-bottom: 30px;">¿Qué es el área de Participación y cultura accesible?</h2>
                         <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
-                            El Área de Igualdad y Promoción de la Mujer con Discapacidad de Coordicanarias trabaja para
-                            eliminar la discriminación múltiple que enfrentan las mujeres con discapacidad y promover
-                            su pleno desarrollo personal, social y profesional. Reconocemos que las mujeres con discapacidad
-                            experimentan barreras específicas derivadas de la intersección entre género y discapacidad.
+                            El área de Participación y cultura accesible de Coordicanarias trabaja para promover la
+                            participación activa de las personas con discapacidad en la vida social, cultural y política
+                            de nuestra comunidad. Defendemos el derecho a la participación ciudadana y al acceso universal
+                            a la cultura como pilares fundamentales de una sociedad inclusiva y democrática.
                         </p>
                         <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 20px;">
-                            Desarrollamos programas de empoderamiento, sensibilización y defensa de derechos que visibilizan
-                            la realidad de las mujeres con discapacidad y promueven su participación activa en todos los
-                            ámbitos de la sociedad. Trabajamos por una igualdad real y efectiva.
+                            Desarrollamos proyectos que eliminan barreras físicas, sensoriales y cognitivas, facilitando
+                            el acceso a espacios culturales, eventos públicos y procesos de toma de decisiones. Creemos
+                            que la participación plena es esencial para construir una sociedad más justa e igualitaria.
                         </p>
                     </div>
                 </div>
@@ -362,7 +407,7 @@
 
 
     <!--Servicios section-->
-    <section id="services-ipm" class="section section-bg">
+    <section id="services-pca" class="section section-bg">
         <div class="main-container">
             <div class="inside-container">
                 <div class="row">
@@ -371,55 +416,27 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3 style="margin-bottom: 15px;">Empoderamiento</h3>
-                            <p>Programas de desarrollo personal, liderazgo y autonomía que fortalecen las capacidades
-                                de las mujeres con discapacidad.</p>
+                    <?php if (!empty($servicios)): ?>
+                        <?php foreach ($servicios as $servicio): ?>
+                            <div class="col-md-4 mb-4">
+                                <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                    <h3 style="margin-bottom: 15px;"><?= e($servicio['titulo']) ?></h3>
+                                    <p><?= e($servicio['descripcion']) ?></p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <p class="text-center">No hay servicios disponibles en este momento.</p>
                         </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3 style="margin-bottom: 15px;">Prevención de violencia</h3>
-                            <p>Acciones de prevención, detección y atención a mujeres con discapacidad en situación
-                                de violencia de género.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3 style="margin-bottom: 15px;">Sensibilización</h3>
-                            <p>Campañas de visibilización y sensibilización sobre la realidad de las mujeres
-                                con discapacidad y la discriminación múltiple.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3 style="margin-bottom: 15px;">Participación política</h3>
-                            <p>Fomentamos la participación de mujeres con discapacidad en espacios de decisión
-                                y representación política y social.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3 style="margin-bottom: 15px;">Formación</h3>
-                            <p>Talleres y formaciones sobre igualdad de género, derechos de las mujeres y
-                                prevención de discriminación.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div style="background: #fff; padding: 30px; border-radius: 8px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3 style="margin-bottom: 15px;">Incidencia política</h3>
-                            <p>Trabajamos para que las políticas públicas incorporen la perspectiva de género
-                                y discapacidad de forma transversal.</p>
-                        </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Proyectos del área Section-->
-    <section id="portfolios-ipm" class="section">
+    <section id="portfolios-pca" class="section">
         <!-- Container Starts -->
         <div class="main-container">
             <div class="inside-container">
@@ -431,33 +448,37 @@
                 <div class="row">
                     <div class="col-lg-6 mb-4">
                         <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                            <h3 style="margin-bottom: 15px;">Parlamento Canario de la Mujer con Discapacidad</h3>
-                            <img src="../images/portfolio/parlamento_canario_mujeres.jpg" alt="Imagen del Parlamento Canario de la Mujer" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                            <h3 style="margin-bottom: 15px;">TAIDA - Radio Escolar e Inclusión Educativa</h3>
+                            <img src="../images/portfolio/taida.jpg" alt="Imagen del Proyecto TAIDA" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
                             <p style="margin-bottom: 15px;">
-                                Espacio de participación y representación donde las mujeres con discapacidad de Canarias
-                                debaten, proponen y defienden políticas públicas que respondan a sus necesidades específicas.
-                                El Parlamento es un órgano consultivo que traslada propuestas a las instituciones canarias.
+                                Proyecto innovador que potencia la comunicación, las habilidades sociales y la innovación
+                                socioeducativa en 36 Centros Educativos Públicos de Infantil y Primaria del Municipio de
+                                Santa Cruz de Tenerife. Utiliza la radio y la técnica del croma como recursos pedagógicos
+                                para promover la convivencia escolar y la inclusión educativa.
                             </p>
                             <p>
-                                A través de este proyecto, las mujeres con discapacidad ejercen su derecho a participar
-                                activamente en las decisiones políticas y sociales que afectan a sus vidas, siendo
-                                protagonistas del cambio social.
+                                TAIDA transmite al alumnado los principios de la comunicación a través de talleres de radio
+                                escolar, crea canales de YouTube en cada centro participante y edita las intervenciones de
+                                los estudiantes. Más de 550 alumnos y alumnas se benefician de este proyecto que convierte
+                                la radio en un recurso estratégico para la participación y la inclusión.
                             </p>
                         </article>
                     </div>
                     <div class="col-lg-6 mb-4">
                         <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
-                            <h3 style="margin-bottom: 15px;">Magarza Crea</h3>
-                            <img src="../images/portfolio/magarza_crea.jpg" alt="Imagen del Proyecto Magarza Crea" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
+                            <h3 style="margin-bottom: 15px;">TENIQUE 2024 - VI Edición</h3>
+                            <img src="../images/portfolio/tenique24.jpg" alt="Imagen del Proyecto TENIQUE 2024" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">
                             <p style="margin-bottom: 15px;">
-                                Programa de empoderamiento y desarrollo creativo para mujeres con discapacidad que combina
-                                talleres artísticos, expresión creativa y desarrollo de habilidades personales. A través
-                                del arte y la creatividad, las participantes exploran su identidad y fortalecen su autoestima.
+                                TENIQUE, que significa "piedra" en lengua guanche, es un proyecto participativo que lleva
+                                6 ediciones acercando el arte urbano a los barrios de Santa Cruz de Tenerife. Involucra
+                                a centros educativos, asociaciones vecinales y el colectivo de personas con discapacidad
+                                en encuentros de sensibilización y creación colectiva de murales.
                             </p>
                             <p>
-                                Magarza Crea es un espacio seguro donde las mujeres con discapacidad se encuentran,
-                                comparten experiencias y desarrollan su potencial creativo, generando redes de apoyo mutuo
-                                y promoviendo el bienestar emocional.
+                                A través de obras realizadas por reconocidos artistas urbanos como Sabotaje al Montaje y
+                                Feo Flip, en colaboración con la comunidad, TENIQUE favorece la cohesión social y el
+                                empoderamiento. Cada edición regala a los barrios obras artísticas accesibles que reflejan
+                                la diversidad y generan mecanismos de sensibilización para la verdadera integración social.
                             </p>
                         </article>
                     </div>
@@ -470,7 +491,7 @@
 
 
     <!--Beneficios-->
-    <section id="beneficios-ipm" class="section section-bg">
+    <section id="beneficios-pca" class="section section-bg">
         <div class="main-container">
             <div class="inside-container">
                 <div class="row">
@@ -479,46 +500,29 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                            <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✓</div>
-                            <div>
-                                <h3 style="margin-bottom: 10px;">Visibilización</h3>
-                                <p>Hacemos visible la realidad de las mujeres con discapacidad y la discriminación
-                                    múltiple que enfrentan en todos los ámbitos de la vida.</p>
+                    <?php if (!empty($beneficios)): ?>
+                        <?php foreach ($beneficios as $beneficio): ?>
+                            <div class="col-md-6 mb-4">
+                                <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
+                                    <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">
+                                        <?php if (!empty($beneficio['icono'])): ?>
+                                            <i class="<?= e($beneficio['icono']) ?>" aria-hidden="true"></i>
+                                        <?php else: ?>
+                                            ✔
+                                        <?php endif; ?>
+                                    </div>
+                                    <div>
+                                        <h3 style="margin-bottom: 10px;"><?= e($beneficio['titulo']) ?></h3>
+                                        <p><?= e($beneficio['descripcion']) ?></p>
+                                    </div>
+                                </div>
                             </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <p class="text-center">No hay beneficios disponibles en este momento.</p>
                         </div>
-                    </div>
-                    <div class="col-md-6 mb-4">
-                        <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                            <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✓</div>
-                            <div>
-                                <h3 style="margin-bottom: 10px;">Empoderamiento personal</h3>
-                                <p>Fortalecemos la autoestima, la autonomía y las capacidades de liderazgo de las
-                                    mujeres con discapacidad.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-4">
-                        <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                            <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✓</div>
-                            <div>
-                                <h3 style="margin-bottom: 10px;">Cambio social</h3>
-                                <p>Contribuimos a transformar actitudes, eliminar estereotipos y construir una sociedad
-                                    más igualitaria y justa para todas las personas.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-4">
-                        <div style="display: flex; align-items: start; padding: 20px; background: #fff; border-radius: 8px;">
-                            <div style="min-width: 50px; font-size: 2em; color: #243659; margin-right: 20px;">✓</div>
-                            <div>
-                                <h3 style="margin-bottom: 10px;">Defensa de derechos</h3>
-                                <p>Promovemos políticas públicas que garanticen los derechos de las mujeres con
-                                    discapacidad y previenen situaciones de violencia y discriminación.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -528,7 +532,7 @@
 
 
     <!--Contact section-->
-    <section id="participa-ipm" class="section">
+    <section id="participa-pca" class="section">
         <div class="main-container section-bg">
             <div class="inside-container">
                 <div class="row">
@@ -536,25 +540,25 @@
                         <div class="contact-con">
                             <h2>¿Cómo puedo participar?</h2>
                             <p style="margin-bottom: 10px;">
-                                Si quieres formar parte de nuestros proyectos de igualdad y empoderamiento de la mujer
-                                con discapacidad, hay muchas formas de participar:
+                                Si quieres formar parte de nuestros proyectos de participación y cultura accesible,
+                                hay muchas formas de involucrarte:
                             </p>
                             <ol style="line-height: 1.8; margin-bottom: 30px; padding-left: 20px;">
                                 <li style="margin-bottom: 15px;">
-                                    <strong>Únete a nuestros grupos:</strong> Participa en grupos de empoderamiento, talleres
-                                    creativos y espacios de encuentro entre mujeres.
+                                    <strong>Únete a nuestras actividades:</strong> Participa en nuestros grupos de trabajo,
+                                    talleres y acciones de incidencia política.
                                 </li>
                                 <li style="margin-bottom: 15px;">
-                                    <strong>Forma parte del Parlamento:</strong> Si quieres participar activamente en la
-                                    propuesta de políticas públicas, puedes sumarte al Parlamento Canario de la Mujer.
+                                    <strong>Hazte activista:</strong> Colabora en campañas de sensibilización y en la
+                                    defensa de los derechos de las personas con discapacidad.
                                 </li>
                                 <li style="margin-bottom: 15px;">
-                                    <strong>Difunde y sensibiliza:</strong> Ayúdanos a visibilizar la realidad de las mujeres
-                                    con discapacidad compartiendo información y participando en campañas.
+                                    <strong>Comparte tu experiencia:</strong> Tu voz es fundamental para visibilizar
+                                    las barreras y proponer soluciones desde la experiencia real.
                                 </li>
                                 <li style="margin-bottom: 15px;">
-                                    <strong>Contacta con nosotras:</strong> Rellena el formulario y te informaremos sobre
-                                    las próximas actividades y cómo puedes involucrarte.
+                                    <strong>Colabora con tu conocimiento:</strong> Si trabajas en cultura, comunicación
+                                    o administración, te ayudamos a hacer tu trabajo más accesible.
                                 </li>
                             </ol>
                         </div>
@@ -568,7 +572,7 @@
 
                         <div class="contact-form">
                             <form method="post" action="../php/enviar_correo.php" id="contact-form">
-                                <input type="hidden" name="area" value="igualdad">
+                                <input type="hidden" name="area" value="participacion">
                                 <label for="fname">Nombre:</label>
                                 <input type="text" id="fname" name="txtName" placeholder="Tu nombre y apellidos" title="Nombre" required />
                                 <label for="email">Email:</label>
@@ -603,22 +607,31 @@
                                 las personas con discapacidad.</p>
                         </div>
                         <div class="foot-icon">
-                            <a href="https://www.facebook.com/CoordiCanarias/" aria-label="Facebook de Coordicanarias" tabindex="0">
+                            <?php if (!empty($config['redes_facebook'])): ?>
+                            <a href="<?= attr($config['redes_facebook']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Coordicanarias" tabindex="0">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                     <path d="M 19.253906 2 C 15.311906 2 13 4.0821719 13 8.8261719 L 13 13 L 8 13 L 8 18 L 13 18 L 13 30 L 18 30 L 18 18 L 22 18 L 23 13 L 18 13 L 18 9.671875 C 18 7.884875 18.582766 7 20.259766 7 L 23 7 L 23 2.2050781 C 22.526 2.1410781 21.144906 2 19.253906 2 z" />
                                 </svg>
                             </a>
-                            <a href="https://x.com/coordicanarias" aria-label="X (antes Twitter) e Coordicanarias" tabindex="0">
+                            <?php endif; ?>
+                            <?php if (!empty($config['redes_twitter'])): ?>
+                            <a href="<?= attr($config['redes_twitter']) ?>" target="_blank" rel="noopener noreferrer" aria-label="X (antes Twitter) de Coordicanarias" tabindex="0">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                     <path d="M 18.42 14.009 L 27.891 3 L 25.703 3 L 17.446 12.588 L 10.894 3 L 3 3 L 12.921 17.411 L 3 29 L 5.188 29 L 13.895 19.006 L 20.806 29 L 28.7 29 L 18.42 14.009 Z M 15.026 17.708 L 14.07 16.393 L 5.95 4.56 L 9.744 4.56 L 16.209 14.011 L 17.165 15.326 L 25.704 27.517 L 21.91 27.517 L 15.026 17.708 Z" />
                                 </svg>
                             </a>
-                            <a href="https://es.linkedin.com/company/coordicanarias" aria-label="LinkedIn de Coordicanarias" tabindex="0">
+                            <?php endif; ?>
+                            <?php if (!empty($config['redes_linkedin'])): ?>
+                            <a href="<?= attr($config['redes_linkedin']) ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Coordicanarias" tabindex="0">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                     <path d="M 8.6425781 4 C 7.1835781 4 6 5.181625 6 6.640625 C 6 8.099625 7.182625 9.3085938 8.640625 9.3085938 C 10.098625 9.3085938 11.283203 8.099625 11.283203 6.640625 C 11.283203 5.182625 10.101578 4 8.6425781 4 z M 21.535156 11 C 19.316156 11 18.0465 12.160453 17.4375 13.314453 L 17.373047 13.314453 L 17.373047 11.310547 L 13 11.310547 L 13 26 L 17.556641 26 L 17.556641 18.728516 C 17.556641 16.812516 17.701266 14.960938 20.072266 14.960938 C 22.409266 14.960937 22.443359 17.145609 22.443359 18.849609 L 22.443359 26 L 26.994141 26 L 27 26 L 27 17.931641 C 27 13.983641 26.151156 11 21.535156 11 z M 6.3632812 11.310547 L 6.3632812 26 L 10.923828 26 L 10.923828 11.310547 L 6.3632812 11.310547 z" />
                                 </svg>
                             </a>
-                            <a href="https://www.instagram.com/coordicanarias"
+                            <?php endif; ?>
+                            <?php if (!empty($config['redes_instagram'])): ?>
+                            <a href="<?= attr($config['redes_instagram']) ?>"
+                               target="_blank"
+                               rel="noopener noreferrer"
                                aria-label="Instagram de Coordicanarias"
                                tabindex="0">
                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -630,6 +643,7 @@
                                     <path d="M 11.46875 5 C 7.917969 5 5 7.914062 5 11.46875 L 5 20.53125 C 5 24.082031 7.914062 27 11.46875 27 L 20.53125 27 C 24.082031 27 27 24.085938 27 20.53125 L 27 11.46875 C 27 7.917969 24.085938 5 20.53125 5 Z M 11.46875 7 L 20.53125 7 C 23.003906 7 25 8.996094 25 11.46875 L 25 20.53125 C 25 23.003906 23.003906 25 20.53125 25 L 11.46875 25 C 8.996094 25 7 23.003906 7 20.53125 L 7 11.46875 C 7 8.996094 8.996094 7 11.46875 7 Z M 21.90625 9.1875 C 21.402344 9.1875 21 9.589844 21 10.09375 C 21 10.597656 21.402344 11 21.90625 11 C 22.410156 11 22.8125 10.597656 22.8125 10.09375 C 22.8125 9.589844 22.410156 9.1875 21.90625 9.1875 Z M 16 10 C 12.699219 10 10 12.699219 10 16 C 10 19.300781 12.699219 22 16 22 C 19.300781 22 22 19.300781 22 16 C 22 12.699219 19.300781 10 16 10 Z M 16 12 C 18.222656 12 20 13.777344 20 16 C 20 18.222656 18.222656 20 16 20 C 13.777344 20 12 18.222656 12 16 C 12 13.777344 13.777344 12 16 12 Z"/>
                                 </svg>
                             </a>
+                            <?php endif; ?>
                             <!-- Icono de búsqueda -->
                             <a href="#"
                                id="search-icon-trigger"
@@ -675,13 +689,13 @@
                         <div class="row">
                             <div class="col-6 pop-link" style="text-align: center">
                                 <a class="" data-scroll href="#home">Inicio</a>
-                                <a class="" data-scroll href="#about-ipm">Igualdad</a>
-                                <a class="" data-scroll href="#services-ipm">Servicios</a>
+                                <a class="" data-scroll href="#about-pca">Participación</a>
+                                <a class="" data-scroll href="#services-pca">Servicios</a>
                             </div>
                             <div class="col-6 pop-link" style="text-align: center">
-                                <a class="" data-scroll href="#portfolios-ipm">Proyectos</a>
-                                <a class="" data-scroll href="#beneficios-ipm">Beneficios</a>
-                                <a class="" data-scroll href="#participa-ipm">Participa</a>
+                                <a class="" data-scroll href="#portfolios-pca">Proyectos</a>
+                                <a class="" data-scroll href="#beneficios-pca">Beneficios</a>
+                                <a class="" data-scroll href="#participa-pca">Participa</a>
                                 <a href="../index.html#features" class="">Áreas</a>
                             </div>
                         </div>
