@@ -1201,7 +1201,7 @@ if (!function_exists('attr')) {
                                 <div class="col-12 pop-link" style="text-align: center">
                                     <a href="areas/politica-cookies.php">Política de cookies</a>
                                     <a href="areas/politica-privacidad.php">Política de privacidad</a>
-                                    <a href="areas/alegal.html">Aviso legal</a>
+                                    <a href="areas/alegal.php">Aviso legal</a>
                                 </div>
                             </div>
                         </div>
