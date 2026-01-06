@@ -29,6 +29,16 @@ if (!function_exists('attr')) {
         return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
     }
 }
+
+// Mapeo de slugs de áreas a IDs de secciones de portfolios
+$portfolio_ids = [
+    'aintegral' => 'ai',
+    'empleo' => 'em',
+    'forminno' => 'fi',
+    'igualdadpm' => 'ipm',
+    'ocio' => 'o',
+    'participaca' => 'pca'
+];
 ?>
 <!DOCTYPE html>
 <html lang="es" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
@@ -626,7 +636,7 @@ if (!function_exists('attr')) {
                         <?php if (!empty($proyectos)): ?>
                             <?php foreach ($proyectos as $proyecto): ?>
                                 <div class="col-lg-4 col-md-6 col-xs-12 mix <?= e(str_replace(',', ' ', $proyecto['categorias'] ?? '')) ?>">
-                                    <a href="areas/<?= e($proyecto['area_slug']) ?>.php#portfolios-<?= e(strtolower(substr($proyecto['area_slug'], 0, 3))) ?>" class="portfolio-link">
+                                    <a href="areas/<?= e($proyecto['area_slug']) ?>.php#portfolios-<?= e($portfolio_ids[$proyecto['area_slug']] ?? '') ?>" class="portfolio-link">
                                         <div class="portfolio-item" tabindex="0">
                                             <div class="shot-item">
                                                 <img src="<?= e($proyecto['imagen']) ?>" alt="<?= attr($proyecto['titulo']) ?>" />
