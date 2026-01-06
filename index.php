@@ -319,7 +319,7 @@ if (!function_exists('attr')) {
                                             <a class="" data-scroll href="#contact">Contacto</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" href="transparencia.html.backup">Transparencia</a>
+                                            <a class="" href="transparencia.php">Transparencia</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -368,7 +368,7 @@ if (!function_exists('attr')) {
                                                     <a class="" href="#contact">Contacto</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="transparencia.html.backup">Transparencia</a>
+                                                    <a class="" href="transparencia.php">Transparencia</a>
                                                 </li>
                                                 <li class="menu-item menu-search-item">
                                                     <form id="mobile-search-form" class="mobile-search-form" role="search" aria-label="Buscar en el sitio">
@@ -1076,7 +1076,7 @@ if (!function_exists('attr')) {
                         </div>
                         <div class="col-lg-6">
                             <div class="call-to-action-button">
-                                <a class="wm-button button size-large" href="transparencia.html">
+                                <a class="wm-button button size-large" href="transparencia.php">
                                     <span class="icon-thumbs-up-alt"></span>¡Accede a nuestro portal de transparencia ahora!</a>
                             </div>
                         </div>
@@ -1191,7 +1191,7 @@ if (!function_exists('attr')) {
                                     <a class="" data-scroll href="#colabora">Colabora</a> -->
                                     <a class="" data-scroll href="#portfolios">Proyectos</a>
                                     <a class="" data-scroll href="#contact">Contacto</a>
-                                    <a class="" href="transparencia.html.backup">Transparencia</a>
+                                    <a class="" href="transparencia.php">Transparencia</a>
                                 </div>
                             </div>
                         </div>
@@ -1199,8 +1199,8 @@ if (!function_exists('attr')) {
                             <h3 style="text-align: center">Información Legal</h3>
                             <div class="row">
                                 <div class="col-12 pop-link" style="text-align: center">
-                                    <a href="areas/politica-cookies.html">Política de cookies</a>
-                                    <a href="areas/politica-privacidad.html">Política de privacidad</a>
+                                    <a href="areas/politica-cookies.php">Política de cookies</a>
+                                    <a href="areas/politica-privacidad.php">Política de privacidad</a>
                                     <a href="areas/alegal.html">Aviso legal</a>
                                 </div>
                             </div>
@@ -1301,7 +1301,7 @@ if (!function_exists('attr')) {
                 <p id="cookie-banner-description">
                     Este sitio web utiliza cookies propias para mejorar su experiencia de navegación y recordar sus preferencias de accesibilidad.
                     Al continuar navegando, acepta su uso.
-                    <a href="areas/politica-cookies.html" target="_blank" rel="noopener">Más información sobre cookies</a>
+                    <a href="areas/politica-cookies.php" target="_blank" rel="noopener">Más información sobre cookies</a>
                 </p>
             </div>
             <div class="cookie-banner-buttons">
