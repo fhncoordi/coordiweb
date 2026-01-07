@@ -2487,3 +2487,393 @@ aural {
         padding-bottom: 30px;
     }
 }
+
+/* ============================================
+   MEJORAS DE ACCESIBILIDAD - ALTO CONTRASTE - COMENTADO TEMPORALMENTE (2026-01-07)
+   ============================================ */
+/*
+body.high-contrast {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+body.high-contrast * {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+}
+
+body.high-contrast a,
+body.high-contrast button {
+    color: #ffff00 !important;
+    text-decoration: underline !important;
+}
+
+body.high-contrast a:hover,
+body.high-contrast a:focus,
+body.high-contrast button:hover,
+body.high-contrast button:focus {
+    color: #fff !important;
+    background-color: #ffff00 !important;
+    color: #000 !important;
+}
+
+body.high-contrast img,
+body.high-contrast svg {
+    filter: contrast(2) !important;
+    opacity: 0.9 !important;
+}
+
+body.high-contrast .btn-common,
+body.high-contrast .button {
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 2px solid #fff !important;
+}
+
+body.high-contrast input,
+body.high-contrast textarea,
+body.high-contrast select {
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 2px solid #fff !important;
+}
+*/
+
+/* ============================================
+   MEJORAS DE ACCESIBILIDAD - MODO OSCURO - COMENTADO TEMPORALMENTE (2026-01-07)
+   ============================================ */
+/*
+body.dark-mode {
+    background-color: #1a1a1a !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode header,
+body.dark-mode nav,
+body.dark-mode section,
+body.dark-mode footer {
+    background-color: #1a1a1a !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .main-container,
+body.dark-mode .inside-container {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #ffffff !important;
+}
+
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode span {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode a {
+    color: #64b5f6 !important;
+}
+
+body.dark-mode a:hover,
+body.dark-mode a:focus {
+    color: #90caf9 !important;
+}
+
+body.dark-mode .btn-common,
+body.dark-mode .button {
+    background-color: #2d353c !important;
+    color: #e0e0e0 !important;
+    border-color: #3d454c !important;
+}
+
+body.dark-mode .btn-common:hover,
+body.dark-mode .button:hover {
+    background-color: #3d454c !important;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border-color: #4d4d4d !important;
+}
+
+body.dark-mode .portfolio-item,
+body.dark-mode article {
+    background-color: #252525 !important;
+    border-color: #3d3d3d !important;
+}
+
+body.dark-mode .footer-dark,
+body.dark-mode .footer-light {
+    background-color: #0d0d0d !important;
+}
+
+body.dark-mode img {
+    opacity: 0.9;
+}
+
+body.dark-mode svg path {
+    fill: #e0e0e0 !important;
+}
+
+/* Panel de accesibilidad en modo oscuro */
+body.dark-mode #block_settings,
+body.dark-mode .block-settings-wrapper,
+body.dark-mode .open-accessibility {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .lab-wcag-settings {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .lab-wcag-settings li {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .lab-wcag-settings .fontfamily-label {
+    color: #e0e0e0 !important;
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .lab-wcag-settings li button {
+    background-color: #2d2d2d !important;
+    border-color: #4d4d4d !important;
+}
+
+body.dark-mode .lab-wcag-settings li button:hover,
+body.dark-mode .lab-wcag-settings li button:focus {
+    background-color: #3d3d3d !important;
+}
+
+body.dark-mode #settings_close {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode #settings_close svg {
+    fill: #e0e0e0 !important;
+}
+
+/* Jumbotron en modo oscuro - overlay más oscuro para mejor contraste */
+body.dark-mode .jumbotron_index {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/coordi_inicio.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_ai {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/atencion_integral.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_em {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/empleo.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_fi {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/formacion_Innovacion.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_ipm {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/igual_promo_mujer_discapacidad.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_o {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/ocio.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_pca {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/partycult_accesible.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_accesibilidad {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/accesibilidad.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_transparencia {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/transparencia.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_cookies {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/politica_cookies.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+body.dark-mode .jumbotron_alegal {
+    background:
+        linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)),
+        url("../images/banners/alegal.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+*/
+
+/* ============================================
+   PANEL DE ACCESIBILIDAD - ESTADOS ACTIVOS - COMENTADO TEMPORALMENTE (2026-01-07)
+   ============================================ */
+/*
+.lab-wcag-settings li button {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.lab-wcag-settings li button.active {
+    background-color: #28a745 !important;
+    border: 2px solid #28a745 !important;
+}
+
+.lab-wcag-settings li button.active::after {
+    content: "✓";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: #fff;
+    color: #28a745;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.lab-wcag-settings li button:hover {
+    transform: scale(1.05);
+}
+
+.lab-wcag-settings li button:focus {
+    outline: 3px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Etiquetas visibles en botones */
+.lab-wcag-settings li button .lab-button-label {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.lab-wcag-settings li button:hover .lab-button-label,
+.lab-wcag-settings li button:focus .lab-button-label {
+    opacity: 1;
+}
+*/
+
+/* ============================================
+   MODO OSCURO - PANEL DE ACCESIBILIDAD - COMENTADO TEMPORALMENTE (2026-01-07)
+   ============================================ */
+/*
+body.dark-mode .block-settings-wrapper {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .block_settings {
+    background-color: #252525 !important;
+    border: 1px solid #3d3d3d !important;
+}
+
+body.dark-mode .lab-wcag-settings li button {
+    background-color: #2d353c !important;
+    border-color: #3d454c !important;
+}
+
+body.dark-mode .lab-wcag-settings li button:hover {
+    background-color: #3d454c !important;
+}
+
+body.dark-mode .fontfamily-label,
+body.dark-mode .resizer-label {
+    color: #e0e0e0 !important;
+}
+*/
+
+/* ============================================
+   ALTO CONTRASTE - PANEL DE ACCESIBILIDAD - COMENTADO TEMPORALMENTE (2026-01-07)
+   ============================================ */
+/*
+body.high-contrast .block-settings-wrapper {
+    background-color: #000 !important;
+}
+
+body.high-contrast .block_settings {
+    background-color: #000 !important;
+    border: 2px solid #fff !important;
+}
+
+body.high-contrast .lab-wcag-settings li button {
+    background-color: #000 !important;
+    border: 2px solid #fff !important;
+    color: #fff !important;
+}
+
+body.high-contrast .lab-wcag-settings li button:hover,
+body.high-contrast .lab-wcag-settings li button:focus {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+body.high-contrast .fontfamily-label,
+body.high-contrast .resizer-label {
+    color: #fff !important;
+    font-weight: bold !important;
+}
+*/

@@ -88,6 +88,33 @@ $portfolio_ids = [
                 </a>
                 <div class="open-accessibility">
                     <ul class="lab-wcag-settings clearfix">
+                        <!--Visual accessibility menu - COMENTADO TEMPORALMENTE (2026-01-07)-->
+                        <!--
+                        <li class="fontfamily-label">Visualización</li>
+                        <li>
+                            <ul class="access-float-fontfamily">
+                                <li>
+                                    <button class="lab-high-contrast" aria-label="Activar alto contraste" aria-pressed="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 3 C 8.832031 3 3 8.832031 3 16 C 3 23.167969 8.832031 29 16 29 C 23.167969 29 29 23.167969 29 16 C 29 8.832031 23.167969 3 16 3 Z M 16 5 C 22.085938 5 27 9.914063 27 16 C 27 22.085938 22.085938 27 16 27 L 16 5 Z" />
+                                        </svg>
+                                        <span class="lab-only">Alto Contraste</span>
+                                        <span class="lab-button-label">Alto Contraste</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="lab-dark-mode" aria-label="Activar modo oscuro" aria-pressed="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 14.78125 3.03125 C 8.046875 3.777344 2.75 9.519531 2.75 16.5 C 2.75 23.953125 8.796875 30 16.25 30 C 23.230469 30 28.972656 24.703125 29.71875 17.96875 C 27.582031 19.273438 25.054688 20.03125 22.34375 20.03125 C 14.890625 20.03125 8.84375 13.984375 8.84375 6.53125 C 8.84375 5.121094 9.0625 3.761719 9.46875 2.46875 C 6.761719 3.488281 4.433594 5.421875 2.902344 7.984375 C 2.113281 9.390625 1.625 11.003906 1.625 12.75 C 1.625 18.132813 5.992188 22.5 11.375 22.5 C 16.757813 22.5 21.125 18.132813 21.125 12.75 C 21.125 11.003906 20.636719 9.390625 19.847656 7.984375 C 18.316406 5.421875 15.988281 3.488281 13.28125 2.46875 Z" />
+                                        </svg>
+                                        <span class="lab-only">Modo Oscuro</span>
+                                        <span class="lab-button-label">Modo Oscuro</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                        -->
+                        <!--Visual accessibility menu end-->
                         <!--Font type accessibility menu-->
                         <li class="fontfamily-label">Tipo de fuente</li>
                         <li>

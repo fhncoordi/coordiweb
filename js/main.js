@@ -156,21 +156,25 @@ jQuery(document).ready(function() {
 
     font_larger.click(function(event) {
         event.preventDefault();
+        // jQuery('.lab-font-smaller').removeClass('active'); // COMENTADO TEMPORALMENTE
         if (fsCount < 130) {
             body.removeClass('fsize' + fsCount);
             fsCount = fsCount + 10;
             body.addClass('fsize' + fsCount);
             Cookies.set('lab-font-size', fsCount, { expires: 7, path: cookie_path.cookiePath });
+            // jQuery(this).addClass('active'); // COMENTADO TEMPORALMENTE
         }
     });
 
     font_smaller.click(function(event) {
         event.preventDefault();
+        // jQuery('.lab-font-larger').removeClass('active'); // COMENTADO TEMPORALMENTE
         if (fsCount > 70) {
             body.removeClass('fsize' + fsCount);
             fsCount = fsCount - 10;
             body.addClass('fsize' + fsCount);
             Cookies.set('lab-font-size', fsCount, { expires: 7, path: cookie_path.cookiePath });
+            // jQuery(this).addClass('active'); // COMENTADO TEMPORALMENTE
         }
     });
 
@@ -188,6 +192,7 @@ jQuery(document).ready(function() {
         Cookies.set('readablefont', 'yes', { expires: 7, path: cookie_path.cookiePath });
         if (!body.hasClass('font-readable')) {
             body.addClass('font-readable');
+            // jQuery(this).addClass('active'); // COMENTADO TEMPORALMENTE
         }
 
         jQuery(window).trigger('resize');
@@ -198,16 +203,22 @@ jQuery(document).ready(function() {
         Cookies.set('underline', 'yes', { expires: 7, path: cookie_path.cookiePath });
         if (!body.hasClass('link-underline')) {
             body.addClass('link-underline');
+            // jQuery(this).addClass('active'); // COMENTADO TEMPORALMENTE
         }
     });
 
     reset_all.click(function() {
-        body.removeClass('fsize70 fsize80 fsize90 fsize100 fsize110 fsize120 fsize130 font-readable link-underline fontfamily_inter fontfamily_andika fontfamily_fsme fontfamily_tiresias fontfamily_opendyslexic');
+        body.removeClass('fsize70 fsize80 fsize90 fsize100 fsize110 fsize120 fsize130 font-readable link-underline fontfamily_inter fontfamily_andika fontfamily_fsme fontfamily_tiresias fontfamily_opendyslexic'); // high-contrast dark-mode - COMENTADO TEMPORALMENTE
         fsCount = 100;
         Cookies.remove('lab-font-size', { path: cookie_path.cookiePath });
         Cookies.remove('readablefont', { path: cookie_path.cookiePath });
         Cookies.remove('underline', { path: cookie_path.cookiePath });
         Cookies.remove('fontfamily', { path: cookie_path.cookiePath });
+        // Cookies.remove('high-contrast', { path: cookie_path.cookiePath }); // COMENTADO TEMPORALMENTE
+        // Cookies.remove('dark-mode', { path: cookie_path.cookiePath }); // COMENTADO TEMPORALMENTE
+
+        // Remover clases active de todos los botones - COMENTADO TEMPORALMENTE
+        // jQuery('.lab-wcag-settings li button').removeClass('active');
     });
 
     jQuery(Object.keys(fonts).join(",") + "").click(function(event) {
@@ -216,6 +227,106 @@ jQuery(document).ready(function() {
     });
 
     body.addClass(Cookies.get('fontfamily'));
+
+    // ========================================
+    // NUEVAS FUNCIONALIDADES DE ACCESIBILIDAD - COMENTADO TEMPORALMENTE (2026-01-07)
+    // ========================================
+    /*
+    // Botones de alto contraste y modo oscuro
+    let btn_high_contrast = jQuery('.lab-high-contrast');
+    let btn_dark_mode = jQuery('.lab-dark-mode');
+
+    // Cargar estados guardados al inicio
+    if (Cookies.get('high-contrast') === 'yes') {
+        body.addClass('high-contrast');
+        btn_high_contrast.addClass('active');
+    }
+
+    if (Cookies.get('dark-mode') === 'yes') {
+        body.addClass('dark-mode');
+        btn_dark_mode.addClass('active');
+    }
+
+    // Toggle Alto Contraste
+    btn_high_contrast.click(function(event) {
+        event.preventDefault();
+
+        if (body.hasClass('high-contrast')) {
+            // Desactivar alto contraste
+            body.removeClass('high-contrast');
+            Cookies.remove('high-contrast', { path: cookie_path.cookiePath });
+            jQuery(this).removeClass('active');
+        } else {
+            // Activar alto contraste
+            body.addClass('high-contrast');
+            Cookies.set('high-contrast', 'yes', { expires: 7, path: cookie_path.cookiePath });
+            jQuery(this).addClass('active');
+
+            // Desactivar modo oscuro si está activo (son mutuamente excluyentes)
+            if (body.hasClass('dark-mode')) {
+                body.removeClass('dark-mode');
+                Cookies.remove('dark-mode', { path: cookie_path.cookiePath });
+                btn_dark_mode.removeClass('active');
+            }
+        }
+    });
+
+    // Toggle Modo Oscuro
+    btn_dark_mode.click(function(event) {
+        event.preventDefault();
+
+        if (body.hasClass('dark-mode')) {
+            // Desactivar modo oscuro
+            body.removeClass('dark-mode');
+            Cookies.remove('dark-mode', { path: cookie_path.cookiePath });
+            jQuery(this).removeClass('active');
+        } else {
+            // Activar modo oscuro
+            body.addClass('dark-mode');
+            Cookies.set('dark-mode', 'yes', { expires: 7, path: cookie_path.cookiePath });
+            jQuery(this).addClass('active');
+
+            // Desactivar alto contraste si está activo (son mutuamente excluyentes)
+            if (body.hasClass('high-contrast')) {
+                body.removeClass('high-contrast');
+                Cookies.remove('high-contrast', { path: cookie_path.cookiePath });
+                btn_high_contrast.removeClass('active');
+            }
+        }
+    });
+
+    // Indicadores visuales: marcar botones activos según cookies
+    function updateActiveIndicators() {
+        // Font size
+        if (fsCount !== 100) {
+            if (fsCount < 100) {
+                jQuery('.lab-font-smaller').addClass('active');
+            } else if (fsCount > 100) {
+                jQuery('.lab-font-larger').addClass('active');
+            }
+        }
+
+        // Readable font
+        if (body.hasClass('font-readable')) {
+            jQuery('.lab-font-readable').addClass('active');
+        }
+
+        // Link underline
+        if (body.hasClass('link-underline')) {
+            jQuery('.lab-link-underline').addClass('active');
+        }
+
+        // Font family
+        jQuery(Object.keys(fonts).join(",")).each(function() {
+            if (body.hasClass(fonts['.' + this.className.split(' ')[0]])) {
+                jQuery(this).addClass('active');
+            }
+        });
+    }
+
+    // Llamar al inicio para marcar indicadores activos
+    updateActiveIndicators();
+    */
 
     open_acces.click(function() {
         jQuery("body").toggleClass("opened-settings");
