@@ -2625,6 +2625,12 @@ body.dark-mode svg path {
     fill: #e0e0e0 !important;
 }
 
+/* Logo Gobierno de Canarias en modo oscuro - cambiar a versión blanca */
+body.dark-mode .logo-gobcan {
+    content: url("../images/logos_gobcan/Logo_GobCan_claim_blanco_mod1.png");
+    opacity: 1 !important;
+}
+
 /* Panel de accesibilidad en modo oscuro */
 body.dark-mode #block_settings,
 body.dark-mode .block-settings-wrapper,

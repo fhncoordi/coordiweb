@@ -1020,7 +1020,7 @@ if (!function_exists('attr')) {
                     <div class="row footer-dark">
                         <div class="col-12 copyright-text" style="text-align: center;">
                             <a href="https://www.gobiernodecanarias.org/bienestarsocial/dependencia/" target="_blank" rel="noopener">
-                                <img src="../images/logos_gobcan/Logo_GobCan_claim_negro_mod1.png" alt="Gobierno de Canarias - Dirección General de Dependencia" width="120" style="margin: 15px 20px 30px 15px">
+                                <img src="../images/logos_gobcan/Logo_GobCan_claim_negro_mod1.png" alt="Gobierno de Canarias - Dirección General de Dependencia" width="120" style="margin: 15px 20px 30px 15px" class="logo-gobcan">
                             </a>
                             <a href="accesibilidad.php" class="accesibilidad-badge">
                                         <span class="wcag-badge">
