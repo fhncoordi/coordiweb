@@ -2489,9 +2489,9 @@ aural {
 }
 
 /* ============================================
-   MEJORAS DE ACCESIBILIDAD - ALTO CONTRASTE - COMENTADO TEMPORALMENTE (2026-01-07)
+   MEJORAS DE ACCESIBILIDAD - ALTO CONTRASTE
    ============================================ */
-/*
+
 body.high-contrast {
     background-color: #000 !important;
     color: #fff !important;
@@ -2538,12 +2538,11 @@ body.high-contrast select {
     color: #000 !important;
     border: 2px solid #fff !important;
 }
-*/
 
 /* ============================================
-   MEJORAS DE ACCESIBILIDAD - MODO OSCURO - COMENTADO TEMPORALMENTE (2026-01-07)
+   MEJORAS DE ACCESIBILIDAD - MODO OSCURO
    ============================================ */
-/*
+
 body.dark-mode {
     background-color: #1a1a1a !important;
     color: #e0e0e0 !important;
@@ -2758,12 +2757,11 @@ body.dark-mode .jumbotron_alegal {
     background-size: cover !important;
     background-position: center !important;
 }
-*/
 
 /* ============================================
-   PANEL DE ACCESIBILIDAD - ESTADOS ACTIVOS - COMENTADO TEMPORALMENTE (2026-01-07)
+   PANEL DE ACCESIBILIDAD - ESTADOS ACTIVOS
    ============================================ */
-/*
+
 .lab-wcag-settings li button {
     position: relative;
     transition: all 0.3s ease;
@@ -2822,12 +2820,11 @@ body.dark-mode .jumbotron_alegal {
 .lab-wcag-settings li button:focus .lab-button-label {
     opacity: 1;
 }
-*/
 
 /* ============================================
-   MODO OSCURO - PANEL DE ACCESIBILIDAD - COMENTADO TEMPORALMENTE (2026-01-07)
+   MODO OSCURO - PANEL DE ACCESIBILIDAD
    ============================================ */
-/*
+
 body.dark-mode .block-settings-wrapper {
     background-color: #1a1a1a !important;
 }
@@ -2850,12 +2847,11 @@ body.dark-mode .fontfamily-label,
 body.dark-mode .resizer-label {
     color: #e0e0e0 !important;
 }
-*/
 
 /* ============================================
-   ALTO CONTRASTE - PANEL DE ACCESIBILIDAD - COMENTADO TEMPORALMENTE (2026-01-07)
+   ALTO CONTRASTE - PANEL DE ACCESIBILIDAD
    ============================================ */
-/*
+
 body.high-contrast .block-settings-wrapper {
     background-color: #000 !important;
 }
@@ -2882,4 +2878,3 @@ body.high-contrast .resizer-label {
     color: #fff !important;
     font-weight: bold !important;
 }
-*/

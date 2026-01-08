@@ -156,25 +156,25 @@ jQuery(document).ready(function() {
 
     font_larger.click(function(event) {
         event.preventDefault();
-        // jQuery('.lab-font-smaller').removeClass('active'); // COMENTADO TEMPORALMENTE
+        jQuery('.lab-font-smaller').removeClass('active');
         if (fsCount < 130) {
             body.removeClass('fsize' + fsCount);
             fsCount = fsCount + 10;
             body.addClass('fsize' + fsCount);
             Cookies.set('lab-font-size', fsCount, { expires: 7, path: cookie_path.cookiePath });
-            // jQuery(this).addClass('active'); // COMENTADO TEMPORALMENTE
+            jQuery(this).addClass('active');
         }
     });
 
     font_smaller.click(function(event) {
         event.preventDefault();
-        // jQuery('.lab-font-larger').removeClass('active'); // COMENTADO TEMPORALMENTE
+        jQuery('.lab-font-larger').removeClass('active');
         if (fsCount > 70) {
             body.removeClass('fsize' + fsCount);
             fsCount = fsCount - 10;
             body.addClass('fsize' + fsCount);
             Cookies.set('lab-font-size', fsCount, { expires: 7, path: cookie_path.cookiePath });
-            // jQuery(this).addClass('active'); // COMENTADO TEMPORALMENTE
+            jQuery(this).addClass('active');
         }
     });
 
@@ -192,7 +192,7 @@ jQuery(document).ready(function() {
         Cookies.set('readablefont', 'yes', { expires: 7, path: cookie_path.cookiePath });
         if (!body.hasClass('font-readable')) {
             body.addClass('font-readable');
-            // jQuery(this).addClass('active'); // COMENTADO TEMPORALMENTE
+            jQuery(this).addClass('active');
         }
 
         jQuery(window).trigger('resize');
@@ -203,22 +203,22 @@ jQuery(document).ready(function() {
         Cookies.set('underline', 'yes', { expires: 7, path: cookie_path.cookiePath });
         if (!body.hasClass('link-underline')) {
             body.addClass('link-underline');
-            // jQuery(this).addClass('active'); // COMENTADO TEMPORALMENTE
+            jQuery(this).addClass('active');
         }
     });
 
     reset_all.click(function() {
-        body.removeClass('fsize70 fsize80 fsize90 fsize100 fsize110 fsize120 fsize130 font-readable link-underline fontfamily_inter fontfamily_andika fontfamily_fsme fontfamily_tiresias fontfamily_opendyslexic'); // high-contrast dark-mode - COMENTADO TEMPORALMENTE
+        body.removeClass('fsize70 fsize80 fsize90 fsize100 fsize110 fsize120 fsize130 font-readable link-underline fontfamily_inter fontfamily_andika fontfamily_fsme fontfamily_tiresias fontfamily_opendyslexic high-contrast dark-mode');
         fsCount = 100;
         Cookies.remove('lab-font-size', { path: cookie_path.cookiePath });
         Cookies.remove('readablefont', { path: cookie_path.cookiePath });
         Cookies.remove('underline', { path: cookie_path.cookiePath });
         Cookies.remove('fontfamily', { path: cookie_path.cookiePath });
-        // Cookies.remove('high-contrast', { path: cookie_path.cookiePath }); // COMENTADO TEMPORALMENTE
-        // Cookies.remove('dark-mode', { path: cookie_path.cookiePath }); // COMENTADO TEMPORALMENTE
+        Cookies.remove('high-contrast', { path: cookie_path.cookiePath });
+        Cookies.remove('dark-mode', { path: cookie_path.cookiePath });
 
-        // Remover clases active de todos los botones - COMENTADO TEMPORALMENTE
-        // jQuery('.lab-wcag-settings li button').removeClass('active');
+        // Remover clases active de todos los botones
+        jQuery('.lab-wcag-settings li button').removeClass('active');
     });
 
     jQuery(Object.keys(fonts).join(",") + "").click(function(event) {
@@ -229,9 +229,9 @@ jQuery(document).ready(function() {
     body.addClass(Cookies.get('fontfamily'));
 
     // ========================================
-    // NUEVAS FUNCIONALIDADES DE ACCESIBILIDAD - COMENTADO TEMPORALMENTE (2026-01-07)
+    // NUEVAS FUNCIONALIDADES DE ACCESIBILIDAD
     // ========================================
-    /*
+
     // Botones de alto contraste y modo oscuro
     let btn_high_contrast = jQuery('.lab-high-contrast');
     let btn_dark_mode = jQuery('.lab-dark-mode');
@@ -326,7 +326,6 @@ jQuery(document).ready(function() {
 
     // Llamar al inicio para marcar indicadores activos
     updateActiveIndicators();
-    */
 
     open_acces.click(function() {
         jQuery("body").toggleClass("opened-settings");

@@ -88,8 +88,7 @@ $portfolio_ids = [
                 </a>
                 <div class="open-accessibility">
                     <ul class="lab-wcag-settings clearfix">
-                        <!--Visual accessibility menu - COMENTADO TEMPORALMENTE (2026-01-07)-->
-                        <!--
+                        <!--Visual accessibility menu-->
                         <li class="fontfamily-label">Visualización</li>
                         <li>
                             <ul class="access-float-fontfamily">
@@ -113,7 +112,6 @@ $portfolio_ids = [
                                 </li>
                             </ul>
                         </li>
-                        -->
                         <!--Visual accessibility menu end-->
                         <!--Font type accessibility menu-->
                         <li class="fontfamily-label">Tipo de fuente</li>
