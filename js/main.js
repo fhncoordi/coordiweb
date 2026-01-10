@@ -1,5 +1,5 @@
 let LaboffcanvaslastScroll;
-let cookie_path = { "cookiePath": "lab_cookie" };
+let cookie_path = { "cookiePath": "/" };
 let fonts = {
     '.lab-link-default': 'fontfamily_default',
     '.lab-font-inter': 'fontfamily_inter',
