@@ -27,6 +27,22 @@ function sanitizarTexto($texto) {
 }
 
 /**
+ * Sanitiza contenido multilínea SIN escapar HTML
+ * Usar para contenido que se guardará en BD y se escapará al mostrar
+ * IMPORTANTE: Este contenido DEBE escaparse con e() al mostrarlo en HTML
+ *
+ * @param string $texto Texto a sanitizar
+ * @return string Texto sanitizado (sin escape HTML)
+ */
+function sanitizarContenido($texto) {
+    $texto = trim($texto);
+    $texto = stripslashes($texto);
+    // NO aplicar htmlspecialchars aquí - se hará al mostrar
+    // Preservar saltos de línea para contenido multilínea
+    return $texto;
+}
+
+/**
  * Sanitiza email
  *
  * @param string $email Email a sanitizar
