@@ -1674,7 +1674,7 @@ if (!function_exists('attr')) {
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/mixitup.min.js"></script>
 <script src="js/js-cookie.js"></script>
-<script src="js/main.js?v=2.0"></script>
+<script src="js/main.js?v=2.1"></script>
 
 <!-- Script para tabs de transparencia -->
 <script>

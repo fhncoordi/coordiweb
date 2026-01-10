@@ -371,6 +371,16 @@ jQuery(document).ready(function() {
     if ('speechSynthesis' in window) {
         console.log('Speech Synthesis API disponible');
 
+        // IMPORTANTE: Inicializar las voces disponibles (fix para Chrome/Edge)
+        // Esto "despierta" la API y carga las voces del sistema
+        if (speechSynthesis.getVoices().length === 0) {
+            speechSynthesis.addEventListener('voiceschanged', function() {
+                console.log('Voces cargadas:', speechSynthesis.getVoices().length);
+            });
+        } else {
+            console.log('Voces disponibles:', speechSynthesis.getVoices().length);
+        }
+
         // Cargar estado guardado al inicio
         if (Cookies.get('screen-reader') === 'yes') {
             console.log('Cookie screen-reader encontrada: activando lector');
@@ -391,22 +401,37 @@ jQuery(document).ready(function() {
             // Cancelar cualquier lectura anterior
             speechSynthesis.cancel();
 
-            // Crear nueva instancia de speech
-            let utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'es-ES'; // Español de España
-            utterance.rate = 1.0; // Velocidad normal
-            utterance.pitch = 1.0; // Tono normal
-            utterance.volume = 1.0; // Volumen máximo
+            // Pequeño delay después de cancelar (fix para algunos navegadores)
+            setTimeout(function() {
+                // Crear nueva instancia de speech
+                let utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES'; // Español de España
+                utterance.rate = 1.0; // Velocidad normal
+                utterance.pitch = 1.0; // Tono normal
+                utterance.volume = 1.0; // Volumen máximo
 
-            console.log('Intentando hablar:', text);
-            speechSynthesis.speak(utterance);
+                // Intentar seleccionar una voz en español
+                let voices = speechSynthesis.getVoices();
+                console.log('Voces disponibles al hablar:', voices.length);
+                let spanishVoice = voices.find(voice => voice.lang.startsWith('es'));
+                if (spanishVoice) {
+                    utterance.voice = spanishVoice;
+                    console.log('Usando voz:', spanishVoice.name);
+                }
 
-            utterance.onstart = function() {
-                console.log('Speech started');
-            };
-            utterance.onerror = function(event) {
-                console.error('Speech error:', event);
-            };
+                console.log('Intentando hablar:', text);
+                speechSynthesis.speak(utterance);
+
+                utterance.onstart = function() {
+                    console.log('Speech started');
+                };
+                utterance.onerror = function(event) {
+                    console.error('Speech error:', event);
+                };
+                utterance.onend = function() {
+                    console.log('Speech ended');
+                };
+            }, 100);
         }
 
         // Toggle Lector de Voz
