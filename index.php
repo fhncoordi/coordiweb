@@ -882,7 +882,19 @@ $portfolio_ids = [
                         </div>
                     </div>
                     <div class="row">
-                        <?php foreach ($noticias_destacadas as $noticia): ?>
+                        <?php
+                        // Mapeo de slugs de áreas a sufijos de IDs de secciones de noticias
+                        $news_id_map = [
+                            'forminno' => 'fi',
+                            'empleo' => 'em',
+                            'aintegral' => 'ai',
+                            'igualdadpm' => 'ig',
+                            'ocio' => 'oc',
+                            'participaca' => 'pa'
+                        ];
+
+                        foreach ($noticias_destacadas as $noticia):
+                        ?>
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="item">
                                 <?php if (!empty($noticia['imagen_destacada'])): ?>
@@ -901,7 +913,8 @@ $portfolio_ids = [
                                             <h3 class="lab-bs-item-title"><?= e($noticia['titulo']) ?></h3>
                                             <p class="lab-bs-item-excerpt"><?= e($noticia['resumen']) ?></p>
                                             <?php if (!empty($noticia['area_slug'])): ?>
-                                            <a href="areas/<?= e($noticia['area_slug']) ?>.php#news-<?= e(substr($noticia['area_slug'], 0, 2)) ?>"
+                                            <?php $news_suffix = $news_id_map[$noticia['area_slug']] ?? substr($noticia['area_slug'], 0, 2); ?>
+                                            <a href="areas/<?= e($noticia['area_slug']) ?>.php#news-<?= e($news_suffix) ?>"
                                                class="btn btn-sm btn-primary"
                                                style="margin-top: 10px;">
                                                 Leer más <i class="fas fa-arrow-right"></i>
