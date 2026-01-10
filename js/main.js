@@ -79,7 +79,20 @@ function scrollToSection(event) {
 
     $('html, body').animate({
         scrollTop: sectionTop - offset
-    }, 500);
+    }, 500, function() {
+        // Actualizar URL sin recargar página (limpia el &gsc.tab=0 de Google Search)
+        // Solo actualiza el hash si el href es válido
+        if (href && href.startsWith('#')) {
+            // Limpiar cualquier parámetro extra que Google Custom Search pueda agregar
+            const cleanHash = href.split('&')[0]; // Elimina todo después de &
+            if (history.pushState) {
+                history.pushState(null, null, cleanHash);
+            } else {
+                // Fallback para navegadores antiguos
+                window.location.hash = cleanHash;
+            }
+        }
+    });
 }
 
 function count(options) {
