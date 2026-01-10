@@ -484,7 +484,7 @@ $portfolio_ids = [
                         <div class="col-md-4 col-sm-6 col-xs-12">
                             <!-- begin valores -->
                             <div class="contact-con">
-                                <h2 style="padding-bottom: 25px">Nuestros valores</h2>
+                                <h2>Nuestros valores</h2>
                                 <p>Nuestro trabajo se fundamenta en cinco valores esenciales que guían cada una de nuestras acciones. El <strong>compromiso</strong> con las personas con discapacidad y sus familias es el motor que impulsa nuestras iniciativas. La <strong>cooperación</strong> entre entidades y profesionales nos permite aunar esfuerzos para alcanzar objetivos comunes. La <strong>igualdad</strong> de oportunidades es un derecho fundamental que defendemos con determinación.<br><br>Promovemos la <strong>concienciación</strong> social sobre la diversidad funcional, sensibilizando a la comunidad canaria. Y la <strong>normalización</strong> es nuestro horizonte: construir una sociedad donde todas las personas puedan participar plenamente en la vida comunitaria sin barreras ni exclusiones.
                                 </p>
                             </div>
