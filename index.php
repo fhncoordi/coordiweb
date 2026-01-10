@@ -436,7 +436,7 @@ $portfolio_ids = [
                                                 </li>
                                                 <?php if (count($noticias_destacadas) > 0): ?>
                                                 <li class="menu-item">
-                                                    <a class="" href="#news">Noticias</a>
+                                                    <a class="" data-scroll href="#news">Noticias</a>
                                                 </li>
                                                 <?php endif; ?>
                                                 <!-- <li class="menu-item">

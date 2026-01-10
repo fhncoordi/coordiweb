@@ -447,7 +447,7 @@ if (!function_exists('formatearFecha')) {
                                                 </li>
                                                 <?php if (count($noticias) > 0): ?>
                                                 <li class="menu-item">
-                                                    <a class="" href="#news-em">Noticias</a>
+                                                    <a class="" data-scroll href="#news-em">Noticias</a>
                                                 </li>
                                                 <?php endif; ?>
                                                 <li class="menu-item">
