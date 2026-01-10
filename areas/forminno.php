@@ -743,8 +743,7 @@ if (!function_exists('formatearFecha')) {
                                             <h3 class="lab-bs-item-title"><?= e($noticia['titulo']) ?></h3>
                                             <p class="lab-bs-item-excerpt"><?= e($noticia['resumen']) ?></p>
                                             <?php if (!empty($noticia['contenido'])): ?>
-                                            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #e0e0e0;">
-                                            <div class="lab-bs-item-content-full" style="line-height: 1.6; color: #555;">
+                                            <div class="lab-bs-item-content-full" style="line-height: 1.6; color: #fff;">
                                                 <?= nl2br(e($noticia['contenido'])) ?>
                                             </div>
                                             <?php endif; ?>
