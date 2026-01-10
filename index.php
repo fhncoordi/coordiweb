@@ -1370,7 +1370,7 @@ $portfolio_ids = [
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/mixitup.min.js"></script>
     <script src="js/js-cookie.js"></script>
-    <script src="js/main.js?v=2.2"></script>
+    <script src="js/main.js?v=DISABLED"></script>
 
 </body>
 

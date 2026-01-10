@@ -362,16 +362,27 @@ jQuery(document).ready(function() {
     // ========================================
     // LECTOR DE VOZ (Speech Synthesis API)
     // ========================================
+    // TEMPORALMENTE DESACTIVADO - Pendiente de arreglar después de mover de /new a /
 
     let btn_screen_reader = jQuery('.lab-screen-reader');
+
+    // Ocultar el botón del lector de voz hasta que se arregle
+    btn_screen_reader.hide();
+
+    /*
+    // CÓDIGO COMENTADO TEMPORALMENTE
+
     let speechSynthesis = window.speechSynthesis;
     let isScreenReaderActive = false;
 
     // Verificar si el navegador soporta la API de síntesis de voz
     if ('speechSynthesis' in window) {
 
-        // NO cargar estado guardado - siempre empieza desactivado
-        // (Comentado: if (Cookies.get('screen-reader') === 'yes'))
+        // Cargar estado guardado al inicio
+        if (Cookies.get('screen-reader') === 'yes') {
+            isScreenReaderActive = true;
+            btn_screen_reader.addClass('active');
+        }
 
         // Función para leer texto
         function speakText(text) {
@@ -446,13 +457,21 @@ jQuery(document).ready(function() {
         }
 
         // Elementos interactivos a los que aplicar el lector de voz
-        let interactiveElements = 'a, button, input, select, textarea, [role="button"], [role="link"], h1, h2, h3, h4, h5, h6, p';
+        // Nota: Limitamos a elementos interactivos principales para evitar sobrecarga
+        let interactiveElements = 'a, button, input, select, textarea, [role="button"], [role="link"], h1, h2, h3, .lab-button, .btn';
 
         // Event delegation para hover en elementos interactivos
         jQuery(document).on('mouseenter focusin', interactiveElements, function() {
             if (isScreenReaderActive) {
-                let text = getReadableText(jQuery(this));
-                if (text) {
+                let $element = jQuery(this);
+
+                // Evitar leer el botón del lector de voz mismo
+                if ($element.hasClass('lab-screen-reader')) {
+                    return;
+                }
+
+                let text = getReadableText($element);
+                if (text && text.length > 0) {
                     speakText(text);
                 }
             }
@@ -470,6 +489,7 @@ jQuery(document).ready(function() {
         btn_screen_reader.hide();
         console.warn('Este navegador no soporta la API de síntesis de voz');
     }
+    */
 
     // Indicadores visuales: marcar botones activos según cookies
     function updateActiveIndicators() {

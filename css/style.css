@@ -2508,6 +2508,58 @@ body.high-contrast * {
     border-color: #fff !important;
 }
 
+/* Excepciones: títulos y subtítulos del jumbotron NO necesitan fondo negro */
+/* En su lugar, usamos sombra de texto para mejorar la legibilidad */
+body.high-contrast .jumbotron_index h1,
+body.high-contrast .jumbotron_index .display-4,
+body.high-contrast .jumbotron_index p.lead,
+body.high-contrast .jumbotron_index hr,
+body.high-contrast .jumbotron_ai h1,
+body.high-contrast .jumbotron_ai .display-4,
+body.high-contrast .jumbotron_ai p.lead,
+body.high-contrast .jumbotron_ai hr,
+body.high-contrast .jumbotron_em h1,
+body.high-contrast .jumbotron_em .display-4,
+body.high-contrast .jumbotron_em p.lead,
+body.high-contrast .jumbotron_em hr,
+body.high-contrast .jumbotron_fi h1,
+body.high-contrast .jumbotron_fi .display-4,
+body.high-contrast .jumbotron_fi p.lead,
+body.high-contrast .jumbotron_fi hr,
+body.high-contrast .jumbotron_ipm h1,
+body.high-contrast .jumbotron_ipm .display-4,
+body.high-contrast .jumbotron_ipm p.lead,
+body.high-contrast .jumbotron_ipm hr,
+body.high-contrast .jumbotron_o h1,
+body.high-contrast .jumbotron_o .display-4,
+body.high-contrast .jumbotron_o p.lead,
+body.high-contrast .jumbotron_o hr,
+body.high-contrast .jumbotron_pca h1,
+body.high-contrast .jumbotron_pca .display-4,
+body.high-contrast .jumbotron_pca p.lead,
+body.high-contrast .jumbotron_pca hr,
+body.high-contrast .jumbotron_accesibilidad h1,
+body.high-contrast .jumbotron_accesibilidad .display-4,
+body.high-contrast .jumbotron_accesibilidad p.lead,
+body.high-contrast .jumbotron_accesibilidad hr,
+body.high-contrast .jumbotron_transparencia h1,
+body.high-contrast .jumbotron_transparencia .display-4,
+body.high-contrast .jumbotron_transparencia p.lead,
+body.high-contrast .jumbotron_transparencia hr,
+body.high-contrast .jumbotron_cookies h1,
+body.high-contrast .jumbotron_cookies .display-4,
+body.high-contrast .jumbotron_cookies p.lead,
+body.high-contrast .jumbotron_cookies hr,
+body.high-contrast .jumbotron_alegal h1,
+body.high-contrast .jumbotron_alegal .display-4,
+body.high-contrast .jumbotron_alegal p.lead,
+body.high-contrast .jumbotron_alegal hr {
+    background-color: transparent !important;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9),
+                 -1px -1px 4px rgba(0, 0, 0, 0.9),
+                 1px 1px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
 body.high-contrast a,
 body.high-contrast button {
     color: #ffff00 !important;
