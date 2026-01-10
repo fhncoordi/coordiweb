@@ -13,16 +13,17 @@
 2. [¿Por qué Stripe?](#por-qué-stripe)
 3. [Comparativa de Pasarelas](#comparativa-de-pasarelas)
 4. [Precios en España](#precios-en-españa)
-5. [Requisitos Previos](#requisitos-previos)
-6. [Tutorial de Implementación](#tutorial-de-implementación)
-7. [Código Completo](#código-completo)
-8. [Configuración de Webhooks](#configuración-de-webhooks)
-9. [Testing](#testing)
-10. [Paso a Producción](#paso-a-producción)
-11. [Migración de Cuenta Bancaria](#migración-de-cuenta-bancaria)
-12. [FAQ - Preguntas Frecuentes](#faq---preguntas-frecuentes)
-13. [Troubleshooting](#troubleshooting)
-14. [Consideraciones Legales](#consideraciones-legales)
+5. [Cómo Habilitar Bizum](#cómo-habilitar-bizum)
+6. [Requisitos Previos](#requisitos-previos)
+7. [Tutorial de Implementación](#tutorial-de-implementación)
+8. [Código Completo](#código-completo)
+9. [Configuración de Webhooks](#configuración-de-webhooks)
+10. [Testing](#testing)
+11. [Paso a Producción](#paso-a-producción)
+12. [Migración de Cuenta Bancaria](#migración-de-cuenta-bancaria)
+13. [FAQ - Preguntas Frecuentes](#faq---preguntas-frecuentes)
+14. [Troubleshooting](#troubleshooting)
+15. [Consideraciones Legales](#consideraciones-legales)
 
 ---
 
@@ -59,15 +60,15 @@ La sección **"Colabora"** del sitio web (actualmente comentada en `index.php` l
 5. **Dashboard completo** - Panel web para ver todas las transacciones
 6. **Webhooks automáticos** - Notificaciones en tiempo real de pagos
 7. **Modo test/live** - Ambiente de pruebas completo sin necesidad de dinero real
-8. **Métodos de pago** - Tarjetas, SEPA Direct Debit, Google Pay, Apple Pay
+8. **Métodos de pago** - Tarjetas, Bizum, SEPA Direct Debit, Google Pay, Apple Pay
 9. **Sin periodo de permanencia** - Puedes cancelar cuando quieras
+10. **Bizum integrado** - 38% de españoles prefieren Bizum, transacciones en <10 segundos
 
 ### ❌ Desventajas
 
-1. **No soporta Bizum** - Necesitarías Redsys o TPV bancario para Bizum
-2. **Comisiones relativamente altas** - 1.5% + 0.25€ por transacción en EEA
-3. **Pagos en USD si no configuras bien** - Hay que configurar EUR como divisa
-4. **Requiere verificación de cuenta** - Puede tardar 1-3 días
+1. **Comisiones relativamente altas** - 1.5% + 0.25€ por transacción en EEA
+2. **Pagos en USD si no configuras bien** - Hay que configurar EUR como divisa
+3. **Requiere verificación de cuenta** - Puede tardar 1-3 días
 
 ---
 
@@ -76,7 +77,8 @@ La sección **"Colabora"** del sitio web (actualmente comentada en `index.php` l
 | Característica | Stripe | PayPal | Redsys | TPV Bancario |
 |----------------|--------|--------|--------|--------------|
 | **Comisión tarjeta** | 1.5% + 0.25€ | 2.99% + 0.35€ | 1.0-1.5% + 0.25€ | 0.5-1.5% |
-| **Bizum** | ❌ No | ❌ No | ✅ Sí | ✅ Sí |
+| **Bizum** | ✅ Sí | ❌ No | ✅ Sí | ✅ Sí |
+| **Comisión Bizum** | 1.5% + 0.25€ | N/A | 1.0-1.5% + 0.25€ | 0.5-1.5% |
 | **SEPA** | ✅ 0.35€ fijo | ❌ No | ❌ No | ✅ Variable |
 | **Setup** | Fácil | Muy fácil | Complejo | Muy complejo |
 | **Cuota mensual** | ❌ Ninguna | ❌ Ninguna | ✅ 20-50€/mes | ✅ 30-100€/mes |
@@ -88,29 +90,43 @@ La sección **"Colabora"** del sitio web (actualmente comentada en `index.php` l
 
 ### Recomendación
 
-**Para Coordicanarias:**
-- **Fase 1 (ahora):** Stripe - Fácil de implementar, sin cuotas fijas, modo test completo
-- **Fase 2 (futuro):** Agregar Bizum vía Redsys o TPV bancario cuando el volumen lo justifique
+**Para Coordicanarias: Stripe con Bizum es la mejor opción** ✅
 
-**Razón:** Como asociación sin ánimo de lucro, es mejor empezar sin cuotas mensuales. Stripe es ideal para validar que la gente dona antes de comprometerse con cuotas fijas de Redsys/TPV.
+**Razones:**
+- ✅ **Sin cuotas mensuales** - Ideal para asociaciones sin ánimo de lucro
+- ✅ **Bizum incluido** - 38% de españoles lo prefieren como método de pago
+- ✅ **Múltiples métodos de pago** - Tarjetas, Bizum, SEPA, Google Pay, Apple Pay
+- ✅ **Fácil implementación** - API moderna REST/JSON
+- ✅ **Modo test completo** - Pruebas sin dinero real
+- ✅ **Checkout alojado** - Máxima seguridad PCI DSS
+- ✅ **Webhooks excelentes** - Automatización de confirmaciones
+
+**Implementación recomendada:**
+1. **Ahora:** Stripe con Bizum + Tarjetas para donaciones únicas
+2. **Futuro:** Membresías recurrentes con Stripe Subscriptions
 
 ---
 
 ## Precios en España
 
-### Stripe Pricing (Tarjetas EEA - España)
+### Stripe Pricing (Métodos de pago en España)
 
 **Tarjetas estándar europeas:**
 - **1.5% + 0.25€** por transacción exitosa
 
-**Ejemplos:**
+**Bizum:**
+- **1.5% + 0.25€** por transacción exitosa (misma tarifa que tarjetas)
+- ⚡ Transacciones completadas en menos de 10 segundos
+- 📱 Preferido por 38% de compradores españoles
+
+**Transferencias SEPA Direct Debit:**
+- **0.35€** fijo por transacción (ideal para donaciones grandes)
+
+**Ejemplos de comisiones:**
 - Donación de 10€ → Comisión: 0.40€ → Recibes: **9.60€**
 - Donación de 25€ → Comisión: 0.63€ → Recibes: **24.37€**
 - Donación de 50€ → Comisión: 1.00€ → Recibes: **49.00€**
 - Donación de 100€ → Comisión: 1.75€ → Recibes: **98.25€**
-
-**Transferencias SEPA Direct Debit:**
-- **0.35€** fijo por transacción (ideal para donaciones grandes)
 
 **Descuentos para nonprofits:**
 - Stripe NO tiene descuento público para ONGs/asociaciones en España
@@ -124,6 +140,120 @@ La sección **"Colabora"** del sitio web (actualmente comentada en `index.php` l
 - Sin cuenta ONG: 2.99% + 0.35€
 
 **Nota:** PayPal es más caro para donaciones pequeñas que Stripe.
+
+---
+
+## Cómo Habilitar Bizum
+
+### ¿Por qué Bizum es importante?
+
+Bizum es el método de pago instantáneo más popular en España:
+- 📊 **95% de las transferencias instantáneas** en España se hacen con Bizum
+- 👥 **38% de los compradores españoles** prefieren pagar con Bizum
+- ⚡ **Transacciones en menos de 10 segundos**
+- 📱 **86% de abandono de carrito** si no está disponible el método preferido
+- 🏦 **Más de 30 millones de usuarios** en España (2026)
+
+### Configuración en Stripe Dashboard
+
+Stripe ofrece Bizum como método de pago a través de **Open Bank S.A.** (filial de Banco Santander).
+
+#### Paso 1: Crear cuenta de Stripe
+1. Ve a https://dashboard.stripe.com/register
+2. Completa los datos de Coordicanarias (CIF, dirección, etc.)
+3. Verifica tu cuenta (puede tardar 1-3 días)
+
+#### Paso 2: Habilitar Bizum en Payment Methods
+1. Inicia sesión en tu Dashboard de Stripe
+2. Ve a **Settings** → **Payment methods**
+3. En la sección **Wallets and bank redirects**, busca **Bizum**
+4. Click en **Turn on** para activar Bizum
+5. Acepta los términos y condiciones de Bizum
+
+#### Paso 3: Configurar en el código (Checkout)
+Al crear una sesión de Stripe Checkout, agrega `'bizum'` en los métodos de pago permitidos:
+
+```php
+$checkout_session = \Stripe\Checkout\Session::create([
+    'payment_method_types' => ['card', 'bizum'], // ⬅️ Agregar 'bizum' aquí
+    'line_items' => [[
+        'price_data' => [
+            'currency' => 'eur',
+            'product_data' => [
+                'name' => 'Donación a Coordicanarias',
+            ],
+            'unit_amount' => $importe * 100, // En céntimos
+        ],
+        'quantity' => 1,
+    ]],
+    'mode' => 'payment',
+    'success_url' => 'https://coordicanarias.com/donacion-exitosa.php?session_id={CHECKOUT_SESSION_ID}',
+    'cancel_url' => 'https://coordicanarias.com/donacion-cancelada.php',
+]);
+```
+
+#### Paso 4: Probar en modo Test
+Stripe proporciona números de prueba para Bizum:
+- **Pago exitoso:** Usar cualquier número de teléfono español válido en modo test
+- El Dashboard mostrará la transacción como "test mode"
+
+### Requisitos técnicos para Bizum
+
+✅ **Requisitos obligatorios:**
+- Cuenta de Stripe verificada en España
+- HTTPS habilitado en tu sitio web
+- EUR como moneda (Bizum solo funciona en euros)
+- Dirección de negocio en España, Andorra, Portugal o Italia
+
+❌ **Limitaciones:**
+- Solo disponible para clientes con bancos españoles compatibles
+- No funciona para pagos recurrentes/subscripciones (solo pagos únicos)
+- Límites de Bizum aplicables (máx. 1000€ por transacción para profesionales)
+
+### Bancos compatibles (principales)
+
+✅ Los siguientes bancos soportan Bizum profesional para recibir donaciones:
+- Banco Santander
+- BBVA
+- CaixaBank
+- Banco Sabadell
+- Bankia (ahora CaixaBank)
+- ING
+- Openbank
+- Unicaja
+- Ibercaja
+- Kutxabank
+- Abanca
+- Cajamar
+
+**Nota:** En total hay más de 40 bancos en el sistema Bizum, pero los 12 principales (incluyendo los listados arriba) soportan cuentas profesionales.
+
+### Ventajas de usar Bizum con Stripe
+
+1. **Una sola integración** - Stripe maneja tanto tarjetas como Bizum con el mismo código
+2. **Checkout alojado** - Página de pago segura en dominio de Stripe
+3. **Sin cambio de banco** - Puedes mantener tu cuenta actual de Coordicanarias
+4. **Webhooks unificados** - Mismo sistema de notificaciones para todos los métodos de pago
+5. **Dashboard único** - Ver todas las donaciones (tarjetas + Bizum) en un solo lugar
+6. **Sin cuotas mensuales adicionales** - Misma comisión por transacción (1.5% + 0.25€)
+
+### Experiencia del usuario
+
+Cuando un donante elige Bizum en el checkout:
+1. Stripe muestra un código QR
+2. El donante escanea el código con su app bancaria
+3. Confirma el pago en su móvil (con PIN, huella o Face ID)
+4. Pago completado en menos de 10 segundos
+5. Redirección automática a tu página de éxito
+
+**Alternativa:** También pueden introducir su número de teléfono si su banco lo permite.
+
+### Referencias oficiales
+
+- [Bizum: What businesses in Spain need to know | Stripe](https://stripe.com/resources/more/bizum-in-depth-guide)
+- [Accepting Bizum payments in your store | Stripe](https://stripe.com/resources/more/accepting-bizum-payments-online-and-in-store)
+- [Payment Methods in Spain | Stripe](https://stripe.com/resources/more/payment-methods-in-spain)
+- [Bizum Payment Terms](https://stripe.com/legal/bizum)
 
 ---
 
