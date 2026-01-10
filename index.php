@@ -896,6 +896,13 @@ $portfolio_ids = [
                                         <div class="">
                                             <h3 class="lab-bs-item-title"><?= e($noticia['titulo']) ?></h3>
                                             <p class="lab-bs-item-excerpt"><?= e($noticia['resumen']) ?></p>
+                                            <?php if (!empty($noticia['area_slug'])): ?>
+                                            <a href="areas/<?= e($noticia['area_slug']) ?>.php#news-<?= e(substr($noticia['area_slug'], 0, 2)) ?>"
+                                               class="btn btn-sm btn-primary"
+                                               style="margin-top: 10px;">
+                                                Leer más <i class="fas fa-arrow-right"></i>
+                                            </a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
