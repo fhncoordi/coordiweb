@@ -322,7 +322,7 @@ $portfolio_ids = [
                                 <a href="" class="" title="Logo" rel="home">
                                     <span class="">
                                         <picture>
-                                            <img src="images/brand-coordi-black.svg" width="250" alt="Logo de Coordicanarias" class="" />
+                                            <img src="images/brand-coordi-black.svg" width="250" alt="Logo de Coordicanarias" class="logo-coordicanarias" />
                                         </picture>
                                     </span>
                                 </a>
@@ -1165,7 +1165,7 @@ $portfolio_ids = [
                     <div class="row footer-dark">
                         <div class="col-sm-6 col-lg-4 foot-col-padd">
                             <div class="foot-logo">
-                                <img src="images/brand-coordi-black.svg" width="250" alt="Logotipo de Coordicanarias" class="float-center img-fluid">
+                                <img src="images/brand-coordi-black.svg" width="250" alt="Logotipo de Coordicanarias" class="float-center img-fluid logo-coordicanarias">
                             </div>
                             <div class="dream-text">
                                 <p>Coordinadora de Personas con Discapacidad Física de Canarias. Acompañamos, defendemos los derechos y promovemos la inclusión de las personas con discapacidad.</p>

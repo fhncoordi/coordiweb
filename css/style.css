@@ -2539,6 +2539,97 @@ body.high-contrast select {
     border: 2px solid #fff !important;
 }
 
+/* Logo Coordicanarias blanco en alto contraste */
+body.high-contrast .logo-coordicanarias {
+    content: url("../images/brand-coordi-white.svg");
+}
+
+/* Logo Gobierno de Canarias blanco en alto contraste */
+body.high-contrast .logo-gobcan {
+    content: url("../images/logos_gobcan/Logo_GobCan_claim_blanco_mod1.png");
+    opacity: 1 !important;
+}
+
+/* Jumbotron en alto contraste - overlay oscuro para mejor contraste */
+body.high-contrast .jumbotron_index,
+body.high-contrast .jumbotron_ai,
+body.high-contrast .jumbotron_em,
+body.high-contrast .jumbotron_fi,
+body.high-contrast .jumbotron_ipm,
+body.high-contrast .jumbotron_o,
+body.high-contrast .jumbotron_pca,
+body.high-contrast .jumbotron_accesibilidad,
+body.high-contrast .jumbotron_transparencia,
+body.high-contrast .jumbotron_cookies,
+body.high-contrast .jumbotron_alegal {
+    position: relative;
+}
+
+body.high-contrast .jumbotron_index::before,
+body.high-contrast .jumbotron_ai::before,
+body.high-contrast .jumbotron_em::before,
+body.high-contrast .jumbotron_fi::before,
+body.high-contrast .jumbotron_ipm::before,
+body.high-contrast .jumbotron_o::before,
+body.high-contrast .jumbotron_pca::before,
+body.high-contrast .jumbotron_accesibilidad::before,
+body.high-contrast .jumbotron_transparencia::before,
+body.high-contrast .jumbotron_cookies::before,
+body.high-contrast .jumbotron_alegal::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 0;
+}
+
+body.high-contrast .jumbotron_index > *,
+body.high-contrast .jumbotron_ai > *,
+body.high-contrast .jumbotron_em > *,
+body.high-contrast .jumbotron_fi > *,
+body.high-contrast .jumbotron_ipm > *,
+body.high-contrast .jumbotron_o > *,
+body.high-contrast .jumbotron_pca > *,
+body.high-contrast .jumbotron_accesibilidad > *,
+body.high-contrast .jumbotron_transparencia > *,
+body.high-contrast .jumbotron_cookies > *,
+body.high-contrast .jumbotron_alegal > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Iconos de áreas con líneas blancas en alto contraste */
+body.high-contrast svg path {
+    fill: #fff !important;
+}
+
+body.high-contrast .our-spec svg path,
+body.high-contrast .area-icon svg path,
+body.high-contrast .services-single-content .icon svg path,
+body.high-contrast .single-promo .icon svg path,
+body.high-contrast .features-content .icon svg path {
+    fill: #fff !important;
+}
+
+/* Imágenes de proyectos sin overlay en alto contraste */
+body.high-contrast .portfolio-item img,
+body.high-contrast .shot-item img {
+    filter: contrast(2) !important;
+    opacity: 1 !important;
+}
+
+/* Quitar overlay oscuro de imágenes de proyectos en alto contraste */
+body.high-contrast .shot-item .single-content {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+body.high-contrast .shot-item:hover .single-content {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
 /* ============================================
    MEJORAS DE ACCESIBILIDAD - MODO OSCURO
    ============================================ */
@@ -2628,6 +2719,11 @@ body.dark-mode svg path {
 body.dark-mode .logo-gobcan {
     content: url("../images/logos_gobcan/Logo_GobCan_claim_blanco_mod1.png");
     opacity: 1 !important;
+}
+
+/* Logo Coordicanarias blanco en modo oscuro */
+body.dark-mode .logo-coordicanarias {
+    content: url("../images/brand-coordi-white.svg");
 }
 
 /* Panel de accesibilidad en modo oscuro */
