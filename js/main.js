@@ -216,6 +216,12 @@ jQuery(document).ready(function() {
         Cookies.remove('fontfamily', { path: cookie_path.cookiePath });
         Cookies.remove('high-contrast', { path: cookie_path.cookiePath });
         Cookies.remove('dark-mode', { path: cookie_path.cookiePath });
+        Cookies.remove('screen-reader', { path: cookie_path.cookiePath });
+
+        // Detener síntesis de voz si está activa
+        if (typeof window.speechSynthesis !== 'undefined') {
+            window.speechSynthesis.cancel();
+        }
 
         // Remover clases active de todos los botones
         jQuery('.lab-wcag-settings li button').removeClass('active');
@@ -294,6 +300,121 @@ jQuery(document).ready(function() {
             }
         }
     });
+
+    // ========================================
+    // LECTOR DE VOZ (Speech Synthesis API)
+    // ========================================
+
+    let btn_screen_reader = jQuery('.lab-screen-reader');
+    let speechSynthesis = window.speechSynthesis;
+    let isScreenReaderActive = false;
+
+    // Verificar si el navegador soporta la API de síntesis de voz
+    if ('speechSynthesis' in window) {
+
+        // Cargar estado guardado al inicio
+        if (Cookies.get('screen-reader') === 'yes') {
+            isScreenReaderActive = true;
+            btn_screen_reader.addClass('active');
+        }
+
+        // Función para leer texto
+        function speakText(text) {
+            if (!isScreenReaderActive || !text || text.trim() === '') return;
+
+            // Cancelar cualquier lectura anterior
+            speechSynthesis.cancel();
+
+            // Crear nueva instancia de speech
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES'; // Español de España
+            utterance.rate = 1.0; // Velocidad normal
+            utterance.pitch = 1.0; // Tono normal
+            utterance.volume = 1.0; // Volumen máximo
+
+            speechSynthesis.speak(utterance);
+        }
+
+        // Toggle Lector de Voz
+        btn_screen_reader.click(function(event) {
+            event.preventDefault();
+
+            if (isScreenReaderActive) {
+                // Desactivar lector de voz
+                isScreenReaderActive = false;
+                speechSynthesis.cancel();
+                Cookies.remove('screen-reader', { path: cookie_path.cookiePath });
+                jQuery(this).removeClass('active');
+                speakText('Lector de voz desactivado');
+            } else {
+                // Activar lector de voz
+                isScreenReaderActive = true;
+                Cookies.set('screen-reader', 'yes', { expires: 7, path: cookie_path.cookiePath });
+                jQuery(this).addClass('active');
+                speakText('Lector de voz activado. Pase el cursor sobre los elementos para escuchar su contenido');
+            }
+        });
+
+        // Función para extraer texto legible de un elemento
+        function getReadableText(element) {
+            let text = '';
+
+            // Prioridad 1: aria-label
+            if (element.attr('aria-label')) {
+                text = element.attr('aria-label');
+            }
+            // Prioridad 2: title
+            else if (element.attr('title')) {
+                text = element.attr('title');
+            }
+            // Prioridad 3: alt (para imágenes)
+            else if (element.attr('alt')) {
+                text = element.attr('alt');
+            }
+            // Prioridad 4: texto visible
+            else {
+                // Obtener texto sin elementos hijos
+                text = element.clone()
+                    .children()
+                    .remove()
+                    .end()
+                    .text()
+                    .trim();
+
+                // Si no hay texto directo, obtener todo el texto
+                if (!text) {
+                    text = element.text().trim();
+                }
+            }
+
+            return text;
+        }
+
+        // Elementos interactivos a los que aplicar el lector de voz
+        let interactiveElements = 'a, button, input, select, textarea, [role="button"], [role="link"], h1, h2, h3, h4, h5, h6, p';
+
+        // Event delegation para hover en elementos interactivos
+        jQuery(document).on('mouseenter focusin', interactiveElements, function() {
+            if (isScreenReaderActive) {
+                let text = getReadableText(jQuery(this));
+                if (text) {
+                    speakText(text);
+                }
+            }
+        });
+
+        // Detener lectura al salir del elemento
+        jQuery(document).on('mouseleave focusout', interactiveElements, function() {
+            if (isScreenReaderActive) {
+                speechSynthesis.cancel();
+            }
+        });
+
+    } else {
+        // Si el navegador no soporta la API, ocultar el botón
+        btn_screen_reader.hide();
+        console.warn('Este navegador no soporta la API de síntesis de voz');
+    }
 
     // Indicadores visuales: marcar botones activos según cookies
     function updateActiveIndicators() {

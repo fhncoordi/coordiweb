@@ -110,6 +110,15 @@ $portfolio_ids = [
                                         <span class="lab-button-label">Modo Oscuro</span>
                                     </button>
                                 </li>
+                                <li>
+                                    <button class="lab-screen-reader" aria-label="Activar lector de voz" aria-pressed="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                            <path d="M 16 4 C 15.476563 4 14.941406 4.183594 14.5625 4.5625 L 8.28125 10.84375 L 4 11 L 4 21 L 8.28125 21.15625 L 14.5625 27.4375 C 15.320313 28.195313 16.53125 27.902344 16.84375 26.875 C 16.941406 26.589844 17 26.308594 17 26 L 17 6 C 17 4.894531 16.105469 4 15 4 Z M 20 9 L 20 11 C 21.65625 11 23 12.34375 23 14 C 23 15.65625 21.65625 17 20 17 L 20 19 C 22.753906 19 25 16.753906 25 14 C 25 11.246094 22.753906 9 20 9 Z M 20 13 L 20 15 C 20.550781 15 21 14.550781 21 14 C 21 13.449219 20.550781 13 20 13 Z" />
+                                        </svg>
+                                        <span class="lab-only">Lector de Voz</span>
+                                        <span class="lab-button-label">Lector de Voz</span>
+                                    </button>
+                                </li>
                             </ul>
                         </li>
                         <!--Visual accessibility menu end-->
