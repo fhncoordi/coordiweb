@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
                             $nuevo_id,
                             "Usuario creado: {$datos['username']}"
                         );
-                        $mensaje = 'Usuario creado exitosamente.';
+                        $mensaje = 'Usuario creado correctamente.';
                     } else {
                         $error = 'Error al crear el usuario. Por favor, intenta de nuevo.';
                     }
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
                             $id_usuario,
                             "Usuario actualizado: {$datos['username']}"
                         );
-                        $mensaje = 'Usuario actualizado exitosamente.';
+                        $mensaje = 'Usuario actualizado correctamente.';
                     } else {
                         $error = 'Error al actualizar el usuario. Por favor, intenta de nuevo.';
                     }
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
                         $id,
                         "Usuario desactivado: {$usuario['username']}"
                     );
-                    $mensaje = 'Usuario desactivado exitosamente.';
+                    $mensaje = 'Usuario desactivado correctamente.';
                 } else {
                     $error = 'Error al desactivar el usuario.';
                 }
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
                         $id,
                         "Usuario {$estado}"
                     );
-                    $mensaje = "Usuario {$estado} exitosamente.";
+                    $mensaje = "Usuario {$estado} correctamente.";
                 } else {
                     $error = 'Error al cambiar el estado del usuario.';
                 }

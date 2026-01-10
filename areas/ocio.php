@@ -12,6 +12,7 @@ require_once __DIR__ . '/../php/models/Servicio.php';
 require_once __DIR__ . '/../php/models/Beneficio.php';
 require_once __DIR__ . '/../php/models/Proyecto.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
+require_once __DIR__ . '/../php/models/Noticia.php';
 
 // Obtener el área actual por slug
 $area_slug = 'ocio';
@@ -28,6 +29,8 @@ $servicios = Servicio::getAll(true, $area['id']);
 $beneficios = Beneficio::getAll(true, $area['id']);
 // Obtener proyectos destacados (activos e históricos)
 $proyectos = Proyecto::getByArea($area['id']);
+// Obtener noticias activas del área (destacadas o no)
+$noticias = Noticia::getAll(true, 0, $area['id']);
 
 // Obtener configuración del sitio (para redes sociales)
 $config = Configuracion::getAll();
@@ -42,6 +45,30 @@ if (!function_exists('e')) {
 if (!function_exists('attr')) {
     function attr($string) {
         return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+    }
+}
+
+// Helper function para formatear fechas en español
+if (!function_exists('formatearFecha')) {
+    function formatearFecha($fecha, $formato = 'corto') {
+        $meses = [
+            'Jan' => 'Ene', 'Feb' => 'Feb', 'Mar' => 'Mar', 'Apr' => 'Abr',
+            'May' => 'May', 'Jun' => 'Jun', 'Jul' => 'Jul', 'Aug' => 'Ago',
+            'Sep' => 'Sep', 'Oct' => 'Oct', 'Nov' => 'Nov', 'Dec' => 'Dic'
+        ];
+
+        if ($formato === 'corto') {
+            $fecha_en = date('d M, Y', strtotime($fecha));
+            return str_replace(array_keys($meses), array_values($meses), $fecha_en);
+        } else {
+            $meses_largo = [
+                'January' => 'enero', 'February' => 'febrero', 'March' => 'marzo', 'April' => 'abril',
+                'May' => 'mayo', 'June' => 'junio', 'July' => 'julio', 'August' => 'agosto',
+                'September' => 'septiembre', 'October' => 'octubre', 'November' => 'noviembre', 'December' => 'diciembre'
+            ];
+            $fecha_en = date('d F, Y', strtotime($fecha));
+            return str_replace(array_keys($meses_largo), array_values($meses_largo), $fecha_en);
+        }
     }
 }
 ?>
@@ -587,6 +614,48 @@ if (!function_exists('attr')) {
         </div>
     </section>
     <!--Beneficios end-->
+
+        <!--News section-->
+        <?php if (count($noticias) > 0): ?>
+        <section id="news-oc" class="section">
+            <div class="main-container section-bg">
+                <div class="inside-container">
+                    <div class="row">
+                        <div class="col-12 our-header">
+                            <h2>Novedades de Ocio e Inclusión Social</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <?php foreach ($noticias as $noticia): ?>
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="item">
+                                <?php if (!empty($noticia['imagen_destacada'])): ?>
+                                <div class="lab-bs-item-image" style="margin-bottom: 15px;">
+                                    <img src="<?= '../' . e($noticia['imagen_destacada']) ?>"
+                                         alt="<?= attr($noticia['titulo']) ?>"
+                                         style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                                </div>
+                                <?php endif; ?>
+                                <div class="lab-part-content">
+                                    <div class="lab-bs-item-content">
+                                        <div class="lab-bs-item-date">
+                                            <span><?= formatearFecha($noticia['fecha_publicacion']) ?></span>
+                                        </div>
+                                        <div class="">
+                                            <h3 class="lab-bs-item-title"><?= e($noticia['titulo']) ?></h3>
+                                            <p class="lab-bs-item-excerpt"><?= e($noticia['resumen']) ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <?php endif; ?>
+        <!--News section end-->
 
 
 

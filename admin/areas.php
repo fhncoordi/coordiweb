@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "Área '{$area['nombre']}' {$estado_texto}"
                 );
 
-                $mensaje = "Área {$estado_texto} exitosamente";
+                $mensaje = "Área {$estado_texto} correctamente";
                 $tipo_mensaje = 'success';
             } else {
                 $mensaje = 'Error al cambiar el estado del área';
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             "Área '{$datos['nombre']}' actualizada"
                         );
 
-                        $mensaje = 'Área actualizada exitosamente';
+                        $mensaje = 'Área actualizada correctamente';
                         $tipo_mensaje = 'success';
                     } else {
                         $mensaje = 'Error al actualizar el área';

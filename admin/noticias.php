@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "Noticia '{$noticia['titulo']}' {$estado_texto}"
                 );
 
-                $mensaje = "Noticia {$estado_texto} exitosamente";
+                $mensaje = "Noticia {$estado_texto} correctamente";
                 $tipo_mensaje = 'success';
             } else {
                 $mensaje = 'Error al cambiar el estado';
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "Noticia '{$noticia['titulo']}' eliminada"
                 );
 
-                $mensaje = 'Noticia eliminada exitosamente';
+                $mensaje = 'Noticia eliminada correctamente';
                 $tipo_mensaje = 'success';
             } else {
                 $mensaje = 'Error al eliminar la noticia';
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         "Noticia '{$datos['titulo']}' creada"
                     );
 
-                    $mensaje = 'Noticia creada exitosamente';
+                    $mensaje = 'Noticia creada correctamente';
                     $tipo_mensaje = 'success';
                     $modo = 'listado';
                 } else {
@@ -254,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             "Noticia '{$datos['titulo']}' actualizada"
                         );
 
-                        $mensaje = 'Noticia actualizada exitosamente';
+                        $mensaje = 'Noticia actualizada correctamente';
                         $tipo_mensaje = 'success';
                         $modo = 'listado';
                     } else {
