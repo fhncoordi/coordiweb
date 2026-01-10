@@ -143,6 +143,38 @@ function onComplete(value) {
 }
 
 jQuery(document).ready(function() {
+    // Limpiar URL si Google Custom Search agregó &gsc.tab=0
+    // Esto ocurre cuando se hace clic en enlaces externos como index.php#features desde otras páginas
+    if (window.location.hash && window.location.hash.indexOf('&gsc.tab=') !== -1) {
+        const cleanHash = window.location.hash.split('&')[0];
+        if (history.replaceState) {
+            // Usar replaceState en lugar de pushState para no crear entrada en historial
+            history.replaceState(null, null, cleanHash);
+        } else {
+            // Fallback para navegadores antiguos
+            window.location.hash = cleanHash;
+        }
+
+        // Hacer scroll a la sección después de limpiar la URL
+        const $section = jQuery(cleanHash);
+        if ($section.length > 0) {
+            const offsetMap = {
+                '#features': 100,
+                '#about': 150,
+                '#portfolios': 150,
+                '#transparencia': 200,
+                // Agregar otros offsets si es necesario
+            };
+            const offset = offsetMap[cleanHash] || 0;
+            const sectionTop = $section.offset().top;
+            setTimeout(function() {
+                jQuery('html, body').animate({
+                    scrollTop: sectionTop - offset
+                }, 500);
+            }, 100); // Pequeño delay para asegurar que la página esté cargada
+        }
+    }
+
     let ReadableFontButton = jQuery('.lab-font-readable');
     let font_normal = jQuery('.lab-font-normal');
     let font_larger = jQuery('.lab-font-larger');
