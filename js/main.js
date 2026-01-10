@@ -391,7 +391,7 @@ jQuery(document).ready(function() {
         }
 
         // Elementos interactivos a los que aplicar el lector de voz
-        let interactiveElements = 'a, button, input, select, textarea, [role="button"], [role="link"], h1, h2, h3, h4, h5, h6, p';
+        let interactiveElements = 'a, button, input, select, textarea, [role="button"], [role="link"], [role="progressbar"], h1, h2, h3, h4, h5, h6, p';
 
         // Event delegation para hover en elementos interactivos
         jQuery(document).on('mouseenter focusin', interactiveElements, function() {

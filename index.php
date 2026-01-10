@@ -485,32 +485,32 @@ $portfolio_ids = [
                             <!-- begin skills -->
                             <div class="contact-con">
                                 <h2 style="padding-bottom: 25px">Nuestros valores</h2>
-                                <div>Compromiso</div>
-                                <div class="progress mb-3">
+                                <h3 class="value-label">Compromiso</h3>
+                                <div class="progress mb-3" role="progressbar" aria-label="Compromiso: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
                                         <span class="progress-number">100%</span>
                                     </div>
                                 </div>
-                                <div>Cooperación</div>
-                                <div class="progress mb-3">
+                                <h3 class="value-label">Cooperación</h3>
+                                <div class="progress mb-3" role="progressbar" aria-label="Cooperación: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
                                         <span class="progress-number">100%</span>
                                     </div>
                                 </div>
-                                <div>Igualdad</div>
-                                <div class="progress mb-3">
+                                <h3 class="value-label">Igualdad</h3>
+                                <div class="progress mb-3" role="progressbar" aria-label="Igualdad: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
                                         <span class="progress-number">100%</span>
                                     </div>
                                 </div>
-                                <div>Concienciación</div>
-                                <div class="progress mb-3">
+                                <h3 class="value-label">Concienciación</h3>
+                                <div class="progress mb-3" role="progressbar" aria-label="Concienciación: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
                                         <span class="progress-number">100%</span>
                                     </div>
                                 </div>
-                                <div>Normalización</div>
-                                <div class="progress mb-3">
+                                <h3 class="value-label">Normalización</h3>
+                                <div class="progress mb-3" role="progressbar" aria-label="Normalización: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
                                         <span class="progress-number">100%</span>
                                     </div>
