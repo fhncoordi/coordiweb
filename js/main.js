@@ -369,16 +369,24 @@ jQuery(document).ready(function() {
 
     // Verificar si el navegador soporta la API de síntesis de voz
     if ('speechSynthesis' in window) {
+        console.log('Speech Synthesis API disponible');
 
         // Cargar estado guardado al inicio
         if (Cookies.get('screen-reader') === 'yes') {
+            console.log('Cookie screen-reader encontrada: activando lector');
             isScreenReaderActive = true;
             btn_screen_reader.addClass('active');
+        } else {
+            console.log('Cookie screen-reader no encontrada');
         }
 
         // Función para leer texto
         function speakText(text) {
-            if (!isScreenReaderActive || !text || text.trim() === '') return;
+            console.log('speakText llamado con:', text, 'isActive:', isScreenReaderActive);
+            if (!isScreenReaderActive || !text || text.trim() === '') {
+                console.log('speakText: condición no cumplida');
+                return;
+            }
 
             // Cancelar cualquier lectura anterior
             speechSynthesis.cancel();
@@ -390,12 +398,21 @@ jQuery(document).ready(function() {
             utterance.pitch = 1.0; // Tono normal
             utterance.volume = 1.0; // Volumen máximo
 
+            console.log('Intentando hablar:', text);
             speechSynthesis.speak(utterance);
+
+            utterance.onstart = function() {
+                console.log('Speech started');
+            };
+            utterance.onerror = function(event) {
+                console.error('Speech error:', event);
+            };
         }
 
         // Toggle Lector de Voz
         btn_screen_reader.click(function(event) {
             event.preventDefault();
+            console.log('Lector de voz clicked. Estado actual:', isScreenReaderActive);
 
             if (isScreenReaderActive) {
                 // Desactivar lector de voz
@@ -403,12 +420,14 @@ jQuery(document).ready(function() {
                 speechSynthesis.cancel();
                 Cookies.remove('screen-reader', { path: cookie_path.cookiePath });
                 jQuery(this).removeClass('active');
+                console.log('Lector de voz desactivado');
                 speakText('Lector de voz desactivado');
             } else {
                 // Activar lector de voz
                 isScreenReaderActive = true;
                 Cookies.set('screen-reader', 'yes', { expires: 7, path: cookie_path.cookiePath });
                 jQuery(this).addClass('active');
+                console.log('Lector de voz activado');
                 speakText('Lector de voz activado. Pase el cursor sobre los elementos para escuchar su contenido');
             }
         });
