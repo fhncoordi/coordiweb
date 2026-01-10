@@ -34,6 +34,32 @@ if (!function_exists('attr')) {
     }
 }
 
+// Helper function para formatear fechas en español
+if (!function_exists('formatearFecha')) {
+    function formatearFecha($fecha, $formato = 'corto') {
+        $meses = [
+            'Jan' => 'Ene', 'Feb' => 'Feb', 'Mar' => 'Mar', 'Apr' => 'Abr',
+            'May' => 'May', 'Jun' => 'Jun', 'Jul' => 'Jul', 'Aug' => 'Ago',
+            'Sep' => 'Sep', 'Oct' => 'Oct', 'Nov' => 'Nov', 'Dec' => 'Dic'
+        ];
+
+        if ($formato === 'corto') {
+            // Formato: "10 Ene, 2026"
+            $fecha_en = date('d M, Y', strtotime($fecha));
+            return str_replace(array_keys($meses), array_values($meses), $fecha_en);
+        } else {
+            // Formato: "10 de enero de 2026"
+            $meses_largo = [
+                'January' => 'enero', 'February' => 'febrero', 'March' => 'marzo', 'April' => 'abril',
+                'May' => 'mayo', 'June' => 'junio', 'July' => 'julio', 'August' => 'agosto',
+                'September' => 'septiembre', 'October' => 'octubre', 'November' => 'noviembre', 'December' => 'diciembre'
+            ];
+            $fecha_en = date('d F, Y', strtotime($fecha));
+            return str_replace(array_keys($meses_largo), array_values($meses_largo), $fecha_en);
+        }
+    }
+}
+
 // Mapeo de slugs de áreas a IDs de secciones de portfolios
 $portfolio_ids = [
     'aintegral' => 'ai',
@@ -865,7 +891,7 @@ $portfolio_ids = [
                                 <div class="lab-part-content">
                                     <div class="lab-bs-item-content">
                                         <div class="lab-bs-item-date">
-                                            <span><?= date('d M, Y', strtotime($noticia['fecha_publicacion'])) ?></span>
+                                            <span><?= formatearFecha($noticia['fecha_publicacion']) ?></span>
                                         </div>
                                         <div class="">
                                             <h3 class="lab-bs-item-title"><?= e($noticia['titulo']) ?></h3>
