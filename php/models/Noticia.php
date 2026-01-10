@@ -69,6 +69,28 @@ class Noticia {
     }
 
     /**
+     * Obtener noticias agrupadas por área
+     *
+     * @param bool $solo_activas Si true, solo noticias activas
+     * @param int $area_id Si se especifica, filtra por área
+     * @return array Array asociativo con áreas como keys y noticias como values
+     */
+    public static function getAllAgrupados($solo_activas = false, $area_id = null) {
+        $noticias = self::getAll($solo_activas, 0, $area_id);
+        $agrupados = [];
+
+        foreach ($noticias as $noticia) {
+            $area_nombre = $noticia['area_nombre'] ?? 'Sin área';
+            if (!isset($agrupados[$area_nombre])) {
+                $agrupados[$area_nombre] = [];
+            }
+            $agrupados[$area_nombre][] = $noticia;
+        }
+
+        return $agrupados;
+    }
+
+    /**
      * Obtener noticia por ID
      *
      * @param int $id ID de la noticia

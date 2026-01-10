@@ -292,12 +292,15 @@ if (isset($_GET['crear'])) {
     }
 }
 
-// Obtener todas las noticias (filtradas por área si es coordinador)
+// Obtener todas las noticias agrupadas por área (filtradas por área si es coordinador)
 if ($es_coordinador) {
-    $noticias = Noticia::getAll(false, 0, $area_permitida);
+    $noticias_agrupadas = Noticia::getAllAgrupados(false, $area_permitida);
+    $noticias_todas = Noticia::getAll(false, 0, $area_permitida);
 } else {
-    $noticias = Noticia::getAll();
+    $noticias_agrupadas = Noticia::getAllAgrupados(false);
+    $noticias_todas = Noticia::getAll();
 }
+$total_noticias = count($noticias_todas);
 
 // Obtener áreas para el selector
 $areas = Noticia::getAreas();
@@ -348,48 +351,57 @@ include __DIR__ . '/includes/sidebar.php';
         <div class="admin-table-wrapper">
             <div class="table-header">
                 <h3 class="table-title">
-                    <i class="fas fa-list me-2"></i>Listado de Noticias (<?= count($noticias) ?>)
+                    <i class="fas fa-list me-2"></i>Listado de Noticias
+                    <span class="badge bg-primary ms-2"><?= $total_noticias ?></span>
                 </h3>
                 <a href="<?= url('admin/noticias.php?crear=1') ?>" class="btn btn-primary">
                     <i class="fas fa-plus me-1"></i>Nueva Noticia
                 </a>
             </div>
 
-            <?php if (count($noticias) > 0): ?>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th>Noticia</th>
-                            <th style="width: 120px;">Fecha</th>
-                            <th style="width: 100px;">Categoría</th>
-                            <th style="width: 100px;">Estado</th>
-                            <th style="width: 200px;" class="text-end">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($noticias as $noticia): ?>
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-start">
+            <?php if ($total_noticias > 0): ?>
+            <!-- Noticias agrupadas por área -->
+            <?php foreach ($noticias_agrupadas as $area_nombre => $noticias): ?>
+            <div class="mb-4">
+                <h4 class="mb-3">
+                    <i class="fas fa-th-large me-2 text-primary"></i>
+                    <?= e($area_nombre) ?>
+                    <span class="badge bg-secondary ms-2"><?= count($noticias) ?> noticia<?= count($noticias) !== 1 ? 's' : '' ?></span>
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 80px;">Imagen</th>
+                                <th>Noticia</th>
+                                <th style="width: 120px;">Fecha</th>
+                                <th style="width: 100px;">Categoría</th>
+                                <th style="width: 100px;">Destacada</th>
+                                <th style="width: 100px;">Estado</th>
+                                <th style="width: 180px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($noticias as $noticia): ?>
+                            <tr>
+                                <td>
                                     <?php if (!empty($noticia['imagen_destacada'])): ?>
                                     <img src="<?= url($noticia['imagen_destacada']) ?>" alt=""
-                                         class="me-3 rounded" style="width: 60px; height: 60px; object-fit: cover;">
-                                    <?php endif; ?>
-                                    <div>
-                                        <strong><?= e($noticia['titulo']) ?></strong>
-                                        <?php if ($noticia['destacada']): ?>
-                                        <span class="badge bg-warning text-dark ms-1">
-                                            <i class="fas fa-star"></i> Destacada
-                                        </span>
-                                        <?php endif; ?>
-                                        <?php if (!empty($noticia['resumen'])): ?>
-                                        <br><small class="text-muted"><?= e(substr($noticia['resumen'], 0, 100)) ?><?= strlen($noticia['resumen']) > 100 ? '...' : '' ?></small>
-                                        <?php endif; ?>
-                                        <br><small class="text-muted">Por: <?= e($noticia['autor'] ?? 'Sin autor') ?></small>
+                                         class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                    <?php else: ?>
+                                    <div class="bg-light d-flex align-items-center justify-content-center"
+                                         style="width: 60px; height: 60px;">
+                                        <i class="fas fa-image text-muted"></i>
                                     </div>
-                                </div>
-                            </td>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <strong><?= e($noticia['titulo']) ?></strong>
+                                    <?php if (!empty($noticia['resumen'])): ?>
+                                    <br><small class="text-muted"><?= e(substr($noticia['resumen'], 0, 80)) ?><?= strlen($noticia['resumen']) > 80 ? '...' : '' ?></small>
+                                    <?php endif; ?>
+                                    <br><small class="text-muted">Por: <?= e($noticia['autor'] ?? 'Sin autor') ?></small>
+                                </td>
                             <td>
                                 <small><?= date('d/m/Y', strtotime($noticia['fecha_publicacion'])) ?></small>
                             </td>
@@ -403,37 +415,47 @@ include __DIR__ . '/includes/sidebar.php';
                             <td>
                                 <form method="POST" class="d-inline">
                                     <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
+                                    <input type="hidden" name="accion" value="toggle_destacada">
+                                    <input type="hidden" name="noticia_id" value="<?= $noticia['id'] ?>">
+                                    <input type="hidden" name="nuevo_estado" value="<?= $noticia['destacada'] ? 0 : 1 ?>">
+                                    <button type="submit" class="btn btn-sm <?= $noticia['destacada'] ? 'btn-warning' : 'btn-outline-secondary' ?>"
+                                            title="<?= $noticia['destacada'] ? 'Destacada' : 'No destacada' ?>">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="POST" class="d-inline">
+                                    <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
                                     <input type="hidden" name="accion" value="toggle_activo">
                                     <input type="hidden" name="noticia_id" value="<?= $noticia['id'] ?>">
                                     <input type="hidden" name="nuevo_estado" value="<?= $noticia['activo'] ? 0 : 1 ?>">
                                     <button type="submit" class="btn btn-sm <?= $noticia['activo'] ? 'btn-success' : 'btn-secondary' ?>">
-                                        <i class="fas fa-<?= $noticia['activo'] ? 'check' : 'times' ?>"></i>
+                                        <i class="fas fa-<?= $noticia['activo'] ? 'check-circle' : 'times-circle' ?>"></i>
+                                        <?= $noticia['activo'] ? 'Activo' : 'Inactivo' ?>
                                     </button>
                                 </form>
                             </td>
-                            <td class="text-end">
+                            <td>
                                 <div class="btn-group" role="group">
                                     <a href="<?= url('admin/noticias.php?editar=' . $noticia['id']) ?>"
-                                       class="btn btn-sm btn-primary" title="Editar">
+                                       class="btn btn-sm btn-outline-primary" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <form method="POST" class="d-inline"
-                                          onsubmit="return confirm('¿Eliminar esta noticia?')">
-                                        <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
-                                        <input type="hidden" name="accion" value="eliminar">
-                                        <input type="hidden" name="noticia_id" value="<?= $noticia['id'] ?>">
-                                        <button type="submit" class="btn btn-sm btn-danger" title="Eliminar">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            title="Eliminar" onclick="confirmarEliminar(<?= $noticia['id'] ?>, '<?= addslashes($noticia['titulo']) ?>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <?php endforeach; ?>
             <?php else: ?>
             <div class="text-center text-muted py-5">
                 <i class="fas fa-newspaper fa-4x mb-3 opacity-25"></i>
@@ -659,6 +681,21 @@ document.getElementById('titulo')?.addEventListener('input', function() {
         slugInput.value = slug;
     }
 });
+
+// Confirmar eliminación de noticia
+function confirmarEliminar(id, titulo) {
+    if (confirm(`¿Estás seguro de que deseas eliminar la noticia "${titulo}"?`)) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.innerHTML = `
+            <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
+            <input type="hidden" name="accion" value="eliminar">
+            <input type="hidden" name="noticia_id" value="${id}">
+        `;
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
 </script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
