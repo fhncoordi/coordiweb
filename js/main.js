@@ -369,85 +369,43 @@ jQuery(document).ready(function() {
 
     // Verificar si el navegador soporta la API de síntesis de voz
     if ('speechSynthesis' in window) {
-        console.log('Speech Synthesis API disponible');
 
-        // IMPORTANTE: Inicializar las voces disponibles (fix para Chrome/Edge)
-        // Esto "despierta" la API y carga las voces del sistema
-        if (speechSynthesis.getVoices().length === 0) {
-            speechSynthesis.addEventListener('voiceschanged', function() {
-                console.log('Voces cargadas:', speechSynthesis.getVoices().length);
-            });
-        } else {
-            console.log('Voces disponibles:', speechSynthesis.getVoices().length);
-        }
-
-        // NO cargar estado guardado al inicio - debe activarse manualmente
-        // El lector de voz siempre empieza desactivado cuando se carga la página
-        isScreenReaderActive = false;
-        btn_screen_reader.removeClass('active');
-        console.log('Lector de voz desactivado por defecto');
+        // NO cargar estado guardado - siempre empieza desactivado
+        // (Comentado: if (Cookies.get('screen-reader') === 'yes'))
 
         // Función para leer texto
         function speakText(text) {
-            console.log('speakText llamado con:', text, 'isActive:', isScreenReaderActive);
-            if (!isScreenReaderActive || !text || text.trim() === '') {
-                console.log('speakText: condición no cumplida');
-                return;
-            }
+            if (!isScreenReaderActive || !text || text.trim() === '') return;
 
             // Cancelar cualquier lectura anterior
             speechSynthesis.cancel();
 
-            // Pequeño delay después de cancelar (fix para algunos navegadores)
-            setTimeout(function() {
-                // Crear nueva instancia de speech
-                let utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'es-ES'; // Español de España
-                utterance.rate = 1.0; // Velocidad normal
-                utterance.pitch = 1.0; // Tono normal
-                utterance.volume = 1.0; // Volumen máximo
+            // Crear nueva instancia de speech
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES'; // Español de España
+            utterance.rate = 1.0; // Velocidad normal
+            utterance.pitch = 1.0; // Tono normal
+            utterance.volume = 1.0; // Volumen máximo
 
-                // Intentar seleccionar una voz en español
-                let voices = speechSynthesis.getVoices();
-                console.log('Voces disponibles al hablar:', voices.length);
-                let spanishVoice = voices.find(voice => voice.lang.startsWith('es'));
-                if (spanishVoice) {
-                    utterance.voice = spanishVoice;
-                    console.log('Usando voz:', spanishVoice.name);
-                }
-
-                console.log('Intentando hablar:', text);
-                speechSynthesis.speak(utterance);
-
-                utterance.onstart = function() {
-                    console.log('Speech started');
-                };
-                utterance.onerror = function(event) {
-                    console.error('Speech error:', event);
-                };
-                utterance.onend = function() {
-                    console.log('Speech ended');
-                };
-            }, 100);
+            speechSynthesis.speak(utterance);
         }
 
         // Toggle Lector de Voz
         btn_screen_reader.click(function(event) {
             event.preventDefault();
-            console.log('Lector de voz clicked. Estado actual:', isScreenReaderActive);
 
             if (isScreenReaderActive) {
                 // Desactivar lector de voz
                 isScreenReaderActive = false;
                 speechSynthesis.cancel();
+                Cookies.remove('screen-reader', { path: cookie_path.cookiePath });
                 jQuery(this).removeClass('active');
-                console.log('Lector de voz desactivado');
-                // NO reproducir mensaje al desactivar para evitar errores
+                speakText('Lector de voz desactivado');
             } else {
                 // Activar lector de voz
                 isScreenReaderActive = true;
+                Cookies.set('screen-reader', 'yes', { expires: 7, path: cookie_path.cookiePath });
                 jQuery(this).addClass('active');
-                console.log('Lector de voz activado');
                 speakText('Lector de voz activado. Pase el cursor sobre los elementos para escuchar su contenido');
             }
         });
@@ -500,16 +458,12 @@ jQuery(document).ready(function() {
             }
         });
 
-        // NO cancelar inmediatamente al salir del elemento para evitar errores
-        // speakText() ya cancela automáticamente antes de hablar el nuevo texto
-        // Si cancelas aquí, causa error "canceled" cuando pasas el ratón rápido
-        /*
+        // Detener lectura al salir del elemento
         jQuery(document).on('mouseleave focusout', interactiveElements, function() {
             if (isScreenReaderActive) {
                 speechSynthesis.cancel();
             }
         });
-        */
 
     } else {
         // Si el navegador no soporta la API, ocultar el botón

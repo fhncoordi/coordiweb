@@ -1,0 +1,244 @@
+# ============================================
+# COORDICANARIAS CMS - Configuración Principal
+# ============================================
+
+# Activar el motor de reescritura
+RewriteEngine On
+
+# ============================================
+# PROTECCIÓN DE ARCHIVOS SENSIBLES
+# ============================================
+
+# Bloquear acceso a archivos de configuración, SQL y otros sensibles
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|md|git|gitignore)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Proteger archivos específicos críticos
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "connection.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Proteger directorio de base de datos
+RedirectMatch 403 ^/database/.*$
+
+# Prevenir acceso a archivos de respaldo
+<FilesMatch "\.(backup|bak|old|save|orig|~)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ============================================
+# SEGURIDAD GENERAL
+# ============================================
+
+# Prevenir listado de directorios
+Options -Indexes
+
+# Seguir enlaces simbólicos (necesario para algunos hostings)
+Options +FollowSymLinks
+
+# Deshabilitar server signature
+ServerSignature Off
+
+# ============================================
+# HEADERS DE SEGURIDAD
+# ============================================
+
+<IfModule mod_headers.c>
+    # Prevenir XSS
+    Header set X-XSS-Protection "1; mode=block"
+
+    # Prevenir clickjacking
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # Prevenir MIME sniffing
+    Header set X-Content-Type-Options "nosniff"
+
+    # Prevenir información del servidor
+    Header unset Server
+    Header unset X-Powered-By
+
+    # Política de referrer (enviar solo origen en cross-origin)
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Content Security Policy básica (ajustar según necesidades)
+    # Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:;"
+</IfModule>
+
+# ============================================
+# COMPATIBILIDAD: REDIRECCIÓN .html → .php
+# ============================================
+# Para mantener compatibilidad con URLs antiguas si es necesario
+
+# Redirigir index.html a index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^index\.html$ index.php [L,R=301]
+
+# Redirigir .html a .php en áreas
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^areas/(.*)\.html$ areas/$1.php [L,R=301]
+
+# ============================================
+# COMPRESIÓN GZIP
+# ============================================
+
+<IfModule mod_deflate.c>
+    # Comprimir HTML, CSS, JavaScript, Text, XML y fuentes
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+    AddOutputFilterByType DEFLATE application/x-font-otf
+    AddOutputFilterByType DEFLATE application/x-font-truetype
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+
+    # Remover browser bugs (solo para navegadores antiguos)
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    Header append Vary User-Agent
+</IfModule>
+
+# ============================================
+# CACHE DE ARCHIVOS ESTÁTICOS
+# ============================================
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Por defecto: 1 mes
+    ExpiresDefault "access plus 1 month"
+
+    # HTML: sin cache (para contenido dinámico)
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # CSS y JavaScript: 1 año (cambiar nombre de archivo si se modifica)
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType application/x-javascript "access plus 1 year"
+
+    # Imágenes: 1 año
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # Fuentes: 1 año
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+
+    # PDF y otros documentos: 1 mes
+    ExpiresByType application/pdf "access plus 1 month"
+</IfModule>
+
+# Cache-Control headers adicionales
+<IfModule mod_headers.c>
+    # CSS y JS
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Imágenes
+    <FilesMatch "\.(jpg|jpeg|png|gif|svg|webp|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Fuentes
+    <FilesMatch "\.(ttf|otf|woff|woff2|eot)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # HTML sin cache
+    <FilesMatch "\.(html|php)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# ============================================
+# PÁGINA DE ERROR PERSONALIZADA (opcional)
+# ============================================
+
+# ErrorDocument 404 /error404.php
+# ErrorDocument 403 /error403.php
+# ErrorDocument 500 /error500.php
+
+# ============================================
+# PHP SETTINGS (si el hosting lo permite)
+# ============================================
+
+<IfModule mod_php.c>
+    # Ocultar versión de PHP
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+    php_flag expose_php Off
+
+    # Aumentar límites si es necesario
+    # php_value upload_max_filesize 10M
+    # php_value post_max_size 10M
+    # php_value max_execution_time 300
+    # php_value max_input_time 300
+    # php_value memory_limit 256M
+</IfModule>
+
+# ============================================
+# CHARSET UTF-8
+# ============================================
+
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .html .css .js .xml .json .rss .atom
+
+# ============================================
+# TIPOS MIME
+# ============================================
+
+<IfModule mod_mime.c>
+    # JavaScript
+    AddType application/javascript js
+    AddType application/json json
+
+    # Fuentes
+    AddType font/ttf ttf
+    AddType font/otf otf
+    AddType font/woff woff
+    AddType font/woff2 woff2
+
+    # Imágenes
+    AddType image/svg+xml svg svgz
+    AddType image/webp webp
+</IfModule>
+
+# ============================================
+# FIN DE CONFIGURACIÓN
+# ============================================
