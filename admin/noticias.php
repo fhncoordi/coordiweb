@@ -210,7 +210,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'activo' => isset($_POST['activo']) ? 1 : 0
                 ];
 
-            // Procesar subida de imagen
+            // Verificar si se solicita eliminar la imagen actual
+            if (isset($_POST['eliminar_imagen']) && $_POST['eliminar_imagen'] == '1') {
+                // Eliminar archivo físico
+                if (!empty($datos['imagen_destacada']) && file_exists(__DIR__ . '/../' . $datos['imagen_destacada'])) {
+                    @unlink(__DIR__ . '/../' . $datos['imagen_destacada']);
+                }
+                // Limpiar campo en la base de datos
+                $datos['imagen_destacada'] = '';
+            }
+
+            // Procesar subida de imagen nueva
             if (isset($_FILES['imagen_destacada']) && $_FILES['imagen_destacada']['error'] === UPLOAD_ERR_OK) {
                 $validacion_imagen = validarImagen($_FILES['imagen_destacada']);
 
@@ -225,7 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $ruta_destino = $upload_dir . $nombre_archivo;
 
                     if (move_uploaded_file($_FILES['imagen_destacada']['tmp_name'], $ruta_destino)) {
-                        // Eliminar imagen anterior
+                        // Eliminar imagen anterior si existe
                         if (!empty($datos['imagen_destacada']) && file_exists(__DIR__ . '/../' . $datos['imagen_destacada'])) {
                             @unlink(__DIR__ . '/../' . $datos['imagen_destacada']);
                         }
@@ -535,6 +545,12 @@ include __DIR__ . '/includes/sidebar.php';
                                 <img src="<?= url($noticia_editar['imagen_destacada']) ?>" alt="Imagen actual"
                                      class="img-thumbnail" style="max-width: 300px; max-height: 200px;">
                                 <div class="form-text">Imagen actual</div>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="eliminar_imagen" name="eliminar_imagen" value="1">
+                                    <label class="form-check-label text-danger" for="eliminar_imagen">
+                                        <i class="fas fa-trash me-1"></i>Eliminar imagen actual
+                                    </label>
+                                </div>
                             </div>
                             <?php endif; ?>
 
