@@ -482,41 +482,15 @@ $portfolio_ids = [
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-6 col-xs-12">
-                            <!-- begin skills -->
+                            <!-- begin valores -->
                             <div class="contact-con">
                                 <h2 style="padding-bottom: 25px">Nuestros valores</h2>
-                                <h3 class="value-label">Compromiso</h3>
-                                <div class="progress mb-3" role="progressbar" aria-label="Compromiso: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
-                                        <span class="progress-number">100%</span>
-                                    </div>
-                                </div>
-                                <h3 class="value-label">Cooperación</h3>
-                                <div class="progress mb-3" role="progressbar" aria-label="Cooperación: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
-                                        <span class="progress-number">100%</span>
-                                    </div>
-                                </div>
-                                <h3 class="value-label">Igualdad</h3>
-                                <div class="progress mb-3" role="progressbar" aria-label="Igualdad: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
-                                        <span class="progress-number">100%</span>
-                                    </div>
-                                </div>
-                                <h3 class="value-label">Concienciación</h3>
-                                <div class="progress mb-3" role="progressbar" aria-label="Concienciación: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
-                                        <span class="progress-number">100%</span>
-                                    </div>
-                                </div>
-                                <h3 class="value-label">Normalización</h3>
-                                <div class="progress mb-3" role="progressbar" aria-label="Normalización: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-theme" style="width: 100%">
-                                        <span class="progress-number">100%</span>
-                                    </div>
-                                </div>
+                                <p>
+                                    Nuestro trabajo se fundamenta en cinco valores esenciales que guían cada una de nuestras acciones diarias. El <strong>compromiso</strong> firme e inquebrantable con las personas con discapacidad y sus familias es el motor que impulsa todas nuestras iniciativas. La <strong>cooperación</strong> activa entre entidades, profesionales y la comunidad nos permite aunar esfuerzos y recursos para alcanzar objetivos comunes que beneficien a todas las personas. La <strong>igualdad</strong> de oportunidades es un derecho fundamental que defendemos con determinación, trabajando para eliminar cualquier tipo de discriminación y garantizar el acceso pleno a todos los ámbitos de la sociedad.<br><br>
+                                    Además, promovemos la <strong>concienciación</strong> social sobre la diversidad funcional, sensibilizando a la comunidad canaria sobre la realidad de las personas con discapacidad y derribando prejuicios. Por último, la <strong>normalización</strong> social es nuestro horizonte: construir una sociedad donde la diversidad sea valorada como una riqueza y donde todas las personas puedan participar plenamente en la vida comunitaria sin barreras, estigmas ni exclusiones. Estos valores no son solo palabras, sino principios vivos que orientan cada proyecto, cada servicio y cada interacción que llevamos a cabo.
+                                </p>
                             </div>
-                            <!-- end skills -->
+                            <!-- end valores -->
                         </div>
                     </div>
                 </div>
