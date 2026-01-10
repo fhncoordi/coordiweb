@@ -9,14 +9,15 @@
 ## 📋 Resumen Ejecutivo
 
 Este checklist cubre el proceso completo de movimiento del sitio web de Coordicanarias desde el subdirectorio `/new/` a la raíz del dominio, incluyendo:
+- ✅ Mover WordPress actual a `/old/` (como backup accesible)
 - ✅ Sitio público (12 páginas PHP)
 - ✅ Panel de administración completo (`/admin/`)
 - ✅ Base de datos MySQL (`coordica_crc`)
 - ✅ Sistema de emails (formularios de contacto)
 - ✅ Panel de accesibilidad (Alto Contraste, Modo Oscuro, Lector de Voz)
 
-**Tiempo estimado:** 2-3 horas
-**Nivel de riesgo:** Bajo (el código está diseñado para auto-detectar rutas)
+**Tiempo estimado:** 2.5-3.5 horas (incluye mover WordPress)
+**Nivel de riesgo:** Bajo (el código está diseñado para auto-detectar rutas, WordPress se preserva en /old/)
 
 ---
 
@@ -52,7 +53,187 @@ Este checklist cubre el proceso completo de movimiento del sitio web de Coordica
 
 ---
 
-### 1.2 Verificar Configuración
+### 1.2 Mover WordPress Actual a /old/
+
+**Situación actual:** Hay un sitio WordPress en la raíz de `coordicanarias.com` que queremos preservar temporalmente.
+
+**Objetivo:** Mover WordPress a `/old/` para que sea accesible como referencia mientras el nuevo sitio ocupa la raíz.
+
+#### 🔍 Identificar archivos de WordPress
+
+- [ ] Conectar al hosting vía SSH o File Manager de cPanel
+- [ ] Listar archivos en `/home/coordica/public_html/`:
+  ```bash
+  cd /home/coordica/public_html
+  ls -la
+  ```
+- [ ] **Identificar archivos/carpetas de WordPress** (típicamente):
+  - [ ] `wp-admin/` (directorio)
+  - [ ] `wp-content/` (directorio)
+  - [ ] `wp-includes/` (directorio)
+  - [ ] `wp-config.php` (archivo de configuración crítico)
+  - [ ] `index.php` (archivo principal de WordPress)
+  - [ ] `wp-*.php` (múltiples archivos: wp-load.php, wp-login.php, etc.)
+  - [ ] `.htaccess` (puede ser de WordPress)
+  - [ ] `xmlrpc.php`
+  - [ ] `license.txt`, `readme.html`
+
+#### 📦 Backup adicional de WordPress (recomendado)
+
+**ANTES de mover, hacer backup específico de WordPress:**
+
+- [ ] **Backup de archivos de WordPress:**
+  ```bash
+  cd /home/coordica/public_html
+  tar -czf backup_wordpress_$(date +%Y%m%d_%H%M%S).tar.gz \
+    wp-admin wp-content wp-includes wp-*.php index.php .htaccess xmlrpc.php
+  # Descargar a tu ordenador
+  ```
+
+- [ ] **Backup de base de datos de WordPress:**
+  - [ ] Abrir phpMyAdmin
+  - [ ] Identificar base de datos de WordPress (probablemente se llama: `coordica_wp`, `coordica_wordpress`, o similar)
+  - [ ] **Exportar base de datos de WordPress** (separada de `coordica_crc`)
+  - [ ] Guardar como: `coordica_wordpress_backup_20260110.sql`
+  - [ ] Verificar que el archivo no está vacío
+
+**Nota:** WordPress usa su propia base de datos, diferente a `coordica_crc` (que usa el nuevo sitio).
+
+#### 📁 Crear directorio /old/ y mover archivos
+
+- [ ] **Crear carpeta `/old/`:**
+  ```bash
+  cd /home/coordica/public_html
+  mkdir old
+  chmod 755 old
+  ```
+
+- [ ] **Mover todos los archivos de WordPress a `/old/`:**
+  ```bash
+  # Mover directorios de WordPress
+  mv wp-admin old/
+  mv wp-content old/
+  mv wp-includes old/
+
+  # Mover archivos PHP de WordPress
+  mv wp-*.php old/
+  mv xmlrpc.php old/ 2>/dev/null
+
+  # Mover index.php de WordPress (¡IMPORTANTE!)
+  mv index.php old/
+
+  # Mover otros archivos de WordPress
+  mv license.txt old/ 2>/dev/null
+  mv readme.html old/ 2>/dev/null
+
+  # Mover .htaccess de WordPress (si existe)
+  # NOTA: Revisa este archivo antes, puede tener reglas importantes
+  mv .htaccess old/.htaccess.wordpress 2>/dev/null
+  ```
+
+- [ ] **Verificar que los archivos se movieron:**
+  ```bash
+  ls -la old/
+  # Deberías ver wp-admin, wp-content, wp-includes, wp-*.php, etc.
+  ```
+
+- [ ] **Verificar que la raíz está libre:**
+  ```bash
+  ls -la
+  # Deberías ver solo: new/, old/, backup_*.tar.gz
+  # NO deberías ver archivos de WordPress en raíz
+  ```
+
+#### ⚙️ Configurar WordPress en /old/ (Opcional)
+
+**Opciones:**
+
+**OPCIÓN A (Recomendada): No arreglar WordPress**
+- WordPress en `/old/` NO funcionará correctamente al navegar
+- Solo úsalo como **archivo de referencia** para:
+  - Copiar textos de páginas antiguas
+  - Descargar imágenes del Media Library
+  - Consultar configuraciones
+- **Ventaja:** Sin trabajo adicional
+- **Desventaja:** Enlaces y navegación rotos
+
+**OPCIÓN B: Arreglar WordPress para que funcione en /old/**
+- Requiere actualizar URLs en base de datos
+- WordPress funcionará completamente en `coordicanarias.com/old/`
+- **Ventaja:** Sitio antiguo navegable durante transición
+- **Desventaja:** Requiere trabajo adicional (15-20 min)
+
+**Si eliges OPCIÓN B, seguir estos pasos:**
+
+- [ ] **Editar `/old/wp-config.php`:**
+  ```bash
+  nano /home/coordica/public_html/old/wp-config.php
+  ```
+
+  Agregar estas líneas DESPUÉS de `define('DB_COLLATE', '');`:
+  ```php
+  // WordPress ahora está en subdirectorio /old/
+  define('WP_HOME', 'https://coordicanarias.com/old');
+  define('WP_SITEURL', 'https://coordicanarias.com/old');
+  ```
+
+- [ ] **Actualizar URLs en base de datos de WordPress:**
+  - [ ] Abrir phpMyAdmin
+  - [ ] Seleccionar base de datos de WordPress
+  - [ ] Ejecutar SQL:
+    ```sql
+    -- Actualizar URL del sitio
+    UPDATE wp_options
+    SET option_value = 'https://coordicanarias.com/old'
+    WHERE option_name IN ('siteurl', 'home');
+
+    -- Actualizar URLs en contenido de posts
+    UPDATE wp_posts
+    SET post_content = REPLACE(
+        post_content,
+        'https://coordicanarias.com/',
+        'https://coordicanarias.com/old/'
+    );
+
+    -- Actualizar GUIDs (identificadores únicos)
+    UPDATE wp_posts
+    SET guid = REPLACE(
+        guid,
+        'https://coordicanarias.com/',
+        'https://coordicanarias.com/old/'
+    );
+
+    -- Actualizar URLs de imágenes en metadatos
+    UPDATE wp_postmeta
+    SET meta_value = REPLACE(
+        meta_value,
+        'https://coordicanarias.com/',
+        'https://coordicanarias.com/old/'
+    );
+    ```
+
+- [ ] **Probar WordPress en /old/:**
+  - [ ] Visitar: `https://coordicanarias.com/old/`
+  - [ ] Verificar que la página carga
+  - [ ] Verificar que imágenes se ven
+  - [ ] Intentar acceder al admin: `https://coordicanarias.com/old/wp-admin/`
+
+**⚠️ DECISIÓN:** Marca cuál opción elegiste:
+- [ ] **OPCIÓN A** - WordPress en /old/ como referencia (sin arreglar)
+- [ ] **OPCIÓN B** - WordPress en /old/ completamente funcional (arreglado)
+
+#### ✅ Verificación final
+
+- [ ] WordPress movido a `/old/` exitosamente
+- [ ] Raíz de `public_html/` está libre (sin archivos de WordPress)
+- [ ] Backup de WordPress guardado en lugar seguro
+- [ ] Base de datos de WordPress respaldada
+
+**Nota importante:** Si WordPress en `/old/` causa problemas más adelante, puedes simplemente eliminarlo. Ya tienes el backup completo guardado.
+
+---
+
+### 1.3 Verificar Configuración del Nuevo Sitio
 
 #### ✅ php/config.php
 - [ ] Abrir `/new/php/config.php` en un editor
@@ -85,19 +266,21 @@ Este checklist cubre el proceso completo de movimiento del sitio web de Coordica
 
 ---
 
-### 1.3 Crear Punto de Restauración
+### 1.4 Crear Punto de Restauración
 
 - [ ] Anotar fecha y hora actual: `____________`
-- [ ] Tomar captura de pantalla del sitio actual en `coordicanarias.com`
+- [ ] Tomar captura de pantalla de WordPress en `coordicanarias.com/old/` (si lo dejaste funcional)
 - [ ] Tomar captura de pantalla del sitio en `coordicanarias.com/new/`
-- [ ] Listar archivos actuales en raíz (para saber qué sobrescribirás):
+- [ ] Listar archivos actuales en raíz (debería estar libre de WordPress):
   ```bash
   ls -la /home/coordica/public_html/
   ```
-- [ ] **Identificar archivos críticos en raíz que NO debes borrar:**
-  - `.htaccess` (del WordPress antiguo si existe)
-  - `wp-config.php` (si existe WordPress)
-  - Otros archivos críticos: `________________`
+- [ ] **Verificar estructura esperada:**
+  - [ ] `/old/` existe con WordPress dentro
+  - [ ] `/new/` existe con el sitio nuevo
+  - [ ] Backups `.tar.gz` están presentes
+  - [ ] Raíz está **libre** de archivos de WordPress
+  - [ ] No hay otros archivos/carpetas inesperados
 
 ---
 
@@ -731,13 +914,16 @@ Antes de dar por terminado el deploy, verificar:
 
 | Fase | Tiempo estimado |
 |------|-----------------|
-| 1. Pre-deploy (backups + verificación) | 30-45 min |
+| 1. Pre-deploy (backups + mover WordPress + verificación) | 45-60 min |
 | 2. Deploy (movimiento de archivos) | 15-30 min |
 | 3. Testing post-deploy | 60-90 min |
 | 4. Post-deploy (limpieza + docs) | 15-30 min |
-| **TOTAL** | **2-3 horas** |
+| **TOTAL** | **2.5-3.5 horas** |
 
-**Nota:** Tiempo puede variar según familiaridad con el hosting y herramientas.
+**Nota:**
+- Tiempo puede variar según familiaridad con el hosting y herramientas
+- +15-20 min adicionales si decides arreglar WordPress en /old/ (OPCIÓN B)
+- Mover WordPress a /old/ agrega ~15 min a la Fase 1
 
 ---
 
