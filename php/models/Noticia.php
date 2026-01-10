@@ -301,9 +301,10 @@ class Noticia {
      *
      * @param array $datos Datos a validar
      * @param int $id_noticia_actual ID de la noticia actual (opcional, para edición)
+     * @param bool $skip_slug_unique_check Si es true, no valida unicidad del slug (útil cuando ya se generó un slug único)
      * @return array Lista de errores (vacío si todo es válido)
      */
-    public static function validar($datos, $id_noticia_actual = null) {
+    public static function validar($datos, $id_noticia_actual = null, $skip_slug_unique_check = false) {
         $errores = [];
 
         // Validar título
@@ -320,7 +321,7 @@ class Noticia {
             $errores[] = 'El slug solo puede contener letras minúsculas, números y guiones';
         } elseif (strlen($datos['slug']) > 200) {
             $errores[] = 'El slug no puede tener más de 200 caracteres';
-        } elseif (!self::isSlugUnico($datos['slug'], $id_noticia_actual)) {
+        } elseif (!$skip_slug_unique_check && !self::isSlugUnico($datos['slug'], $id_noticia_actual)) {
             $errores[] = 'El slug ya está en uso por otra noticia';
         }
 

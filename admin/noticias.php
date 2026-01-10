@@ -27,6 +27,7 @@ $mensaje = '';
 $tipo_mensaje = '';
 $modo = 'listado'; // listado, crear, editar
 $noticia_editar = null;
+$datos_formulario = []; // Para preservar datos cuando hay errores
 
 // Procesar acciones
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -126,13 +127,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'activo' => isset($_POST['activo']) ? 1 : 0
             ];
 
-            // Si el slug está vacío, generar uno automáticamente único
-            if (empty($datos['slug']) && !empty($datos['titulo'])) {
+            // SIEMPRE generar un slug único desde el título (ignora el slug del formulario)
+            // Esto evita problemas de duplicados y valida correctamente
+            if (!empty($datos['titulo'])) {
                 $datos['slug'] = Noticia::generarSlugUnico($datos['titulo']);
             }
 
-            // Validar datos
-            $errores = Noticia::validar($datos);
+            // Validar datos (sin validar slug único ya que lo acabamos de generar)
+            $errores = Noticia::validar($datos, null, true);
 
             if (empty($errores)) {
                 // Crear noticia
@@ -179,6 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mensaje = implode('<br>', $errores);
                 $tipo_mensaje = 'danger';
                 $modo = 'crear';
+                $datos_formulario = $datos; // Preservar datos para repoblar formulario
             }
         }
 
@@ -232,13 +235,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-                // Si el slug está vacío, generar uno automáticamente único
-                if (empty($datos['slug']) && !empty($datos['titulo'])) {
+                // SIEMPRE generar un slug único desde el título (ignora el slug del formulario)
+                // Esto evita problemas de duplicados y valida correctamente
+                if (!empty($datos['titulo'])) {
                     $datos['slug'] = Noticia::generarSlugUnico($datos['titulo'], $noticia_id);
                 }
 
-                // Validar datos
-                $errores = Noticia::validar($datos, $noticia_id);
+                // Validar datos (sin validar slug único ya que lo acabamos de generar)
+                $errores = Noticia::validar($datos, $noticia_id, true);
 
                 if (empty($errores)) {
                     if (Noticia::update($noticia_id, $datos)) {
@@ -260,6 +264,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $mensaje = implode('<br>', $errores);
                     $tipo_mensaje = 'danger';
+                    $modo = 'editar';
+                    $datos_formulario = $datos; // Preservar datos para repoblar formulario
+                    $datos_formulario['id'] = $noticia_id; // Mantener ID de la noticia
+                    $noticia_editar = array_merge($noticia_actual, $datos_formulario); // Mezclar datos actuales con nuevos
                 }
             }
         }
@@ -453,18 +461,24 @@ include __DIR__ . '/includes/sidebar.php';
                     </div>
 
                     <form method="POST" enctype="multipart/form-data" class="p-4">
+                        <?php
+                        // Determinar qué datos usar en el formulario
+                        // Si hay datos_formulario (por errores), usarlos; de lo contrario, usar noticia_editar o vacío
+                        $form_data = !empty($datos_formulario) ? $datos_formulario : ($modo === 'editar' ? $noticia_editar : []);
+                        ?>
+
                         <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
                         <input type="hidden" name="accion" value="<?= $modo === 'crear' ? 'crear' : 'actualizar' ?>">
                         <?php if ($modo === 'editar'): ?>
                         <input type="hidden" name="noticia_id" value="<?= $noticia_editar['id'] ?>">
-                        <input type="hidden" name="imagen_destacada_actual" value="<?= e($noticia_editar['imagen_destacada']) ?>">
+                        <input type="hidden" name="imagen_destacada_actual" value="<?= e($noticia_editar['imagen_destacada'] ?? '') ?>">
                         <?php endif; ?>
 
                         <!-- Título -->
                         <div class="mb-3">
                             <label for="titulo" class="form-label">Título <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="titulo" name="titulo"
-                                   value="<?= $modo === 'editar' ? e($noticia_editar['titulo']) : '' ?>"
+                                   value="<?= e($form_data['titulo'] ?? '') ?>"
                                    required maxlength="200">
                         </div>
 
@@ -472,7 +486,7 @@ include __DIR__ . '/includes/sidebar.php';
                         <div class="mb-3">
                             <label for="slug" class="form-label">Slug <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="slug" name="slug"
-                                   value="<?= $modo === 'editar' ? e($noticia_editar['slug']) : '' ?>"
+                                   value="<?= e($form_data['slug'] ?? '') ?>"
                                    required maxlength="200" pattern="[a-z0-9-]+">
                             <small class="form-text text-muted">URL amigable. Se genera automáticamente desde el título.</small>
                         </div>
@@ -480,14 +494,14 @@ include __DIR__ . '/includes/sidebar.php';
                         <!-- Resumen -->
                         <div class="mb-3">
                             <label for="resumen" class="form-label">Resumen</label>
-                            <textarea class="form-control" id="resumen" name="resumen" rows="3"><?= $modo === 'editar' ? e($noticia_editar['resumen']) : '' ?></textarea>
+                            <textarea class="form-control" id="resumen" name="resumen" rows="3"><?= e($form_data['resumen'] ?? '') ?></textarea>
                             <small class="form-text text-muted">Breve descripción para listados (opcional)</small>
                         </div>
 
                         <!-- Contenido -->
                         <div class="mb-3">
                             <label for="contenido" class="form-label">Contenido</label>
-                            <textarea class="form-control" id="contenido" name="contenido" rows="10"><?= $modo === 'editar' ? e($noticia_editar['contenido']) : '' ?></textarea>
+                            <textarea class="form-control" id="contenido" name="contenido" rows="10"><?= e($form_data['contenido'] ?? '') ?></textarea>
                         </div>
 
                         <!-- Imagen Destacada -->
@@ -512,14 +526,14 @@ include __DIR__ . '/includes/sidebar.php';
                             <div class="col-md-6 mb-3">
                                 <label for="fecha_publicacion" class="form-label">Fecha de Publicación <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="fecha_publicacion" name="fecha_publicacion"
-                                       value="<?= $modo === 'editar' ? $noticia_editar['fecha_publicacion'] : date('Y-m-d') ?>" required>
+                                       value="<?= e($form_data['fecha_publicacion'] ?? date('Y-m-d')) ?>" required>
                             </div>
 
                             <!-- Autor -->
                             <div class="col-md-6 mb-3">
                                 <label for="autor" class="form-label">Autor</label>
                                 <input type="text" class="form-control" id="autor" name="autor"
-                                       value="<?= $modo === 'editar' ? e($noticia_editar['autor']) : e($usuario['nombre_completo']) ?>"
+                                       value="<?= e($form_data['autor'] ?? $usuario['nombre_completo']) ?>"
                                        maxlength="100">
                             </div>
                         </div>
@@ -530,9 +544,12 @@ include __DIR__ . '/includes/sidebar.php';
                             <label for="area_id" class="form-label">Área</label>
                             <select class="form-select" id="area_id" name="area_id">
                                 <option value="0">Sin área específica</option>
-                                <?php foreach ($areas as $area): ?>
+                                <?php
+                                $selected_area_id = $form_data['area_id'] ?? 0;
+                                foreach ($areas as $area):
+                                ?>
                                 <option value="<?= $area['id'] ?>"
-                                        <?= ($modo === 'editar' && $noticia_editar['area_id'] == $area['id']) ? 'selected' : '' ?>>
+                                        <?= ($selected_area_id == $area['id']) ? 'selected' : '' ?>>
                                     <?= e($area['nombre']) ?>
                                 </option>
                                 <?php endforeach; ?>
@@ -550,7 +567,7 @@ include __DIR__ . '/includes/sidebar.php';
                         <div class="mb-3">
                             <label for="categoria" class="form-label">Categoría</label>
                             <input type="text" class="form-control" id="categoria" name="categoria"
-                                   value="<?= $modo === 'editar' ? e($noticia_editar['categoria']) : '' ?>"
+                                   value="<?= e($form_data['categoria'] ?? '') ?>"
                                    maxlength="100" list="categorias-list">
                             <datalist id="categorias-list">
                                 <?php foreach ($categorias as $cat): ?>
@@ -565,7 +582,7 @@ include __DIR__ . '/includes/sidebar.php';
                             <div class="col-md-6 mb-3">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="destacada" name="destacada"
-                                           <?= ($modo === 'editar' && $noticia_editar['destacada']) ? 'checked' : '' ?>>
+                                           <?= (!empty($form_data['destacada'])) ? 'checked' : '' ?>>
                                     <label class="form-check-label" for="destacada">
                                         <i class="fas fa-star text-warning"></i> Marcar como destacada
                                     </label>
@@ -576,7 +593,7 @@ include __DIR__ . '/includes/sidebar.php';
                             <div class="col-md-6 mb-3">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="activo" name="activo"
-                                           <?= ($modo === 'crear' || ($modo === 'editar' && $noticia_editar['activo'])) ? 'checked' : '' ?>>
+                                           <?= ($modo === 'crear' || !empty($form_data['activo'])) ? 'checked' : '' ?>>
                                     <label class="form-check-label" for="activo">
                                         Noticia activa (visible)
                                     </label>
