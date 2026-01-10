@@ -1363,6 +1363,11 @@ div.aligncenter {
     font-weight: 400;
 }
 
+.contact-con strong {
+    font-weight: 700;
+    color: inherit;
+}
+
 .row-pad + .row-pad {
     margin-top: -20px; /* Ajusta el valor negativo según necesites */
 }
@@ -2973,4 +2978,16 @@ body.high-contrast .fontfamily-label,
 body.high-contrast .resizer-label {
     color: #fff !important;
     font-weight: bold !important;
+}
+
+/* Strong en alto contraste - amarillo para mejor visibilidad */
+body.high-contrast strong {
+    color: #ffff00 !important;
+    font-weight: 700 !important;
+}
+
+/* Strong en modo oscuro - color más claro para mejor contraste */
+body.dark-mode strong {
+    color: #ffd700 !important;
+    font-weight: 700 !important;
 }
