@@ -381,14 +381,11 @@ jQuery(document).ready(function() {
             console.log('Voces disponibles:', speechSynthesis.getVoices().length);
         }
 
-        // Cargar estado guardado al inicio
-        if (Cookies.get('screen-reader') === 'yes') {
-            console.log('Cookie screen-reader encontrada: activando lector');
-            isScreenReaderActive = true;
-            btn_screen_reader.addClass('active');
-        } else {
-            console.log('Cookie screen-reader no encontrada');
-        }
+        // NO cargar estado guardado al inicio - debe activarse manualmente
+        // El lector de voz siempre empieza desactivado cuando se carga la página
+        isScreenReaderActive = false;
+        btn_screen_reader.removeClass('active');
+        console.log('Lector de voz desactivado por defecto');
 
         // Función para leer texto
         function speakText(text) {
@@ -443,14 +440,12 @@ jQuery(document).ready(function() {
                 // Desactivar lector de voz
                 isScreenReaderActive = false;
                 speechSynthesis.cancel();
-                Cookies.remove('screen-reader', { path: cookie_path.cookiePath });
                 jQuery(this).removeClass('active');
                 console.log('Lector de voz desactivado');
-                speakText('Lector de voz desactivado');
+                // NO reproducir mensaje al desactivar para evitar errores
             } else {
                 // Activar lector de voz
                 isScreenReaderActive = true;
-                Cookies.set('screen-reader', 'yes', { expires: 7, path: cookie_path.cookiePath });
                 jQuery(this).addClass('active');
                 console.log('Lector de voz activado');
                 speakText('Lector de voz activado. Pase el cursor sobre los elementos para escuchar su contenido');
@@ -505,12 +500,16 @@ jQuery(document).ready(function() {
             }
         });
 
-        // Detener lectura al salir del elemento
+        // NO cancelar inmediatamente al salir del elemento para evitar errores
+        // speakText() ya cancela automáticamente antes de hablar el nuevo texto
+        // Si cancelas aquí, causa error "canceled" cuando pasas el ratón rápido
+        /*
         jQuery(document).on('mouseleave focusout', interactiveElements, function() {
             if (isScreenReaderActive) {
                 speechSynthesis.cancel();
             }
         });
+        */
 
     } else {
         // Si el navegador no soporta la API, ocultar el botón
