@@ -392,6 +392,11 @@ if (!function_exists('formatearFecha')) {
                                         <li class="menu-item">
                                             <a class="" data-scroll href="#beneficios-em">Beneficios</a>
                                         </li>
+                                        <?php if (count($noticias) > 0): ?>
+                                        <li class="menu-item">
+                                            <a class="" data-scroll href="#news-em">Noticias</a>
+                                        </li>
+                                        <?php endif; ?>
                                         <li class="menu-item">
                                             <a class="" data-scroll href="#participa-em">Participa</a>
                                         </li>
@@ -440,6 +445,11 @@ if (!function_exists('formatearFecha')) {
                                                 <li class="menu-item">
                                                     <a class="" href="#beneficios-em">Beneficios</a>
                                                 </li>
+                                                <?php if (count($noticias) > 0): ?>
+                                                <li class="menu-item">
+                                                    <a class="" href="#news-em">Noticias</a>
+                                                </li>
+                                                <?php endif; ?>
                                                 <li class="menu-item">
                                                     <a class="" data-scroll href="#participa-em">Participa</a>
                                                 </li>
@@ -886,6 +896,9 @@ if (!function_exists('formatearFecha')) {
                                 <div class="col-6 pop-link" style="text-align: center">
                                     <a class="" data-scroll href="#portfolios-em">Proyectos</a>
                                     <a class="" data-scroll href="#beneficios-em">Beneficios</a>
+                                    <?php if (count($noticias) > 0): ?>
+                                    <a class="" data-scroll href="#news-em">Noticias</a>
+                                    <?php endif; ?>
                                     <a class="" data-scroll href="#participa-em">Participa</a>
                                     <a href="../index.php#features" class="">Áreas</a>
                                 </div>
@@ -1015,10 +1028,15 @@ if (!function_exists('formatearFecha')) {
                                 <li class="menu-item">
                                     <a class="" data-scroll href="#beneficios-em">Beneficios</a>
                                 </li>
+                                <?php if (count($noticias) > 0): ?>
+                                <li class="menu-item">
+                                    <a class="" data-scroll href="#news-em">Noticias</a>
+                                </li>
+                                <?php endif; ?>
                                 <li class="menu-item">
                                     <a class="" data-scroll href="#participa-em">Participa</a>
                                 </li>
-                            </ul>
+            </ul>
                         </div>
                     </div>
                 </div>

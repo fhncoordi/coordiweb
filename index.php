@@ -383,10 +383,12 @@ $portfolio_ids = [
                                         <li class="menu-item">
                                             <a class="" data-scroll href="#portfolios">Proyectos</a>
                                         </li>
-                                        <!-- <li class="menu-item">
-                                            <a class="" data-scroll href="#news">Novedades</a>
-                                        </li>
+                                        <?php if (count($noticias_destacadas) > 0): ?>
                                         <li class="menu-item">
+                                            <a class="" data-scroll href="#news">Noticias</a>
+                                        </li>
+                                        <?php endif; ?>
+                                        <!-- <li class="menu-item">
                                             <a class="" data-scroll href="#colabora">Colabora</a>
                                         </li> -->
                                         <li class="menu-item">
@@ -432,10 +434,12 @@ $portfolio_ids = [
                                                 <li class="menu-item">
                                                     <a class="" href="#portfolios">Proyectos</a>
                                                 </li>
-                                                <!-- <li class="menu-item">
-                                                    <a class="" href="#news">Novedades</a>
-                                                </li>
+                                                <?php if (count($noticias_destacadas) > 0): ?>
                                                 <li class="menu-item">
+                                                    <a class="" href="#news">Noticias</a>
+                                                </li>
+                                                <?php endif; ?>
+                                                <!-- <li class="menu-item">
                                                     <a class="" data-scroll href="#colabora">Colabora</a>
                                                 </li> -->
                                                 <li class="menu-item">
@@ -1221,9 +1225,11 @@ $portfolio_ids = [
                                     <a class="" data-scroll href="#features">Áreas</a>
                                 </div>
                                 <div class="col-6 pop-link" style="text-align: center">
-                                    <!-- <a class="" data-scroll href="#news">Novedades</a>
-                                    <a class="" data-scroll href="#colabora">Colabora</a> -->
+                                    <!-- <a class="" data-scroll href="#colabora">Colabora</a> -->
                                     <a class="" data-scroll href="#portfolios">Proyectos</a>
+                                    <?php if (count($noticias_destacadas) > 0): ?>
+                                    <a class="" data-scroll href="#news">Noticias</a>
+                                    <?php endif; ?>
                                     <a class="" data-scroll href="#contact">Contacto</a>
                                     <a class="" href="transparencia.php">Transparencia</a>
                                 </div>

@@ -386,6 +386,11 @@ if (!function_exists('formatearFecha')) {
                                     <li class="menu-item">
                                         <a class="" data-scroll href="#beneficios-pca">Beneficios</a>
                                     </li>
+                                    <?php if (count($noticias) > 0): ?>
+                                    <li class="menu-item">
+                                        <a class="" data-scroll href="#news-pa">Noticias</a>
+                                    </li>
+                                    <?php endif; ?>
                                     <li class="menu-item">
                                         <a class="" data-scroll href="#participa-pca">Participa</a>
                                     </li>
@@ -434,6 +439,11 @@ if (!function_exists('formatearFecha')) {
                                             <li class="menu-item">
                                                 <a class="" href="#beneficios-pca">Beneficios</a>
                                             </li>
+                                            <?php if (count($noticias) > 0): ?>
+                                            <li class="menu-item">
+                                                <a class="" href="#news-pa">Noticias</a>
+                                            </li>
+                                            <?php endif; ?>
                                             <li class="menu-item">
                                                 <a class="" data-scroll href="#participa-pca">Participa</a>
                                             </li>
@@ -832,6 +842,9 @@ if (!function_exists('formatearFecha')) {
                             <div class="col-6 pop-link" style="text-align: center">
                                 <a class="" data-scroll href="#portfolios-pca">Proyectos</a>
                                 <a class="" data-scroll href="#beneficios-pca">Beneficios</a>
+                                <?php if (count($noticias) > 0): ?>
+                                <a class="" data-scroll href="#news-pa">Noticias</a>
+                                <?php endif; ?>
                                 <a class="" data-scroll href="#participa-pca">Participa</a>
                                 <a href="../index.php#features" class="">Áreas</a>
                             </div>

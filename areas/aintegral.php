@@ -393,6 +393,11 @@ if (!function_exists('formatearFecha')) {
                                             <a class="" data-scroll href="#beneficios-ai">Beneficios</a>
                                         </li>
                                         <li class="menu-item">
+                                        <?php if (count($noticias) > 0): ?>
+                                        <li class="menu-item">
+                                            <a class="" data-scroll href="#news-ai">Noticias</a>
+                                        </li>
+                                        <?php endif; ?>
                                             <a class="" data-scroll href="#participa-ai">Participa</a>
                                         </li>
                                         <li class="menu-item">
@@ -441,6 +446,11 @@ if (!function_exists('formatearFecha')) {
                                                     <a class="" href="#beneficios-ai">Beneficios</a>
                                                 </li>
                                                 <li class="menu-item">
+                                        <?php if (count($noticias) > 0): ?>
+                                        <li class="menu-item">
+                                            <a class="" data-scroll href="#news-ai">Noticias</a>
+                                        </li>
+                                        <?php endif; ?>
                                                     <a class="" data-scroll href="#participa-ai">Participa</a>
                                                 </li>
                                                 <li class="menu-item">
@@ -760,6 +770,11 @@ if (!function_exists('formatearFecha')) {
 
 
         <!--Contact section-->
+                                        <?php if (count($noticias) > 0): ?>
+                                        <li class="menu-item">
+                                            <a class="" data-scroll href="#news-ai">Noticias</a>
+                                        </li>
+                                        <?php endif; ?>
         <section id="participa-ai" class="section">
             <div class="main-container section-bg">
                 <div class="inside-container">
@@ -879,6 +894,9 @@ if (!function_exists('formatearFecha')) {
                                 <div class="col-6 pop-link" style="text-align: center">
                                     <a class="" data-scroll href="#portfolios-ai">Proyectos</a>
                                     <a class="" data-scroll href="#beneficios-ai">Beneficios</a>
+                                    <?php if (count($noticias) > 0): ?>
+                                    <a class="" data-scroll href="#news-ai">Noticias</a>
+                                    <?php endif; ?>
                                     <a class="" data-scroll href="#participa-ai">Participa</a>
                                     <a href="../index.php#features" class="">Áreas</a>
                                 </div>
