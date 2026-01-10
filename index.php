@@ -9,12 +9,16 @@ require_once __DIR__ . '/php/db/connection.php';
 require_once __DIR__ . '/php/core/security.php';
 require_once __DIR__ . '/php/models/Proyecto.php';
 require_once __DIR__ . '/php/models/Configuracion.php';
+require_once __DIR__ . '/php/models/Noticia.php';
 
 // Obtener proyectos activos y destacados
 $proyectos = Proyecto::getAll(true); // Solo activos
 
 // Obtener configuración del sitio
 $config = Configuracion::getAll();
+
+// Obtener noticias destacadas (últimas 3)
+$noticias_destacadas = Noticia::getDestacadas(3);
 
 // Helper function para escapar HTML (si no existe ya)
 if (!function_exists('e')) {
@@ -838,7 +842,8 @@ $portfolio_ids = [
 
 
         <!--News section-->
-        <!-- <section id="news" class="section">
+        <?php if (count($noticias_destacadas) > 0): ?>
+        <section id="news" class="section">
             <div class="main-container section-bg">
                 <div class="inside-container">
                     <div class="row">
@@ -847,55 +852,35 @@ $portfolio_ids = [
                         </div>
                     </div>
                     <div class="row">
+                        <?php foreach ($noticias_destacadas as $noticia): ?>
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="item">
+                                <?php if (!empty($noticia['imagen_destacada'])): ?>
+                                <div class="lab-bs-item-image" style="margin-bottom: 15px;">
+                                    <img src="<?= e($noticia['imagen_destacada']) ?>"
+                                         alt="<?= attr($noticia['titulo']) ?>"
+                                         style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                                </div>
+                                <?php endif; ?>
                                 <div class="lab-part-content">
                                     <div class="lab-bs-item-content">
                                         <div class="lab-bs-item-date">
-                                            <span>Oct 01, 2025</span>
+                                            <span><?= date('d M, Y', strtotime($noticia['fecha_publicacion'])) ?></span>
                                         </div>
                                         <div class="">
-                                            <h3 class="lab-bs-item-title"> Noticia 1 </h3>
-                                            <p class="lab-bs-item-excerpt">Este es un ejemplo de la primera noticia.</p>
+                                            <h3 class="lab-bs-item-title"><?= e($noticia['titulo']) ?></h3>
+                                            <p class="lab-bs-item-excerpt"><?= e($noticia['resumen']) ?></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12">
-                            <div class="item">
-                                <div class="lab-part-content">
-                                    <div class="lab-bs-item-content">
-                                        <div class="lab-bs-item-date">
-                                            <span>Sept 10, 2025</span>
-                                        </div>
-                                        <div class="">
-                                            <h3 class="lab-bs-item-title"> Noticia 2 </h3>
-                                            <p class="lab-bs-item-excerpt">Este es un ejemplo de la segunda noticia.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-12">
-                            <div class="item">
-                                <div class="lab-part-content">
-                                    <div class="lab-bs-item-content">
-                                        <div class="lab-bs-item-date">
-                                            <span>Ago 28, 2025</span>
-                                        </div>
-                                        <div class="">
-                                            <h3 class="lab-bs-item-title"> Noticia 3 </h3>
-                                            <p class="lab-bs-item-excerpt">Este es un ejemplo de la tercera noticia.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
-        </section> -->
+        </section>
+        <?php endif; ?>
         <!--News section end-->
 
         <!--Colabora section-->
