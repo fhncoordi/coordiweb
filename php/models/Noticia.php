@@ -260,6 +260,43 @@ class Noticia {
     }
 
     /**
+     * Generar slug único desde un título
+     * Si el slug ya existe, agrega un número incremental (-2, -3, etc.)
+     *
+     * @param string $titulo Título de la noticia
+     * @param int $id_noticia_actual ID de la noticia actual (para excluir de la validación al editar)
+     * @return string Slug único generado
+     */
+    public static function generarSlugUnico($titulo, $id_noticia_actual = null) {
+        // Generar slug base desde el título
+        $slug_base = self::generarSlug($titulo);
+        $slug = $slug_base;
+        $contador = 2;
+
+        // Si el slug está vacío (título sin caracteres válidos), usar fallback
+        if (empty($slug)) {
+            $slug = 'noticia-' . date('YmdHis');
+            return $slug;
+        }
+
+        // Verificar si el slug está disponible
+        // Si no, agregar número incremental hasta encontrar uno disponible
+        while (!self::isSlugUnico($slug, $id_noticia_actual)) {
+            $slug = $slug_base . '-' . $contador;
+            $contador++;
+
+            // Protección contra loops infinitos (máximo 1000 intentos)
+            if ($contador > 1000) {
+                // Usar timestamp como último recurso
+                $slug = $slug_base . '-' . time();
+                break;
+            }
+        }
+
+        return $slug;
+    }
+
+    /**
      * Validar datos de noticia
      *
      * @param array $datos Datos a validar

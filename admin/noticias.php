@@ -126,6 +126,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'activo' => isset($_POST['activo']) ? 1 : 0
             ];
 
+            // Si el slug está vacío, generar uno automáticamente único
+            if (empty($datos['slug']) && !empty($datos['titulo'])) {
+                $datos['slug'] = Noticia::generarSlugUnico($datos['titulo']);
+            }
+
             // Validar datos
             $errores = Noticia::validar($datos);
 
@@ -227,6 +232,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
+                // Si el slug está vacío, generar uno automáticamente único
+                if (empty($datos['slug']) && !empty($datos['titulo'])) {
+                    $datos['slug'] = Noticia::generarSlugUnico($datos['titulo'], $noticia_id);
+                }
+
                 // Validar datos
                 $errores = Noticia::validar($datos, $noticia_id);
 
@@ -283,6 +293,13 @@ if ($es_coordinador) {
 
 // Obtener áreas para el selector
 $areas = Noticia::getAreas();
+
+// Obtener nombre del área del coordinador si aplica
+$nombre_area_coordinador = '';
+if ($es_coordinador && $area_permitida) {
+    $area_coord = fetchOne("SELECT nombre FROM areas WHERE id = ?", [$area_permitida]);
+    $nombre_area_coordinador = $area_coord['nombre'] ?? '';
+}
 
 // Obtener categorías para el filtro
 $categorias = Noticia::getCategorias();
@@ -506,6 +523,28 @@ include __DIR__ . '/includes/sidebar.php';
                                        maxlength="100">
                             </div>
                         </div>
+
+                        <!-- Área -->
+                        <?php if (!$es_coordinador): ?>
+                        <div class="mb-3">
+                            <label for="area_id" class="form-label">Área</label>
+                            <select class="form-select" id="area_id" name="area_id">
+                                <option value="0">Sin área específica</option>
+                                <?php foreach ($areas as $area): ?>
+                                <option value="<?= $area['id'] ?>"
+                                        <?= ($modo === 'editar' && $noticia_editar['area_id'] == $area['id']) ? 'selected' : '' ?>>
+                                    <?= e($area['nombre']) ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <small class="form-text text-muted">Área temática a la que pertenece esta noticia (opcional)</small>
+                        </div>
+                        <?php else: ?>
+                        <input type="hidden" name="area_id" value="<?= $area_permitida ?>">
+                        <div class="alert alert-info mb-3">
+                            <i class="fas fa-info-circle me-2"></i>Esta noticia se publicará en el área: <strong><?= e($nombre_area_coordinador) ?></strong>
+                        </div>
+                        <?php endif; ?>
 
                         <!-- Categoría -->
                         <div class="mb-3">
