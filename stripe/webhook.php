@@ -265,6 +265,63 @@ switch ($event->type) {
 
         break;
 
+    case 'customer.updated':
+        $customer = $event->data->object;
+
+        // Actualizar datos del cliente (email, nombre, teléfono)
+        try {
+            // Extraer datos del customer
+            $email = $customer->email;
+            $nombre = $customer->name ?? null;
+            $telefono = $customer->phone ?? null;
+
+            // Si no hay nombre en el customer, intentar sacarlo de metadata
+            if (!$nombre && isset($customer->metadata->member_name)) {
+                $nombre = $customer->metadata->member_name;
+            }
+
+            // Si no hay teléfono en el customer, intentar sacarlo de metadata
+            if (!$telefono && isset($customer->metadata->member_phone)) {
+                $telefono = $customer->metadata->member_phone;
+            }
+
+            // Construir el UPDATE dinámicamente según qué campos tenemos
+            $campos = [];
+            $valores = [];
+
+            if ($email) {
+                $campos[] = "email = ?";
+                $valores[] = $email;
+            }
+
+            if ($nombre) {
+                $campos[] = "nombre = ?";
+                $valores[] = $nombre;
+            }
+
+            if ($telefono) {
+                $campos[] = "telefono = ?";
+                $valores[] = $telefono;
+            }
+
+            if (count($campos) > 0) {
+                $valores[] = $customer->id; // WHERE stripe_customer_id = ?
+
+                $sql = "UPDATE socios SET " . implode(", ", $campos) . " WHERE stripe_customer_id = ?";
+
+                execute($sql, $valores);
+
+                error_log("Customer actualizado: {$customer->id} - Email: " . ($email ?? 'N/A') . ", Nombre: " . ($nombre ?? 'N/A'));
+            } else {
+                error_log("Customer actualizado pero sin campos relevantes: {$customer->id}");
+            }
+
+        } catch (Exception $e) {
+            error_log("Error actualizando customer: " . $e->getMessage());
+        }
+
+        break;
+
     case 'customer.subscription.updated':
         $subscription = $event->data->object;
 
