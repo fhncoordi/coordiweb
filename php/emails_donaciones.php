@@ -219,7 +219,7 @@ function enviarEmailBienvenidaSocio($socio) {
     $proximoCobro = date('d/m/Y', strtotime($socio['fecha_proximo_cobro']));
 
     $contenido = '
-        <h2>¡Bienvenido/a a Coordicanarias! 🎉</h2>
+        <h2>¡Bienvenido/a a Coordicanarias!</h2>
 
         <p>Hola <strong>' . $nombre . '</strong>,</p>
 
@@ -228,7 +228,7 @@ function enviarEmailBienvenidaSocio($socio) {
         discapacidad en Canarias.</p>
 
         <div class="info-box">
-            <h3 style="margin-top: 0; color: ' . EMAIL_COLOR_PRIMARY . ';">Detalles de tu suscripción</h3>
+            <h3 style="margin-top: 0; color: ' . EMAIL_COLOR_PRIMARY . ';">RECIBO y detalle de tu suscripción</h3>
             <div class="info-row">
                 <span class="info-label">Cuota mensual:</span>
                 <span class="info-value"><strong>5,00 €</strong></span>
@@ -250,7 +250,6 @@ function enviarEmailBienvenidaSocio($socio) {
         <h3 style="color: ' . EMAIL_COLOR_PRIMARY . ';">Como socio/a disfrutas de:</h3>
         <ul>
             <li><strong>Contribución directa</strong> a nuestros 6 áreas de actuación</li>
-            <li><strong>Boletín mensual</strong> con nuestras actividades y logros</li>
             <li><strong>Invitaciones</strong> a eventos y actividades especiales</li>
             <li><strong>Transparencia total</strong> sobre el uso de los fondos</li>
         </ul>
@@ -288,6 +287,11 @@ function enviarEmailReciboMensual($socio) {
     $fecha = date('d/m/Y');
     $mes = strftime('%B de %Y', time());
 
+    // Obtener fecha del próximo cobro desde BD (más preciso que +1 month)
+    $proximoCobro = !empty($socio['fecha_proximo_cobro'])
+        ? date('d/m/Y', strtotime($socio['fecha_proximo_cobro']))
+        : date('d/m/Y', strtotime('+1 month')); // Fallback si no hay fecha en BD
+
     $contenido = '
         <h2>Recibo de tu aportación mensual</h2>
 
@@ -308,7 +312,7 @@ function enviarEmailReciboMensual($socio) {
             </div>
             <div class="info-row">
                 <span class="info-label">Próximo cobro:</span>
-                <span class="info-value">' . date('d/m/Y', strtotime('+1 month')) . '</span>
+                <span class="info-value">' . $proximoCobro . '</span>
             </div>
         </div>
 
