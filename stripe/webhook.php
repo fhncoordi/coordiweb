@@ -76,7 +76,20 @@ switch ($event->type) {
                     $customer = \Stripe\Customer::retrieve($session->customer);
                     $subscription = \Stripe\Subscription::retrieve($session->subscription);
 
-                    execute("
+                    // Debug: registrar valores
+                    error_log("DEBUG Subscription - current_period_end: " . $subscription->current_period_end);
+                    error_log("DEBUG Subscription - current_period_start: " . $subscription->current_period_start);
+                    error_log("DEBUG Subscription - status: " . $subscription->status);
+
+                    // Calcular fecha del próximo cobro
+                    $fechaProximoCobro = $subscription->current_period_end
+                        ? date('Y-m-d', $subscription->current_period_end)
+                        : null;
+
+                    error_log("DEBUG fecha_proximo_cobro calculada: " . ($fechaProximoCobro ?? 'NULL'));
+
+                    // Actualizar el registro en la BD
+                    $stmt = getDB()->prepare("
                         UPDATE socios
                         SET stripe_customer_id = ?,
                             stripe_subscription_id = ?,
@@ -87,21 +100,35 @@ switch ($event->type) {
                         AND stripe_subscription_id IS NULL
                         ORDER BY fecha_creacion DESC
                         LIMIT 1
-                    ", [
+                    ");
+                    $stmt->execute([
                         $session->customer,
                         $session->subscription,
                         $subscription->status,
-                        date('Y-m-d', $subscription->current_period_end),
+                        $fechaProximoCobro,
                         $customer->email
                     ]);
 
-                    error_log("Suscripción completada vía webhook: {$session->subscription} para {$customer->email}");
+                    $filasActualizadas = $stmt->rowCount();
+                    error_log("UPDATE socios: {$filasActualizadas} filas actualizadas para {$customer->email}");
 
-                    // Enviar email de bienvenida al nuevo socio
+                    // Buscar el socio actualizado
                     $socioNuevo = fetchOne("SELECT * FROM socios WHERE stripe_subscription_id = ?", [$session->subscription]);
+
                     if ($socioNuevo) {
-                        enviarEmailBienvenidaSocio($socioNuevo);
+                        error_log("Socio encontrado: ID {$socioNuevo['id']}, intentando enviar email...");
+                        $resultadoEmail = enviarEmailBienvenidaSocio($socioNuevo);
+
+                        if ($resultadoEmail) {
+                            error_log("✅ Email de bienvenida enviado correctamente a {$customer->email}");
+                        } else {
+                            error_log("❌ Error: enviarEmailBienvenidaSocio() devolvió false para {$customer->email}");
+                        }
+                    } else {
+                        error_log("❌ Error: No se encontró el socio con subscription_id {$session->subscription}");
                     }
+
+                    error_log("Suscripción completada vía webhook: {$session->subscription} para {$customer->email}");
                 }
             } catch (Exception $e) {
                 error_log("Error actualizando suscripción en webhook: " . $e->getMessage());
@@ -206,6 +233,14 @@ switch ($event->type) {
 
         // Actualizar estado de la suscripción
         try {
+            // Calcular fecha del próximo cobro
+            $fechaProximoCobro = $subscription->current_period_end
+                ? date('Y-m-d', $subscription->current_period_end)
+                : null;
+
+            error_log("DEBUG subscription.updated - current_period_end: " . ($subscription->current_period_end ?? 'NULL'));
+            error_log("DEBUG subscription.updated - fecha calculada: " . ($fechaProximoCobro ?? 'NULL'));
+
             execute("
                 UPDATE socios
                 SET estado = ?,
@@ -213,7 +248,7 @@ switch ($event->type) {
                 WHERE stripe_subscription_id = ?
             ", [
                 $subscription->status,
-                date('Y-m-d', $subscription->current_period_end),
+                $fechaProximoCobro,
                 $subscription->id
             ]);
 
@@ -256,12 +291,22 @@ switch ($event->type) {
         // Actualizar última factura pagada (cobros mensuales recurrentes)
         try {
             if ($invoice->subscription) {
+                // Obtener la suscripción para tener la fecha del próximo cobro
+                $subscription = \Stripe\Subscription::retrieve($invoice->subscription);
+
+                $fechaProximoCobro = $subscription->current_period_end
+                    ? date('Y-m-d', $subscription->current_period_end)
+                    : null;
+
+                error_log("DEBUG invoice.payment_succeeded - Actualizando próximo cobro: " . ($fechaProximoCobro ?? 'NULL'));
+
                 execute("
                     UPDATE socios
                     SET ultima_factura_pagada = NOW(),
-                        estado = 'active'
+                        estado = 'active',
+                        fecha_proximo_cobro = ?
                     WHERE stripe_subscription_id = ?
-                ", [$invoice->subscription]);
+                ", [$fechaProximoCobro, $invoice->subscription]);
 
                 error_log("Pago mensual exitoso para suscripción: {$invoice->subscription}");
 
