@@ -162,7 +162,7 @@ $cuerpo_email = "
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .header {
-            background-color: #FF6B35;
+            background-color: #E5A649;
             color: white;
             padding: 30px 20px;
             text-align: center;
@@ -190,7 +190,17 @@ $cuerpo_email = "
             margin-top: 5px;
             padding: 10px;
             background-color: #f5f5f5;
-            border-left: 4px solid #FF6B35;
+            border-left: 4px solid #E5A649;
+        }
+        .area-badge {
+            display: inline-block;
+            background-color: #E5A649;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
         .footer {
             background-color: #f9f9f9;
@@ -206,10 +216,12 @@ $cuerpo_email = "
 <body>
     <div class='email-wrapper'>
         <div class='header'>
-            <img src='https://coordicanarias.com/images/brand-coordi-white.svg' alt='Coordicanarias' />
+            <h1 style='margin: 0; font-size: 28px; font-weight: 600;'>COORDICANARIAS</h1>
+            <p style='margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;'>Coordinadora de Personas con Discapacidad Física de Canarias</p>
         </div>
         <div class='content'>
-            <h2 style='color: #FF6B35; margin-top: 0;'>Nuevo mensaje de contacto</h2>
+            <span class='area-badge'>📧 " . strtoupper(htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8')) . "</span>
+            <h2 style='color: #E5A649; margin-top: 0;'>Nuevo mensaje de contacto</h2>
             <div class='field'>
                 <div class='field-label'>Nombre:</div>
                 <div class='field-value'>" . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . "</div>
@@ -227,12 +239,11 @@ $cuerpo_email = "
             <p><strong>Coordicanarias</strong><br>
             Coordinadora de Personas con Discapacidad Física de Canarias</p>
             <p>
-                <a href='https://coordicanarias.com' style='color: #FF6B35; text-decoration: none;'>coordicanarias.com</a> |
-                <a href='mailto:fhn@coordicanarias.com' style='color: #FF6B35; text-decoration: none;'>fhn@coordicanarias.com</a>
+                <a href='https://coordicanarias.com' style='color: #E5A649; text-decoration: none;'>coordicanarias.com</a> |
+                <a href='mailto:fhn@coordicanarias.com' style='color: #E5A649; text-decoration: none;'>fhn@coordicanarias.com</a>
             </p>
             <p style='font-size: 11px; color: #999; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;'>
-                Email recibido desde formulario de contacto<br>
-                Área: " . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . " | Fecha: " . date('d/m/Y H:i:s') . "
+                Email recibido desde formulario de contacto | " . date('d/m/Y H:i:s') . "
             </p>
         </div>
     </div>

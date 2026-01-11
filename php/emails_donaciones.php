@@ -6,10 +6,9 @@
 
 require_once __DIR__ . '/config.php';
 
-// Color corporativo naranja de discapacidad
-define('EMAIL_COLOR_PRIMARY', '#FF6B35');
+// Color corporativo naranja de Coordicanarias
+define('EMAIL_COLOR_PRIMARY', '#E5A649');
 define('EMAIL_COLOR_SECONDARY', '#F5F5F5');
-define('EMAIL_LOGO_URL', 'https://coordicanarias.com/images/brand-coordi-white.svg');
 
 /**
  * Template base de email con banda naranja y logo blanco
@@ -43,9 +42,15 @@ function getEmailTemplate($titulo, $contenido) {
                 padding: 30px 20px;
                 text-align: center;
             }
-            .header img {
-                max-width: 200px;
-                height: auto;
+            .header h1 {
+                margin: 0;
+                font-size: 28px;
+                font-weight: 600;
+            }
+            .header p {
+                margin: 5px 0 0 0;
+                font-size: 14px;
+                opacity: 0.9;
             }
             .content {
                 padding: 30px 20px;
@@ -113,7 +118,8 @@ function getEmailTemplate($titulo, $contenido) {
     <body>
         <div class="email-wrapper">
             <div class="header">
-                <img src="' . EMAIL_LOGO_URL . '" alt="Coordicanarias" />
+                <h1>COORDICANARIAS</h1>
+                <p>Coordinadora de Personas con Discapacidad Física de Canarias</p>
             </div>
             <div class="content">
                 ' . $contenido . '
