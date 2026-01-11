@@ -147,23 +147,69 @@ $cuerpo_email = "
 <head>
     <meta charset='UTF-8'>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background-color: #007bff; color: white; padding: 20px; text-align: center; }
-        .content { background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; }
-        .field { margin-bottom: 15px; }
-        .field-label { font-weight: bold; color: #555; }
-        .field-value { margin-top: 5px; padding: 10px; background-color: white; border-left: 3px solid #007bff; }
-        .footer { margin-top: 20px; padding: 10px; text-align: center; font-size: 12px; color: #777; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-wrapper {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #FF6B35;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header img {
+            max-width: 200px;
+            height: auto;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .content {
+            background-color: white;
+            padding: 30px 20px;
+        }
+        .field {
+            margin-bottom: 15px;
+        }
+        .field-label {
+            font-weight: 600;
+            color: #555;
+        }
+        .field-value {
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-left: 4px solid #FF6B35;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            margin-top: 20px;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+            border-top: 1px solid #e0e0e0;
+        }
     </style>
 </head>
 <body>
-    <div class='container'>
+    <div class='email-wrapper'>
         <div class='header'>
-            <h2>Nuevo mensaje de contacto</h2>
-            <p>Coordicanarias</p>
+            <img src='https://coordicanarias.com/images/brand-coordi-white.svg' alt='Coordicanarias' />
         </div>
         <div class='content'>
+            <h2 style='color: #FF6B35; margin-top: 0;'>Nuevo mensaje de contacto</h2>
             <div class='field'>
                 <div class='field-label'>Nombre:</div>
                 <div class='field-value'>" . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . "</div>
@@ -178,9 +224,16 @@ $cuerpo_email = "
             </div>
         </div>
         <div class='footer'>
-            <p>Este email fue enviado desde el formulario de contacto de coordicanarias.com</p>
-            <p>Área: " . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . "</p>
-            <p>Fecha: " . date('d/m/Y H:i:s') . "</p>
+            <p><strong>Coordicanarias</strong><br>
+            Coordinadora de Personas con Discapacidad Física de Canarias</p>
+            <p>
+                <a href='https://coordicanarias.com' style='color: #FF6B35; text-decoration: none;'>coordicanarias.com</a> |
+                <a href='mailto:fhn@coordicanarias.com' style='color: #FF6B35; text-decoration: none;'>fhn@coordicanarias.com</a>
+            </p>
+            <p style='font-size: 11px; color: #999; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;'>
+                Email recibido desde formulario de contacto<br>
+                Área: " . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . " | Fecha: " . date('d/m/Y H:i:s') . "
+            </p>
         </div>
     </div>
 </body>

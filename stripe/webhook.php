@@ -27,6 +27,7 @@
 require_once __DIR__ . '/../php/config.php';
 require_once __DIR__ . '/../php/stripe-php/init.php';
 require_once __DIR__ . '/../php/db/connection.php';
+require_once __DIR__ . '/../php/emails_donaciones.php';
 
 // Establecer API key
 \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
@@ -95,6 +96,12 @@ switch ($event->type) {
                     ]);
 
                     error_log("Suscripción completada vía webhook: {$session->subscription} para {$customer->email}");
+
+                    // Enviar email de bienvenida al nuevo socio
+                    $socioNuevo = fetchOne("SELECT * FROM socios WHERE stripe_subscription_id = ?", [$session->subscription]);
+                    if ($socioNuevo) {
+                        enviarEmailBienvenidaSocio($socioNuevo);
+                    }
                 }
             } catch (Exception $e) {
                 error_log("Error actualizando suscripción en webhook: " . $e->getMessage());
@@ -120,9 +127,11 @@ switch ($event->type) {
 
                     error_log("Donación completada vía webhook: {$session->id}");
 
-                    // TODO: Aquí puedes enviar email de confirmación
-                    // require_once __DIR__ . '/../php/enviar_correo.php';
-                    // enviar_email_confirmacion_donacion($donacion);
+                    // Enviar email de confirmación al donante
+                    $donacionActualizada = fetchOne("SELECT * FROM donaciones WHERE stripe_session_id = ?", [$session->id]);
+                    if ($donacionActualizada) {
+                        enviarEmailConfirmacionDonacion($donacionActualizada);
+                    }
                 }
             } catch (Exception $e) {
                 error_log("Error actualizando donación en webhook: " . $e->getMessage());
@@ -230,7 +239,11 @@ switch ($event->type) {
 
             error_log("Suscripción cancelada: {$subscription->id}");
 
-            // TODO: Enviar email de despedida
+            // Enviar email de despedida
+            $socio = fetchOne("SELECT * FROM socios WHERE stripe_subscription_id = ?", [$subscription->id]);
+            if ($socio) {
+                enviarEmailCancelacionSocio($socio);
+            }
         } catch (Exception $e) {
             error_log("Error marcando suscripción como cancelada: " . $e->getMessage());
         }
@@ -252,7 +265,11 @@ switch ($event->type) {
 
                 error_log("Pago mensual exitoso para suscripción: {$invoice->subscription}");
 
-                // TODO: Enviar recibo por email
+                // Enviar recibo mensual al socio
+                $socio = fetchOne("SELECT * FROM socios WHERE stripe_subscription_id = ?", [$invoice->subscription]);
+                if ($socio) {
+                    enviarEmailReciboMensual($socio);
+                }
             }
         } catch (Exception $e) {
             error_log("Error registrando pago mensual: " . $e->getMessage());
@@ -274,7 +291,11 @@ switch ($event->type) {
 
                 error_log("Pago mensual fallido para suscripción: {$invoice->subscription}");
 
-                // TODO: Notificar al socio del fallo de pago
+                // Notificar al socio del fallo de pago
+                $socio = fetchOne("SELECT * FROM socios WHERE stripe_subscription_id = ?", [$invoice->subscription]);
+                if ($socio) {
+                    enviarEmailPagoFallido($socio);
+                }
             }
         } catch (Exception $e) {
             error_log("Error marcando pago fallido: " . $e->getMessage());
