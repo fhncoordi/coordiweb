@@ -63,6 +63,41 @@ try {
     exit();
 }
 
+/**
+ * Helper: Obtener current_period_end de una suscripción
+ * En versiones recientes de Stripe API, este campo está en items.data[0]
+ */
+function getSubscriptionPeriodEnd($subscription) {
+    // Método nuevo: buscar en subscription items
+    if (isset($subscription->items->data[0]->current_period_end)) {
+        return $subscription->items->data[0]->current_period_end;
+    }
+
+    // Método antiguo: buscar en subscription directamente (fallback)
+    if (isset($subscription->current_period_end)) {
+        return $subscription->current_period_end;
+    }
+
+    return null;
+}
+
+/**
+ * Helper: Obtener current_period_start de una suscripción
+ */
+function getSubscriptionPeriodStart($subscription) {
+    // Método nuevo: buscar en subscription items
+    if (isset($subscription->items->data[0]->current_period_start)) {
+        return $subscription->items->data[0]->current_period_start;
+    }
+
+    // Método antiguo: buscar en subscription directamente (fallback)
+    if (isset($subscription->current_period_start)) {
+        return $subscription->current_period_start;
+    }
+
+    return null;
+}
+
 // Procesar el evento
 switch ($event->type) {
     case 'checkout.session.completed':
@@ -76,15 +111,17 @@ switch ($event->type) {
                     $customer = \Stripe\Customer::retrieve($session->customer);
                     $subscription = \Stripe\Subscription::retrieve($session->subscription);
 
+                    // Obtener fechas usando helper (busca en items.data[0] o fallback a subscription)
+                    $periodStart = getSubscriptionPeriodStart($subscription);
+                    $periodEnd = getSubscriptionPeriodEnd($subscription);
+
                     // Debug: registrar valores
-                    error_log("DEBUG Subscription - current_period_end: " . $subscription->current_period_end);
-                    error_log("DEBUG Subscription - current_period_start: " . $subscription->current_period_start);
+                    error_log("DEBUG Subscription - current_period_end: " . ($periodEnd ?? 'NULL'));
+                    error_log("DEBUG Subscription - current_period_start: " . ($periodStart ?? 'NULL'));
                     error_log("DEBUG Subscription - status: " . $subscription->status);
 
                     // Calcular fecha del próximo cobro
-                    $fechaProximoCobro = $subscription->current_period_end
-                        ? date('Y-m-d', $subscription->current_period_end)
-                        : null;
+                    $fechaProximoCobro = $periodEnd ? date('Y-m-d', $periodEnd) : null;
 
                     error_log("DEBUG fecha_proximo_cobro calculada: " . ($fechaProximoCobro ?? 'NULL'));
 
@@ -233,12 +270,13 @@ switch ($event->type) {
 
         // Actualizar estado de la suscripción
         try {
-            // Calcular fecha del próximo cobro
-            $fechaProximoCobro = $subscription->current_period_end
-                ? date('Y-m-d', $subscription->current_period_end)
-                : null;
+            // Obtener fecha usando helper
+            $periodEnd = getSubscriptionPeriodEnd($subscription);
 
-            error_log("DEBUG subscription.updated - current_period_end: " . ($subscription->current_period_end ?? 'NULL'));
+            // Calcular fecha del próximo cobro
+            $fechaProximoCobro = $periodEnd ? date('Y-m-d', $periodEnd) : null;
+
+            error_log("DEBUG subscription.updated - current_period_end: " . ($periodEnd ?? 'NULL'));
             error_log("DEBUG subscription.updated - fecha calculada: " . ($fechaProximoCobro ?? 'NULL'));
 
             execute("
@@ -294,9 +332,9 @@ switch ($event->type) {
                 // Obtener la suscripción para tener la fecha del próximo cobro
                 $subscription = \Stripe\Subscription::retrieve($invoice->subscription);
 
-                $fechaProximoCobro = $subscription->current_period_end
-                    ? date('Y-m-d', $subscription->current_period_end)
-                    : null;
+                // Obtener fecha usando helper
+                $periodEnd = getSubscriptionPeriodEnd($subscription);
+                $fechaProximoCobro = $periodEnd ? date('Y-m-d', $periodEnd) : null;
 
                 error_log("DEBUG invoice.payment_succeeded - Actualizando próximo cobro: " . ($fechaProximoCobro ?? 'NULL'));
 
