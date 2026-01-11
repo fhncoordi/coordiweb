@@ -289,18 +289,12 @@ if (strpos($_SERVER['HTTP_REFERER'], '/areas/') !== false) {
 }
 
 if ($email_enviado) {
-    // Éxito - redirigir con mensaje de éxito
-    echo "<hr><h2 style='color: green;'>✓ Email enviado correctamente usando: $metodo_usado</h2>";
-    echo "<p><a href='$pagina_origen?success=1'>Volver al formulario</a></p>";
-    // TEMPORAL: Deshabilitado para ver debug
-    // header("Location: $pagina_origen?success=1");
-    // exit;
+    // Éxito - redirigir automáticamente con mensaje de éxito
+    header("Location: $pagina_origen?success=1#contact");
+    exit;
 } else {
     // Error al enviar - redirigir con mensaje de error
-    echo "<hr><h2 style='color: red;'>✗ Error al enviar el email</h2>";
-    echo "<p><a href='$pagina_origen?error=error_envio'>Volver al formulario</a></p>";
-    // TEMPORAL: Deshabilitado para ver debug
-    // header("Location: $pagina_origen?error=error_envio");
-    // exit;
+    header("Location: $pagina_origen?error=error_envio#contact");
+    exit;
 }
 ?>
