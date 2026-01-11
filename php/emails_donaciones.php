@@ -42,15 +42,11 @@ function getEmailTemplate($titulo, $contenido) {
                 padding: 30px 20px;
                 text-align: center;
             }
-            .header h1 {
-                margin: 0;
-                font-size: 28px;
-                font-weight: 600;
-            }
-            .header p {
-                margin: 5px 0 0 0;
-                font-size: 14px;
-                opacity: 0.9;
+            .header img {
+                max-width: 280px;
+                height: auto;
+                display: block;
+                margin: 0 auto;
             }
             .content {
                 padding: 30px 20px;
@@ -118,8 +114,7 @@ function getEmailTemplate($titulo, $contenido) {
     <body>
         <div class="email-wrapper">
             <div class="header">
-                <h1>COORDICANARIAS</h1>
-                <p>Coordinadora de Personas con Discapacidad Física de Canarias</p>
+                <img src="https://coordicanarias.com/images/brand-coordi-white.png" alt="Coordicanarias" />
             </div>
             <div class="content">
                 ' . $contenido . '

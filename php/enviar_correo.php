@@ -168,8 +168,10 @@ $cuerpo_email = "
             text-align: center;
         }
         .header img {
-            max-width: 200px;
+            max-width: 280px;
             height: auto;
+            display: block;
+            margin: 0 auto;
         }
         .container {
             max-width: 600px;
@@ -216,8 +218,7 @@ $cuerpo_email = "
 <body>
     <div class='email-wrapper'>
         <div class='header'>
-            <h1 style='margin: 0; font-size: 28px; font-weight: 600;'>COORDICANARIAS</h1>
-            <p style='margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;'>Coordinadora de Personas con Discapacidad Física de Canarias</p>
+            <img src='https://coordicanarias.com/images/brand-coordi-white.png' alt='Coordicanarias' />
         </div>
         <div class='content'>
             <span class='area-badge'>📧 " . strtoupper(htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8')) . "</span>
