@@ -63,6 +63,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
             </div>
 
+            <!-- Sección: Donaciones & Socios -->
+            <div class="nav-section">
+                <div class="nav-section-title">Donaciones & Socios</div>
+
+                <a href="donaciones.php" class="nav-link <?= $current_page === 'donaciones.php' ? 'active' : '' ?>">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span>Donaciones</span>
+                </a>
+
+                <a href="socios.php" class="nav-link <?= $current_page === 'socios.php' ? 'active' : '' ?>">
+                    <i class="fas fa-users"></i>
+                    <span>Socios</span>
+                </a>
+            </div>
+
             <!-- Sección: Sistema (solo admin) -->
             <?php if (puedeGestionarUsuarios() || puedeGestionarConfiguracion() || puedeVerRegistroActividad()): ?>
             <div class="nav-section">
@@ -70,7 +85,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                 <?php if (puedeGestionarUsuarios()): ?>
                 <a href="<?= url('admin/usuarios.php') ?>" class="nav-link <?= $current_page === 'usuarios.php' ? 'active' : '' ?>">
-                    <i class="fas fa-users"></i>
+                    <i class="fas fa-user-shield"></i>
                     <span>Usuarios</span>
                 </a>
                 <?php endif; ?>

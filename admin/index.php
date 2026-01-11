@@ -63,6 +63,30 @@ try {
         $total_usuarios = 0;
     }
 
+    // Estadísticas de Donaciones
+    $stats_donaciones = fetchOne("
+        SELECT
+            COUNT(*) as total_donaciones,
+            SUM(CASE WHEN estado = 'completed' THEN importe ELSE 0 END) as total_recaudado,
+            SUM(CASE WHEN estado = 'completed' THEN 1 ELSE 0 END) as completadas
+        FROM donaciones
+    ");
+    $total_donaciones = $stats_donaciones['total_donaciones'] ?? 0;
+    $total_recaudado = $stats_donaciones['total_recaudado'] ?? 0;
+    $donaciones_completadas = $stats_donaciones['completadas'] ?? 0;
+
+    // Estadísticas de Socios (Suscripciones)
+    $stats_socios = fetchOne("
+        SELECT
+            COUNT(*) as total_socios,
+            SUM(CASE WHEN estado IN ('active', 'trialing') THEN 1 ELSE 0 END) as socios_activos,
+            SUM(CASE WHEN estado IN ('active', 'trialing') THEN 1 ELSE 0 END) * 5 as ingresos_mensuales
+        FROM socios
+    ");
+    $total_socios = $stats_socios['total_socios'] ?? 0;
+    $socios_activos = $stats_socios['socios_activos'] ?? 0;
+    $ingresos_mensuales = $stats_socios['ingresos_mensuales'] ?? 0;
+
     // Últimos proyectos creados (filtrado por área si es coordinador)
     if ($es_coordinador) {
         $ultimos_proyectos = fetchAll("
@@ -98,6 +122,8 @@ try {
     error_log("Error al obtener estadísticas: " . $e->getMessage());
     $total_proyectos = $proyectos_activos = $total_areas = $total_servicios = 0;
     $total_beneficios = $total_testimonios = $total_usuarios = 0;
+    $total_donaciones = $total_recaudado = $donaciones_completadas = 0;
+    $total_socios = $socios_activos = $ingresos_mensuales = 0;
     $ultimos_proyectos = [];
     $ultimas_actividades = [];
 }
@@ -189,8 +215,89 @@ include __DIR__ . '/includes/sidebar.php';
         </div>
     </div>
 
+    <!-- Tarjetas de Donaciones & Socios -->
+    <div class="row g-4 mt-2">
+        <div class="col-12">
+            <h5 class="text-muted mb-3"><i class="fas fa-hand-holding-heart me-2"></i>Donaciones & Socios</h5>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card" style="border-left: 4px solid #28a745;">
+                <div class="stat-card-header">
+                    <div>
+                        <div class="stat-card-title">Total Recaudado</div>
+                    </div>
+                    <div class="stat-card-icon" style="color: #28a745;">
+                        <i class="fas fa-euro-sign"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value" style="color: #28a745;"><?= number_format($total_recaudado, 2) ?> €</div>
+                <div class="stat-card-label">
+                    <?= $donaciones_completadas ?> donaciones completadas
+                </div>
+                <a href="donaciones.php" class="btn btn-sm btn-outline-success mt-2">
+                    Ver donaciones <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card" style="border-left: 4px solid #17a2b8;">
+                <div class="stat-card-header">
+                    <div>
+                        <div class="stat-card-title">Socios Activos</div>
+                    </div>
+                    <div class="stat-card-icon" style="color: #17a2b8;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value" style="color: #17a2b8;"><?= $socios_activos ?></div>
+                <div class="stat-card-label">
+                    <?= $total_socios ?> socios registrados
+                </div>
+                <a href="socios.php" class="btn btn-sm btn-outline-info mt-2">
+                    Ver socios <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card" style="border-left: 4px solid #667eea;">
+                <div class="stat-card-header">
+                    <div>
+                        <div class="stat-card-title">Ingresos Mensuales</div>
+                    </div>
+                    <div class="stat-card-icon" style="color: #667eea;">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value" style="color: #667eea;"><?= number_format($ingresos_mensuales, 2) ?> €</div>
+                <div class="stat-card-label">
+                    De suscripciones recurrentes (5€/mes)
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card" style="border-left: 4px solid #ffc107;">
+                <div class="stat-card-header">
+                    <div>
+                        <div class="stat-card-title">Total Donaciones</div>
+                    </div>
+                    <div class="stat-card-icon" style="color: #ffc107;">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value" style="color: #ffc107;"><?= $total_donaciones ?></div>
+                <div class="stat-card-label">
+                    Donaciones recibidas (todas)
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Fila con dos columnas -->
-    <div class="row g-4">
+    <div class="row g-4 mt-4">
         <!-- Últimos Proyectos -->
         <div class="col-lg-6">
             <div class="admin-table-wrapper">
