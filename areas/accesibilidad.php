@@ -783,12 +783,12 @@ if (!function_exists('attr')) {
                 <div class="category-tabs">
                     <ul class="nav nav-tabs-accessibility" role="tablist" aria-label="Categorías de información de accesibilidad">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link"
+                            <button class="nav-link active"
                                     id="conformidad-tab"
                                     type="button"
                                     role="tab"
                                     aria-controls="conformidad"
-                                    aria-selected="false"
+                                    aria-selected="true"
                                     data-target="#conformidad">
                                 <i class="fas fa-certificate tab-icon" aria-hidden="true"></i>
                                 <span>Conformidad WCAG</span>
@@ -834,7 +834,7 @@ if (!function_exists('attr')) {
 
                     <div class="tab-content" id="accessibilityTabContent">
                         <!--TAB 2: CONFORMIDAD-->
-                        <div class="tab-pane fade" id="conformidad" role="tabpanel" aria-labelledby="conformidad-tab">
+                        <div class="tab-pane fade show active" id="conformidad" role="tabpanel" aria-labelledby="conformidad-tab">
                             <div class="highlight-box">
                                 <div style="display: flex; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
                                     <div class="wcag-badge">AA</div>
