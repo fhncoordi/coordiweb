@@ -388,9 +388,9 @@ $portfolio_ids = [
                                             <a class="" data-scroll href="#news">Noticias</a>
                                         </li>
                                         <?php endif; ?>
-                                        <!-- <li class="menu-item">
+                                        <li class="menu-item">
                                             <a class="" data-scroll href="#colabora">Colabora</a>
-                                        </li> -->
+                                        </li>
                                         <li class="menu-item">
                                             <a class="" data-scroll href="#contact">Contacto</a>
                                         </li>
@@ -439,9 +439,9 @@ $portfolio_ids = [
                                                     <a class="" data-scroll href="#news">Noticias</a>
                                                 </li>
                                                 <?php endif; ?>
-                                                <!-- <li class="menu-item">
+                                                <li class="menu-item">
                                                     <a class="" data-scroll href="#colabora">Colabora</a>
-                                                </li> -->
+                                                </li>
                                                 <li class="menu-item">
                                                     <a class="" href="#contact">Contacto</a>
                                                 </li>
@@ -934,7 +934,7 @@ $portfolio_ids = [
         <!--News section end-->
 
         <!--Colabora section-->
-        <!-- <section id="colabora" class="section">
+        <section id="colabora" class="section">
             <div class="main-container">
                 <div class="inside-container">
                     <div class="row">
@@ -948,10 +948,10 @@ $portfolio_ids = [
                                 justo para las personas con discapacidad en Canarias.
                             </p>
                         </div>
-                    </div> -->
+                    </div>
 
                     <!-- Pricing table -->
-                    <!--<ul class="pricing-table pricing-col-4">
+                    <ul class="pricing-table pricing-col-4">
                         <li>
                             <div class="pricing-container">
                                 <h3>Donaciones</h3>
@@ -970,11 +970,13 @@ $portfolio_ids = [
                                     </li>
                                 </ul>
                                 <div class="footer">
-                                    <a href="https://coordicanarias.com/donaciones"
+                                    <button type="button"
                                        class="btn-inverse btn-white btn-block"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#donacionModal"
                                        aria-label="Realizar una donación a CoordiCanarias">
                                         Dona ahora
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </li>
@@ -999,8 +1001,9 @@ $portfolio_ids = [
                                     </li>
                                 </ul>
                                 <div class="footer">
-                                    <a href="https://coordicanarias.com/colaboraciones"
-                                       class="btn-inverse btn-white btn-block"
+                                    <a href="#contact"
+                                       class="btn-inverse btn-white btn-block btn-contacto-colaboraciones"
+                                       data-tipo="colaboraciones"
                                        aria-label="Información sobre colaboraciones empresariales">
                                         Colabora ahora
                                     </a>
@@ -1029,11 +1032,13 @@ $portfolio_ids = [
                                     </li>
                                 </ul>
                                 <div class="footer">
-                                    <a href="https://coordicanarias.com/hazte-socio"
+                                    <button type="button"
                                        class="btn-inverse btn-white btn-block"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#socioModal"
                                        aria-label="Hacerse socio de CoordiCanarias por 5 euros al mes">
                                         Asóciate ahora
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </li>
@@ -1059,8 +1064,9 @@ $portfolio_ids = [
                                     </li>
                                 </ul>
                                 <div class="footer">
-                                    <a href="https://coordicanarias.com/voluntariado"
-                                       class="btn-inverse btn-white btn-block"
+                                    <a href="#contact"
+                                       class="btn-inverse btn-white btn-block btn-contacto-voluntariado"
+                                       data-tipo="voluntariado"
                                        aria-label="Información sobre programa de voluntariado">
                                         Más información
                                     </a>
@@ -1070,7 +1076,7 @@ $portfolio_ids = [
                     </ul>
                 </div>
             </div>
-        </section> -->
+        </section>
         <!--Colabora section end-->
 
 
@@ -1094,14 +1100,24 @@ $portfolio_ids = [
                         <div class="col-md-6">
                             <h3>Formulario de contacto</h3>
                             <br>
+
+                            <!-- Mensajes de éxito/error -->
+                            <div id="contactMessage" style="display:none; padding: 15px; margin-bottom: 20px; border-radius: 5px;"></div>
+
                             <div class="contact-form">
-                                <form action="#">
+                                <form action="<?= url('php/enviar_correo.php') ?>" method="POST" id="contactForm">
+                                    <!-- Campo oculto para identificar el área -->
+                                    <input type="hidden" name="area" value="inicio">
+
                                     <label for="fname">Nombre:</label>
-                                    <input type="text" id="fname" name="firstname" placeholder="Tu nombre y apellidos" title="FirstName" required />
+                                    <input type="text" id="fname" name="txtName" placeholder="Tu nombre y apellidos" title="FirstName" required />
+
                                     <label for="email">Email:</label>
-                                    <input type="email" id="email" name="email" placeholder="Tu correo electrónico" title="Email" required />
+                                    <input type="email" id="email" name="txtEmail" placeholder="Tu correo electrónico" title="Email" required />
+
                                     <label for="subject">Mensaje:</label>
-                                    <textarea id="subject" name="subject" placeholder="Tu mensaje" title="Message" style="height:200px" required></textarea>
+                                    <textarea id="subject" name="txtMsg" placeholder="Tu mensaje" title="Message" style="height:200px" required></textarea>
+
                                     <input type="submit" value="Enviar">
                                 </form>
                             </div>
@@ -1238,13 +1254,15 @@ $portfolio_ids = [
                                     <a class="" data-scroll href="#features">Áreas</a>
                                 </div>
                                 <div class="col-6 pop-link" style="text-align: center">
-                                    <!-- <a class="" data-scroll href="#colabora">Colabora</a> -->
                                     <a class="" data-scroll href="#portfolios">Proyectos</a>
-                                    <?php if (count($noticias_destacadas) > 0): ?>
-                                    <a class="" data-scroll href="#news">Noticias</a>
-                                    <?php endif; ?>
+                                    <a class="" data-scroll href="#colabora">Colabora</a>
                                     <a class="" data-scroll href="#contact">Contacto</a>
                                     <a class="" href="transparencia.php">Transparencia</a>
+                                </div>
+                                <div class="col-6 pop-link" style="text-align: center">
+                                    <?php if (count($noticias_destacadas) > 0): ?>
+                                        <a class="" data-scroll href="#news">Noticias</a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -1366,11 +1384,461 @@ $portfolio_ids = [
     </div>
     <!-- Fin Banner de Cookies -->
 
+    <!-- Modal de Donación -->
+    <div class="modal fade" id="donacionModal" tabindex="-1" aria-labelledby="donacionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h3 class="modal-title" id="donacionModalLabel">Hacer una Donación</h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body" style="padding: 30px;">
+                    <p class="text-center mb-4">
+                        Tu donación nos ayuda a continuar nuestra labor de apoyo a personas con discapacidad en Canarias.
+                        <strong>¡Gracias por tu generosidad!</strong>
+                    </p>
+
+                    <form id="donacionForm">
+                        <!-- Importes predefinidos -->
+                        <div class="mb-4">
+                            <label class="form-label"><strong>Selecciona un importe o ingresa uno personalizado:</strong></label>
+                            <div class="row g-2">
+                                <div class="col-6 col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100 btn-importe" data-amount="10">10 €</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100 btn-importe" data-amount="25">25 €</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100 btn-importe" data-amount="50">50 €</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button type="button" class="btn btn-outline-primary w-100 btn-importe" data-amount="100">100 €</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Importe personalizado -->
+                        <div class="mb-3">
+                            <label for="importePersonalizado" class="form-label">O ingresa un importe personalizado (€):</label>
+                            <input type="number" class="form-control" id="importePersonalizado" name="amount"
+                                   min="1" max="10000" step="1" placeholder="Ej: 30" required>
+                            <div class="form-text">Importe mínimo: 1€ - Máximo: 10,000€</div>
+                        </div>
+
+                        <!-- Datos del donante -->
+                        <div class="mb-3">
+                            <label for="nombreDonante" class="form-label">Nombre completo:</label>
+                            <input type="text" class="form-control" id="nombreDonante" name="name"
+                                   placeholder="Tu nombre" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="emailDonante" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="emailDonante" name="email"
+                                   placeholder="tu@email.com" required>
+                            <div class="form-text">Recibirás un recibo de tu donación en este email</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="mensajeDonante" class="form-label">Mensaje (opcional):</label>
+                            <textarea class="form-control" id="mensajeDonante" name="message"
+                                      rows="3" placeholder="Deja un mensaje si lo deseas..."></textarea>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="donacionAnonima" name="anonymous">
+                            <label class="form-check-label" for="donacionAnonima">
+                                Quiero que mi donación sea anónima
+                            </label>
+                        </div>
+
+                        <div class="alert alert-info" role="alert">
+                            <strong>Métodos de pago disponibles:</strong> Tarjeta de crédito/débito
+                            <small class="d-block mt-1">(Bizum estará disponible cuando se active el modo de producción)</small>
+                        </div>
+
+                        <div id="donacionError" class="alert alert-danger" style="display:none;" role="alert"></div>
+                        <div id="donacionLoading" style="display:none; text-align: center;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Procesando...</span>
+                            </div>
+                            <p>Redirigiendo a la pasarela de pago segura...</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="donacionForm" class="btn btn-primary" id="btnProcederPago"
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                        Proceder al pago
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin Modal de Donación -->
+
+    <!-- Modal de Suscripción de Socio -->
+    <div class="modal fade" id="socioModal" tabindex="-1" aria-labelledby="socioModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h3 class="modal-title" id="socioModalLabel">Hacerte Socio de Coordicanarias</h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body" style="padding: 30px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 48px; color: #667eea; font-weight: bold;">5 €</div>
+                        <div style="font-size: 18px; color: #666; margin-top: 5px;">al mes</div>
+                    </div>
+
+                    <p class="text-center mb-4">
+                        Al convertirte en socio de Coordicanarias, te unes a una comunidad comprometida con
+                        la inclusión y el cambio social. Tu aportación regular nos brinda una base sólida para
+                        planificar y desarrollar iniciativas a largo plazo.
+                        <strong>¡Gracias por tu compromiso!</strong>
+                    </p>
+
+                    <div class="alert alert-info" role="alert" style="margin-bottom: 25px;">
+                        <strong>✓ Ventajas de ser socio:</strong>
+                        <ul style="margin: 10px 0 0 20px;">
+                            <li>Apoyo continuado a nuestros programas y servicios</li>
+                            <li>Cancela tu suscripción cuando quieras (sin permanencia)</li>
+                            <li>Gestiona tu suscripción desde tu portal personal</li>
+                            <li>Recibo mensual automático por email</li>
+                        </ul>
+                    </div>
+
+                    <form id="socioForm">
+                        <!-- Datos del socio -->
+                        <div class="mb-3">
+                            <label for="nombreSocio" class="form-label">Nombre completo: <span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" id="nombreSocio" name="name"
+                                   placeholder="Tu nombre y apellidos" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="emailSocio" class="form-label">Email: <span style="color: red;">*</span></label>
+                            <input type="email" class="form-control" id="emailSocio" name="email"
+                                   placeholder="tu@email.com" required>
+                            <div class="form-text">Recibirás los recibos mensuales y podrás gestionar tu suscripción</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="telefonoSocio" class="form-label">Teléfono (opcional):</label>
+                            <input type="tel" class="form-control" id="telefonoSocio" name="phone"
+                                   placeholder="Ej: 922 123 456">
+                        </div>
+
+                        <div class="alert alert-warning" role="alert">
+                            <strong>Métodos de pago:</strong> Tarjeta de crédito/débito
+                            <small class="d-block mt-1">(En modo TEST - Bizum estará disponible en producción)</small>
+                        </div>
+
+                        <div class="alert alert-success" role="alert">
+                            <strong>💳 Pago seguro con Stripe</strong><br>
+                            <small>Tus datos de pago están protegidos con encriptación de nivel bancario.
+                            Nunca almacenamos información de tu tarjeta en nuestros servidores.</small>
+                        </div>
+
+                        <div id="socioError" class="alert alert-danger" style="display:none;" role="alert"></div>
+                        <div id="socioLoading" style="display:none; text-align: center;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Procesando...</span>
+                            </div>
+                            <p>Redirigiendo a la pasarela de pago segura...</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="socioForm" class="btn btn-primary" id="btnProcederSuscripcion"
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                        Continuar al pago
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin Modal de Socio -->
+
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/mixitup.min.js"></script>
     <script src="js/js-cookie.js"></script>
     <script src="js/main.js?v=DISABLED"></script>
+
+    <!-- Stripe Integration -->
+    <script>
+        // Manejar selección de importes predefinidos
+        document.querySelectorAll('.btn-importe').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remover selección previa
+                document.querySelectorAll('.btn-importe').forEach(b => b.classList.remove('active'));
+                // Marcar como activo
+                this.classList.add('active');
+                // Establecer valor en el input
+                document.getElementById('importePersonalizado').value = this.dataset.amount;
+            });
+        });
+
+        // Manejar envío del formulario
+        document.getElementById('donacionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const errorDiv = document.getElementById('donacionError');
+            const loadingDiv = document.getElementById('donacionLoading');
+            const btnSubmit = document.getElementById('btnProcederPago');
+
+            // Ocultar errores previos
+            errorDiv.style.display = 'none';
+
+            // Obtener datos del formulario
+            const formData = {
+                amount: parseFloat(document.getElementById('importePersonalizado').value),
+                name: document.getElementById('nombreDonante').value.trim(),
+                email: document.getElementById('emailDonante').value.trim(),
+                message: document.getElementById('mensajeDonante').value.trim(),
+                anonymous: document.getElementById('donacionAnonima').checked
+            };
+
+            // Validaciones
+            if (!formData.amount || formData.amount < 1) {
+                errorDiv.textContent = 'Por favor, ingresa un importe válido (mínimo 1€)';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (formData.amount > 10000) {
+                errorDiv.textContent = 'El importe máximo permitido es 10,000€';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (!formData.name || !formData.email) {
+                errorDiv.textContent = 'Por favor, completa todos los campos obligatorios';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Mostrar loading
+            btnSubmit.disabled = true;
+            loadingDiv.style.display = 'block';
+
+            try {
+                // Llamar al endpoint para crear sesión de Stripe
+                const response = await fetch('<?= url('stripe/create-checkout-session.php') ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.url) {
+                    // Redirigir a Stripe Checkout
+                    window.location.href = data.url;
+                } else {
+                    throw new Error(data.error || 'Error al procesar la donación');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.textContent = error.message || 'Error al conectar con el servidor. Por favor, inténtalo de nuevo.';
+                errorDiv.style.display = 'block';
+                btnSubmit.disabled = false;
+                loadingDiv.style.display = 'none';
+            }
+        });
+
+        // Limpiar formulario al cerrar modal
+        document.getElementById('donacionModal').addEventListener('hidden.bs.modal', function() {
+            document.getElementById('donacionForm').reset();
+            document.querySelectorAll('.btn-importe').forEach(b => b.classList.remove('active'));
+            document.getElementById('donacionError').style.display = 'none';
+            document.getElementById('donacionLoading').style.display = 'none';
+            document.getElementById('btnProcederPago').disabled = false;
+        });
+
+        // ============================================
+        // SUSCRIPCIÓN DE SOCIO
+        // ============================================
+
+        // Manejar envío del formulario de suscripción
+        document.getElementById('socioForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const errorDiv = document.getElementById('socioError');
+            const loadingDiv = document.getElementById('socioLoading');
+            const btnSubmit = document.getElementById('btnProcederSuscripcion');
+
+            // Ocultar errores previos
+            errorDiv.style.display = 'none';
+
+            // Obtener datos del formulario
+            const formData = {
+                name: document.getElementById('nombreSocio').value.trim(),
+                email: document.getElementById('emailSocio').value.trim(),
+                phone: document.getElementById('telefonoSocio').value.trim() || null
+            };
+
+            // Validaciones
+            if (!formData.name) {
+                errorDiv.textContent = 'Por favor, ingresa tu nombre completo';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (!formData.email) {
+                errorDiv.textContent = 'Por favor, ingresa tu email';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                errorDiv.textContent = 'Por favor, ingresa un email válido';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Mostrar loading
+            btnSubmit.disabled = true;
+            loadingDiv.style.display = 'block';
+
+            try {
+                // Llamar al endpoint para crear sesión de suscripción en Stripe
+                const response = await fetch('<?= url('stripe/create-subscription-session.php') ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.url) {
+                    // Redirigir a Stripe Checkout
+                    window.location.href = data.url;
+                } else {
+                    throw new Error(data.error || 'Error al procesar la suscripción');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.textContent = error.message || 'Error al conectar con el servidor. Por favor, inténtalo de nuevo.';
+                errorDiv.style.display = 'block';
+                btnSubmit.disabled = false;
+                loadingDiv.style.display = 'none';
+            }
+        });
+
+        // Limpiar formulario de socio al cerrar modal
+        document.getElementById('socioModal').addEventListener('hidden.bs.modal', function() {
+            document.getElementById('socioForm').reset();
+            document.getElementById('socioError').style.display = 'none';
+            document.getElementById('socioLoading').style.display = 'none';
+            document.getElementById('btnProcederSuscripcion').disabled = false;
+        });
+    </script>
+
+    <!-- Mensajes de éxito/error del formulario de contacto -->
+    <script>
+        // Mostrar mensaje de éxito o error después de enviar el formulario
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const messageDiv = document.getElementById('contactMessage');
+            const contactForm = document.getElementById('contactForm');
+
+            if (urlParams.get('success') === '1') {
+                // Mostrar mensaje de éxito
+                messageDiv.innerHTML = '<strong style="color: #28a745;">✓ ¡Mensaje enviado!</strong><br>Gracias por contactarnos. Te responderemos lo antes posible.';
+                messageDiv.style.display = 'block';
+                messageDiv.style.backgroundColor = '#d4edda';
+                messageDiv.style.borderLeft = '4px solid #28a745';
+                messageDiv.style.color = '#155724';
+
+                // Limpiar el formulario
+                if (contactForm) {
+                    contactForm.reset();
+                }
+
+                // Ocultar el mensaje después de 8 segundos
+                setTimeout(function() {
+                    messageDiv.style.display = 'none';
+                    // Limpiar la URL sin recargar
+                    window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+                }, 8000);
+
+            } else if (urlParams.get('error')) {
+                // Mostrar mensaje de error
+                const errorMsg = urlParams.get('error');
+                let textoError = '✗ Error al enviar el mensaje';
+
+                if (errorMsg === 'error_envio') {
+                    textoError = '✗ Error al enviar el mensaje. Por favor, inténtalo de nuevo o contáctanos por teléfono.';
+                } else if (errorMsg.includes('obligatorio')) {
+                    textoError = '✗ ' + decodeURIComponent(errorMsg);
+                }
+
+                messageDiv.innerHTML = '<strong>' + textoError + '</strong>';
+                messageDiv.style.display = 'block';
+                messageDiv.style.backgroundColor = '#f8d7da';
+                messageDiv.style.borderLeft = '4px solid #dc3545';
+                messageDiv.style.color = '#721c24';
+
+                // Ocultar el mensaje después de 10 segundos
+                setTimeout(function() {
+                    messageDiv.style.display = 'none';
+                    window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+                }, 10000);
+            }
+        });
+    </script>
+
+    <!-- Pre-llenar formulario de contacto desde sección Colabora -->
+    <script>
+        // Manejar clics en botones de Colaboraciones y Voluntariado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mensajes predefinidos
+            const mensajes = {
+                'colaboraciones': 'Buenos días,\n\nMe gustaría recibir información sobre cómo mi empresa puede colaborar con Coordicanarias y apoyar su labor en favor de las personas con discapacidad en Canarias.\n\nQuedo a la espera de su respuesta.\n\nGracias.',
+                'voluntariado': 'Buenos días,\n\nEstoy interesado/a en participar como voluntario/a en Coordicanarias. Me gustaría recibir más información sobre las oportunidades disponibles y cómo puedo colaborar en sus proyectos.\n\nQuedo a la espera de su respuesta.\n\nGracias.'
+            };
+
+            // Obtener todos los botones con data-tipo
+            const botonesContacto = document.querySelectorAll('[data-tipo]');
+
+            botonesContacto.forEach(function(boton) {
+                boton.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevenir comportamiento por defecto
+
+                    const tipo = this.getAttribute('data-tipo');
+                    const textarea = document.getElementById('subject');
+                    const seccionContacto = document.getElementById('contact');
+
+                    if (textarea && mensajes[tipo]) {
+                        // Pre-llenar el mensaje
+                        textarea.value = mensajes[tipo];
+
+                        // Hacer scroll suave a la sección de contacto
+                        seccionContacto.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+
+                        // Después del scroll, hacer focus en el textarea
+                        setTimeout(function() {
+                            textarea.focus();
+                        }, 800);
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 
