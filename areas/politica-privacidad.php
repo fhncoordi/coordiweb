@@ -3,6 +3,7 @@ require_once __DIR__ . '/../php/config.php';
 require_once __DIR__ . '/../php/db/connection.php';
 require_once __DIR__ . '/../php/core/security.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
+require_once __DIR__ . '/../php/form_security_helper.php';
 
 $config = Configuracion::getAll();
 
@@ -184,6 +185,13 @@ if (!function_exists('attr')) {
             }
         }
     </style>
+    <!-- reCAPTCHA v3 -->
+    <?php echo generar_script_recaptcha(); ?>
+
+    <!-- Configuracion para JavaScript -->
+    <script>
+        window.RECAPTCHA_SITE_KEY = '<?php echo obtener_recaptcha_site_key(); ?>';
+    </script>
 </head>
 
 <body id="home" class="sticky-bar menu-standard ">
@@ -934,6 +942,10 @@ if (!function_exists('attr')) {
                             <div class="contact-form">
                                 <form method="post" action="../php/enviar_correo.php" id="contact-form">
                                     <input type="hidden" name="area" value="politica-privacidad">
+                                    <!-- CAMPOS DE SEGURIDAD ANTI-BOT -->
+                                    <?php echo generar_campos_seguridad(); ?>
+                                    <!-- FIN CAMPOS DE SEGURIDAD -->
+
                                     <label for="fname">Nombre:</label>
                                     <input type="text" id="fname" name="txtName" placeholder="Tu nombre y apellidos" title="Nombre" required />
                                     <label for="email">Email:</label>
@@ -1150,6 +1162,9 @@ if (!function_exists('attr')) {
         });
     });
 </script>
+
+    <!-- Script de seguridad de formularios -->
+    <script src="<?= url('../js/form-security.js') ?>"></script>
 
 </body>
 

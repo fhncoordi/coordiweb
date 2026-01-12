@@ -1,0 +1,6 @@
+# Ignorar todos los archivos temporales
+*.json
+*.log
+
+# Mantener el directorio en git
+!.gitignore

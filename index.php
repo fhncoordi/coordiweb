@@ -10,6 +10,7 @@ require_once __DIR__ . '/php/core/security.php';
 require_once __DIR__ . '/php/models/Proyecto.php';
 require_once __DIR__ . '/php/models/Configuracion.php';
 require_once __DIR__ . '/php/models/Noticia.php';
+require_once __DIR__ . '/php/form_security_helper.php';
 
 // Obtener proyectos activos y destacados
 $proyectos = Proyecto::getAll(true); // Solo activos
@@ -83,6 +84,13 @@ $portfolio_ids = [
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link href="css/my.css" rel="stylesheet" type="text/css">
+    <!-- reCAPTCHA v3 -->
+    <?php echo generar_script_recaptcha(); ?>
+
+    <!-- Configuracion para JavaScript -->
+    <script>
+        window.RECAPTCHA_SITE_KEY = '<?php echo obtener_recaptcha_site_key(); ?>';
+    </script>
 </head>
 
 <body id="home" class="sticky-bar menu-standard ">
@@ -1108,6 +1116,10 @@ $portfolio_ids = [
                                 <form action="<?= url('php/enviar_correo.php') ?>" method="POST" id="contactForm">
                                     <!-- Campo oculto para identificar el área -->
                                     <input type="hidden" name="area" value="inicio">
+                                    <!-- CAMPOS DE SEGURIDAD ANTI-BOT -->
+                                    <?php echo generar_campos_seguridad(); ?>
+                                    <!-- FIN CAMPOS DE SEGURIDAD -->
+
 
                                     <label for="fname">Nombre:</label>
                                     <input type="text" id="fname" name="txtName" placeholder="Tu nombre y apellidos" title="FirstName" required />
@@ -1839,6 +1851,9 @@ $portfolio_ids = [
             });
         });
     </script>
+
+    <!-- Script de seguridad de formularios -->
+    <script src="<?= url('js/form-security.js') ?>"></script>
 
 </body>
 
