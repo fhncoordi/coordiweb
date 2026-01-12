@@ -130,9 +130,28 @@ $area = isset($_POST['area']) ? sanitizar_texto($_POST['area']) : 'default';
 // Obtener el email destino según el área
 $email_destino = isset($emails_por_area[$area]) ? $emails_por_area[$area] : $emails_por_area['default'];
 
+// Mapeo de áreas a nombres legibles
+$nombres_areas = [
+    'inicio' => 'Inicio',
+    'empleo' => 'Empleo',
+    'aintegral' => 'Atención Integral',
+    'ocio' => 'Ocio, Participación y Cultura Accesible',
+    'igualdadpm' => 'Igualdad y Promoción de la Mujer con Discapacidad',
+    'forminno' => 'Formación e Innovación',
+    'accesibilidad' => 'Cultura Accesible',
+    'participaca' => 'Participación Ciudadana',
+    'transparencia' => 'Transparencia',
+    'alegal' => 'Asesoramiento Legal',
+    'politica-cookies' => 'Política de Cookies',
+    'politica-privacidad' => 'Política de Privacidad',
+    'default' => 'Contacto'
+];
+
+// Obtener nombre legible del área
+$nombre_area = isset($nombres_areas[$area]) ? $nombres_areas[$area] : ucfirst(str_replace(array('-', '_'), ' ', $area));
+
 // Personalizar el asunto según el área
-$nombre_area = ucfirst(str_replace(array('-', '_'), ' ', $area));
-$asunto = "Nuevo mensaje desde " . $nombre_area . " - Coordicanarias";
+$asunto = "Mensaje desde el formulario de " . $nombre_area . " - Coordicanarias";
 
 // Recoger y sanitizar datos del formulario
 $nombre = isset($_POST['txtName']) ? sanitizar_texto($_POST['txtName']) : '';
@@ -238,16 +257,6 @@ $cuerpo_email = "
             background-color: #f5f5f5;
             border-left: 4px solid #E5A649;
         }
-        .area-badge {
-            display: inline-block;
-            background-color: #E5A649;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
         .security-badge {
             display: inline-block;
             background-color: #28a745;
@@ -275,17 +284,15 @@ $cuerpo_email = "
             <img src='https://coordicanarias.com/images/brand-coordi-white.png' alt='Coordicanarias' />
         </div>
         <div class='content'>
-            <span class='area-badge'>📧 " . strtoupper(htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8')) . "</span>\";
+            <h2 style='color: #E5A649; margin-top: 0;'>Mensaje desde el formulario de " . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8');
 
 // Agregar badge de seguridad si reCAPTCHA está activo
 if (isset(\$resultado_antibot['scores']['recaptcha'])) {
     \$score = \$resultado_antibot['scores']['recaptcha'];
-    \$cuerpo_email .= "<span class='security-badge'>✓ Verificado (Score: " . number_format(\$score, 2) . ")</span>";
+    \$cuerpo_email .= " <span class='security-badge'>✓ Verificado (Score: " . number_format(\$score, 2) . ")</span>";
 }
 
-\$cuerpo_email .= "
-
-            <h2 style='color: #E5A649; margin-top: 0;'>Nuevo mensaje de contacto</h2>
+\$cuerpo_email .= "</h2>
             <div class='field'>
                 <div class='field-label'>Nombre:</div>
                 <div class='field-value'>" . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . "</div>
