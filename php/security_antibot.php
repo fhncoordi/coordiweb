@@ -16,10 +16,22 @@
 // CONFIGURACIÓN
 // ============================================
 
-// reCAPTCHA v3 - Obtener claves en: https://www.google.com/recaptcha/admin
-define('RECAPTCHA_SITE_KEY', ''); // PÚBLICO - Agregar tu clave aquí
-define('RECAPTCHA_SECRET_KEY', ''); // SECRETO - Agregar tu clave aquí
-define('RECAPTCHA_MIN_SCORE', 0.5); // Puntuación mínima (0.0 - 1.0)
+// Importar configuración de reCAPTCHA desde config.php
+// Las claves están en php/config.php (archivo NO versionado en git)
+if (!defined('RECAPTCHA_SITE_KEY')) {
+    require_once __DIR__ . '/config.php';
+}
+
+// Si aún no están definidas (por retrocompatibilidad), usar valores vacíos
+if (!defined('RECAPTCHA_SITE_KEY')) {
+    define('RECAPTCHA_SITE_KEY', ''); // Configurar en php/config.php
+}
+if (!defined('RECAPTCHA_SECRET_KEY')) {
+    define('RECAPTCHA_SECRET_KEY', ''); // Configurar en php/config.php
+}
+if (!defined('RECAPTCHA_MIN_SCORE')) {
+    define('RECAPTCHA_MIN_SCORE', 0.5); // Puntuación mínima por defecto
+}
 
 // Rate Limiting
 define('RATE_LIMIT_MAX_ATTEMPTS', 3); // Máximo de envíos permitidos
