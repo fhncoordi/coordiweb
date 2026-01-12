@@ -23,6 +23,9 @@ yarn-error.log*
 *.tmp
 *.temp
 .cache/
+tmpclaude-*-cwd
+*.backup
+*.backup-*
 
 # Entornos locales (si se agregan en el futuro)
 .env
