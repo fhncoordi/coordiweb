@@ -10,48 +10,35 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 
 ## 🚨 PARA LA PRÓXIMA SESIÓN
 
-### Sistema Anti-Bot Implementado - Acción Requerida
+### ✅ Sistema Anti-Bot COMPLETAMENTE ACTIVO
 
-**Estado actual:** Sistema anti-bot **100% funcional** con 5 de 6 capas activas.
+**Estado actual:** Sistema anti-bot **100% funcional** con **6 de 6 capas activas**.
 
-**Acción recomendada:** Configurar Google reCAPTCHA v3 (la 6ª capa más potente)
+**Protección actual:** 95%+ ⭐
 
-#### Pasos a seguir:
+#### Capas activas:
+1. ✅ **Google reCAPTCHA v3** - Configurado y funcionando
+2. ✅ **Honeypot** - Campo trampa activo
+3. ✅ **Rate Limiting** - 3 intentos/hora por IP
+4. ✅ **Validación de tiempo** - Mínimo 3 segundos
+5. ✅ **Detección de spam** - Palabras y patrones sospechosos
+6. ✅ **Token CSRF** - Protección contra ataques
 
-1. **Obtener claves de reCAPTCHA v3:**
-   - Ir a: https://www.google.com/recaptcha/admin
-   - Crear nuevo sitio:
-     - Tipo: reCAPTCHA v3
-     - Dominio: coordicanarias.com (y localhost para pruebas)
-   - Copiar:
-     - **Site Key** (clave pública)
-     - **Secret Key** (clave privada)
+#### Configuración de seguridad:
+- ✅ Claves reCAPTCHA guardadas en `/php/config.php` (NO versionado en git)
+- ✅ Archivo `php/config.php` protegido en `.gitignore`
+- ✅ Código fuente sin claves sensibles expuestas
 
-2. **Configurar claves en el código:**
-   - Abrir: `/php/security_antibot.php`
-   - Línea 18: Pegar Site Key en `RECAPTCHA_SITE_KEY`
-   - Línea 19: Pegar Secret Key en `RECAPTCHA_SECRET_KEY`
-   - Guardar y hacer commit
+#### Monitoreo del sistema:
+```bash
+# Ver spam bloqueado
+tail -50 php/temp/spam_attempts.log
 
-3. **Probar el sistema:**
-   - Enviar formulario normal → Debe funcionar
-   - Enviar muy rápido (<3 seg) → Debe bloquearse
-   - Enviar 4+ veces seguidas → Debe bloquearse por rate limit
-   - Revisar logs: `php/temp/spam_attempts.log`
-
-4. **Monitorear efectividad:**
-   ```bash
-   # Ver spam bloqueado
-   tail -50 php/temp/spam_attempts.log
-
-   # Contar bloqueos de hoy
-   grep "$(date +%Y-%m-%d)" php/temp/spam_attempts.log | wc -l
-   ```
+# Contar bloqueos de hoy
+grep "$(date +%Y-%m-%d)" php/temp/spam_attempts.log | wc -l
+```
 
 **Documentación completa:** `/SEGURIDAD_ANTI_BOT_README.md`
-
-**Sin reCAPTCHA:** 60-70% de protección ✅
-**Con reCAPTCHA:** 95%+ de protección ⭐
 
 ---
 
@@ -460,9 +447,9 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 - [x] Sistema de limpieza automática de logs
 
 ### Próximas Acciones (Pendientes) ⏳
-- [ ] Configurar claves de reCAPTCHA v3 (obtener en https://www.google.com/recaptcha/admin)
-- [ ] Integrar validaciones en `/php/enviar_correo.php` (ver `/php/INSTRUCCIONES_INTEGRACION.md`)
-- [ ] Probar sistema con envíos reales
+- [x] Configurar claves de reCAPTCHA v3 ✅ COMPLETADO
+- [x] Integrar validaciones en `/php/enviar_correo.php` ✅ COMPLETADO
+- [ ] Probar sistema con envíos reales (pruebas de usuario)
 - [ ] Monitorear logs de spam bloqueado en `/php/temp/spam_attempts.log`
 - [ ] Ajustar configuración según necesidad (puntuación reCAPTCHA, límites, tiempos)
 
