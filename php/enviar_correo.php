@@ -141,8 +141,8 @@ $nombres_areas = [
     'formacion' => 'Formación e Innovación',
     'forminno' => 'Formación e Innovación', // Alias
     'accesibilidad' => 'Cultura Accesible',
-    'participacion' => 'Participación Ciudadana',
-    'participaca' => 'Participación Ciudadana', // Alias
+    'participacion' => 'Participación y Cultura Accesible',
+    'participaca' => 'Participación y Cultura Accesible', // Alias
     'transparencia' => 'Transparencia',
     'alegal' => 'Asesoramiento Legal',
     'politica-cookies' => 'Política de Cookies',
@@ -150,8 +150,29 @@ $nombres_areas = [
     'default' => 'Contacto'
 ];
 
+// Mapeo de iconos por área (emojis compatibles con email)
+$iconos_areas = [
+    'inicio' => '🏠',
+    'empleo' => '💼',
+    'aintegral' => '🤝',
+    'ocio' => '🎨',
+    'igualdad' => '⚖️',
+    'igualdadpm' => '⚖️',
+    'formacion' => '📚',
+    'forminno' => '📚',
+    'accesibilidad' => '♿',
+    'participacion' => '🎭',
+    'participaca' => '🎭',
+    'transparencia' => '📊',
+    'alegal' => '⚖️',
+    'politica-cookies' => '🍪',
+    'politica-privacidad' => '🔒',
+    'default' => '📧'
+];
+
 // Obtener nombre legible del área
 $nombre_area = isset($nombres_areas[$area]) ? $nombres_areas[$area] : ucfirst(str_replace(array('-', '_'), ' ', $area));
+$icono_area = isset($iconos_areas[$area]) ? $iconos_areas[$area] : $iconos_areas['default'];
 
 // Personalizar el asunto según el área
 $asunto = "Mensaje desde el formulario de " . $nombre_area . " - Coordicanarias";
@@ -269,6 +290,24 @@ $cuerpo_email = "
             font-size: 11px;
             margin-left: 10px;
         }
+        .area-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #E5A649;
+        }
+        .area-icon {
+            font-size: 48px;
+            line-height: 1;
+        }
+        .area-title {
+            color: #E5A649;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+        }
 
         .footer {
             background-color: #f9f9f9;
@@ -287,15 +326,20 @@ $cuerpo_email = "
             <img src='https://coordicanarias.com/images/brand-coordi-white.png' alt='Coordicanarias' />
         </div>
         <div class='content'>
-            <h2 style='color: #E5A649; margin-top: 0;'>Mensaje desde el formulario de " . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8');
+            <div class='area-header'>
+                <div class='area-icon'>" . $icono_area . "</div>
+                <div>
+                    <div class='area-title'>" . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . "</div>";
 
 // Agregar badge de seguridad si reCAPTCHA está activo
 if (isset(\$resultado_antibot['scores']['recaptcha'])) {
     \$score = \$resultado_antibot['scores']['recaptcha'];
-    \$cuerpo_email .= " <span class='security-badge'>✓ Verificado (Score: " . number_format(\$score, 2) . ")</span>";
+    \$cuerpo_email .= "<span class='security-badge'>✓ Verificado (Score: " . number_format(\$score, 2) . ")</span>";
 }
 
-\$cuerpo_email .= "</h2>
+\$cuerpo_email .= "
+                </div>
+            </div>
             <div class='field'>
                 <div class='field-label'>Nombre:</div>
                 <div class='field-value'>" . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . "</div>
