@@ -1,10 +1,9 @@
 <?php
 /**
  * Script de envío de correos para formularios de contacto
- * Coordicanarias - 2025
+ * Coordicanarias - 2024
  *
  * Usa PHPMailer con SMTP de Google Workspace
- * INCLUYE PROTECCIÓN ANTI-BOT MULTICAPA
  */
 
 // Incluir PHPMailer
@@ -18,9 +17,6 @@ require 'PHPMailer/SMTP.php';
 // Cargar configuración de SMTP desde archivo externo
 // IMPORTANTE: El archivo config.php contiene credenciales sensibles y NO está en git
 require_once 'config.php';
-
-// Cargar sistema de seguridad anti-bot
-require_once 'security_antibot.php';
 
 // ============================================
 // FUNCIONES DE VALIDACIÓN Y SANITIZACIÓN
@@ -84,46 +80,6 @@ if (!verificar_origen($dominios_permitidos)) {
     exit;
 }
 
-// ============================================
-// VALIDACIONES ANTI-BOT
-// ============================================
-
-// Preparar datos del formulario para validación anti-bot
-$datos_antibot = [
-    'nombre' => $_POST['txtName'] ?? '',
-    'email' => $_POST['txtEmail'] ?? '',
-    'mensaje' => $_POST['txtMsg'] ?? '',
-    'website' => $_POST['website'] ?? '',  // Honeypot
-    'timestamp' => $_POST['form_timestamp'] ?? '',  // Tiempo de carga
-    'csrf_token' => $_POST['csrf_token'] ?? '',  // Token CSRF
-    'recaptcha_token' => $_POST['recaptcha_token'] ?? ''  // reCAPTCHA v3
-];
-
-// Ejecutar todas las validaciones anti-bot
-$resultado_antibot = validar_antibot($datos_antibot);
-
-// Si las validaciones anti-bot fallan, bloquear y registrar
-if (!$resultado_antibot['valido']) {
-    $errores_encoded = urlencode('Mensaje bloqueado por seguridad. Si crees que es un error, contacta por teléfono.');
-
-    // Determinar la página de origen
-    $pagina_origen = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../index.html';
-    $pagina_origen = basename(parse_url($pagina_origen, PHP_URL_PATH));
-
-    // Ajustar ruta si viene de areas/
-    if (strpos($_SERVER['HTTP_REFERER'], '/areas/') !== false) {
-        $pagina_origen = '../areas/' . $pagina_origen;
-    } else {
-        $pagina_origen = '../' . $pagina_origen;
-    }
-
-    // Log detallado del intento bloqueado (para debugging)
-    error_log("Formulario bloqueado por anti-bot: " . json_encode($resultado_antibot));
-
-    header("Location: $pagina_origen?error=" . $errores_encoded . "#contact");
-    exit;
-}
-
 // Detectar el área desde el formulario
 $area = isset($_POST['area']) ? sanitizar_texto($_POST['area']) : 'default';
 
@@ -131,48 +87,27 @@ $area = isset($_POST['area']) ? sanitizar_texto($_POST['area']) : 'default';
 $email_destino = isset($emails_por_area[$area]) ? $emails_por_area[$area] : $emails_por_area['default'];
 
 // Mapeo de áreas a nombres legibles
-$nombres_areas = [
+$nombres_areas = array(
     'inicio' => 'Inicio',
     'empleo' => 'Empleo',
     'aintegral' => 'Atención Integral',
     'ocio' => 'Ocio y Tiempo Libre',
     'igualdad' => 'Igualdad y Promoción de la Mujer con Discapacidad',
-    'igualdadpm' => 'Igualdad y Promoción de la Mujer con Discapacidad', // Alias
+    'igualdadpm' => 'Igualdad y Promoción de la Mujer con Discapacidad',
     'formacion' => 'Formación e Innovación',
-    'forminno' => 'Formación e Innovación', // Alias
+    'forminno' => 'Formación e Innovación',
     'accesibilidad' => 'Cultura Accesible',
     'participacion' => 'Participación y Cultura Accesible',
-    'participaca' => 'Participación y Cultura Accesible', // Alias
+    'participaca' => 'Participación y Cultura Accesible',
     'transparencia' => 'Transparencia',
     'alegal' => 'Asesoramiento Legal',
     'politica-cookies' => 'Política de Cookies',
     'politica-privacidad' => 'Política de Privacidad',
     'default' => 'Contacto'
-];
-
-// Mapeo de iconos por área (emojis compatibles con email)
-$iconos_areas = [
-    'inicio' => '🏠',
-    'empleo' => '💼',
-    'aintegral' => '🤝',
-    'ocio' => '🎨',
-    'igualdad' => '⚖️',
-    'igualdadpm' => '⚖️',
-    'formacion' => '📚',
-    'forminno' => '📚',
-    'accesibilidad' => '♿',
-    'participacion' => '🎭',
-    'participaca' => '🎭',
-    'transparencia' => '📊',
-    'alegal' => '⚖️',
-    'politica-cookies' => '🍪',
-    'politica-privacidad' => '🔒',
-    'default' => '📧'
-];
+);
 
 // Obtener nombre legible del área
 $nombre_area = isset($nombres_areas[$area]) ? $nombres_areas[$area] : ucfirst(str_replace(array('-', '_'), ' ', $area));
-$icono_area = isset($iconos_areas[$area]) ? $iconos_areas[$area] : $iconos_areas['default'];
 
 // Personalizar el asunto según el área
 $asunto = "Mensaje desde el formulario de " . $nombre_area . " - Coordicanarias";
@@ -281,34 +216,14 @@ $cuerpo_email = "
             background-color: #f5f5f5;
             border-left: 4px solid #E5A649;
         }
-        .security-badge {
-            display: inline-block;
-            background-color: #28a745;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            margin-left: 10px;
-        }
-        .area-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #E5A649;
-        }
-        .area-icon {
-            font-size: 48px;
-            line-height: 1;
-        }
         .area-title {
             color: #E5A649;
             font-size: 22px;
             font-weight: 700;
-            margin: 0;
+            margin: 0 0 25px 0;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #E5A649;
         }
-
         .footer {
             background-color: #f9f9f9;
             margin-top: 20px;
@@ -326,12 +241,7 @@ $cuerpo_email = "
             <img src='https://coordicanarias.com/images/brand-coordi-white.png' alt='Coordicanarias' />
         </div>
         <div class='content'>
-            <div class='area-header'>
-                <div class='area-icon'>" . $icono_area . "</div>
-                <div>
-                    <div class='area-title'>" . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . "</div>
-                </div>
-            </div>
+            <div class='area-title'>" . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . "</div>
             <div class='field'>
                 <div class='field-label'>Nombre:</div>
                 <div class='field-value'>" . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . "</div>
@@ -353,8 +263,7 @@ $cuerpo_email = "
                 <a href='mailto:fhn@coordicanarias.com' style='color: #E5A649; text-decoration: none;'>fhn@coordicanarias.com</a>
             </p>
             <p style='font-size: 11px; color: #999; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;'>
-                Email recibido desde formulario de contacto | " . date('d/m/Y H:i:s') . "<br>
-                IP: \" . obtener_ip_cliente() . \"
+                Email recibido desde formulario de contacto | " . date('d/m/Y H:i:s') . "
             </p>
         </div>
     </div>
@@ -371,8 +280,9 @@ if (EMAIL_METHOD === 'smtp' || EMAIL_METHOD === 'smtp_with_fallback') {
         // Crear instancia de PHPMailer
         $mail = new PHPMailer(true);
 
-        // Desactivar modo debug en producción
-        $mail->SMTPDebug = 0; // 0=sin debug, 1=cliente, 2=cliente+servidor, 3=detallado
+        // Activar modo debug (TEMPORAL - quitar después)
+        $mail->SMTPDebug = 3; // 0=sin debug, 1=cliente, 2=cliente+servidor, 3=detallado
+        $mail->Debugoutput = 'html'; // Mostrar en HTML formateado
 
         // Configuración del servidor SMTP
         $mail->isSMTP();
@@ -450,12 +360,6 @@ if (!$email_enviado && (EMAIL_METHOD === 'mail' || EMAIL_METHOD === 'smtp_with_f
 // ============================================
 // REDIRECCIÓN SEGÚN RESULTADO
 // ============================================
-
-
-// Si el email se envió exitosamente, limpiar el rate limiter
-if ($email_enviado) {
-    limpiar_rate_limit_exitoso();
-}
 
 // Determinar la página de origen
 $pagina_origen = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../index.html';
