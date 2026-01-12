@@ -133,7 +133,7 @@ $email_destino = isset($emails_por_area[$area]) ? $emails_por_area[$area] : $ema
 // Mapeo de áreas a nombres legibles
 $nombres_areas = [
     'inicio' => 'Inicio',
-    'empleo' => 'Empleo con Apoyo',
+    'empleo' => 'Empleo',
     'aintegral' => 'Atención Integral',
     'ocio' => 'Ocio y Tiempo Libre',
     'igualdad' => 'Igualdad y Promoción de la Mujer con Discapacidad',
