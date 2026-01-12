@@ -329,15 +329,7 @@ $cuerpo_email = "
             <div class='area-header'>
                 <div class='area-icon'>" . $icono_area . "</div>
                 <div>
-                    <div class='area-title'>" . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . "</div>";
-
-// Agregar badge de seguridad si reCAPTCHA está activo
-if (isset($resultado_antibot['scores']['recaptcha'])) {
-    $score = $resultado_antibot['scores']['recaptcha'];
-    $cuerpo_email .= "<span class='security-badge'>✓ Verificado (Score: " . number_format($score, 2) . ")</span>";
-}
-
-$cuerpo_email .= "
+                    <div class='area-title'>" . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . "</div>
                 </div>
             </div>
             <div class='field'>
