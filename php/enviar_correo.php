@@ -332,12 +332,12 @@ $cuerpo_email = "
                     <div class='area-title'>" . htmlspecialchars($nombre_area, ENT_QUOTES, 'UTF-8') . "</div>";
 
 // Agregar badge de seguridad si reCAPTCHA está activo
-if (isset(\$resultado_antibot['scores']['recaptcha'])) {
-    \$score = \$resultado_antibot['scores']['recaptcha'];
-    \$cuerpo_email .= "<span class='security-badge'>✓ Verificado (Score: " . number_format(\$score, 2) . ")</span>";
+if (isset($resultado_antibot['scores']['recaptcha'])) {
+    $score = $resultado_antibot['scores']['recaptcha'];
+    $cuerpo_email .= "<span class='security-badge'>✓ Verificado (Score: " . number_format($score, 2) . ")</span>";
 }
 
-\$cuerpo_email .= "
+$cuerpo_email .= "
                 </div>
             </div>
             <div class='field'>
@@ -380,7 +380,7 @@ if (EMAIL_METHOD === 'smtp' || EMAIL_METHOD === 'smtp_with_fallback') {
         $mail = new PHPMailer(true);
 
         // Desactivar modo debug en producción
-        \$mail->SMTPDebug = 0; // 0=sin debug, 1=cliente, 2=cliente+servidor, 3=detallado
+        $mail->SMTPDebug = 0; // 0=sin debug, 1=cliente, 2=cliente+servidor, 3=detallado
 
         // Configuración del servidor SMTP
         $mail->isSMTP();
@@ -461,7 +461,7 @@ if (!$email_enviado && (EMAIL_METHOD === 'mail' || EMAIL_METHOD === 'smtp_with_f
 
 
 // Si el email se envió exitosamente, limpiar el rate limiter
-if (\$email_enviado) {
+if ($email_enviado) {
     limpiar_rate_limit_exitoso();
 }
 
