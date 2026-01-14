@@ -6,6 +6,11 @@
  * Genera los campos ocultos necesarios para las validaciones anti-bot
  */
 
+// Iniciar sesión ANTES de cualquier otra cosa
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/security_antibot.php';
 
 /**

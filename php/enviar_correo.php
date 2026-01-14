@@ -6,6 +6,11 @@
  * Usa PHPMailer con SMTP de Google Workspace
  */
 
+// Iniciar sesión ANTES de cualquier otra cosa (necesario para validar CSRF token)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Incluir PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
