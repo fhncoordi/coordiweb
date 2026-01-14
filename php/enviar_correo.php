@@ -18,6 +18,9 @@ require 'PHPMailer/SMTP.php';
 // IMPORTANTE: El archivo config.php contiene credenciales sensibles y NO está en git
 require_once 'config.php';
 
+// Cargar sistema de seguridad anti-bot
+require_once 'security_antibot.php';
+
 // ============================================
 // FUNCIONES DE VALIDACIÓN Y SANITIZACIÓN
 // ============================================
@@ -159,6 +162,48 @@ if (!empty($errores)) {
 }
 
 // ============================================
+// VALIDACIONES ANTI-BOT (6 CAPAS)
+// ============================================
+
+// Preparar datos del formulario para las validaciones anti-bot
+$datos_formulario = [
+    'nombre' => $nombre,
+    'email' => $email,
+    'mensaje' => $mensaje,
+    'website' => isset($_POST['website']) ? $_POST['website'] : '',
+    'timestamp' => isset($_POST['form_timestamp']) ? $_POST['form_timestamp'] : '',
+    'csrf_token' => isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '',
+    'recaptcha_token' => isset($_POST['recaptcha_token']) ? $_POST['recaptcha_token'] : ''
+];
+
+// Ejecutar todas las validaciones anti-bot
+$resultado_antibot = validar_antibot($datos_formulario);
+
+// Si las validaciones fallan, bloquear el envío
+if (!$resultado_antibot['valido']) {
+    // Registrar el intento bloqueado (ya se hace automáticamente en security_antibot.php)
+
+    // Preparar mensaje de error para el usuario
+    $error_mensaje = "Error de seguridad: " . implode(", ", $resultado_antibot['errores']);
+    $error_encoded = urlencode($error_mensaje);
+
+    // Determinar la página de origen
+    $pagina_origen = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../index.html';
+    $pagina_origen = basename(parse_url($pagina_origen, PHP_URL_PATH));
+
+    // Ajustar ruta si viene de areas/
+    if (strpos($_SERVER['HTTP_REFERER'], '/areas/') !== false) {
+        $pagina_origen = '../areas/' . $pagina_origen;
+    } else {
+        $pagina_origen = '../' . $pagina_origen;
+    }
+
+    // Redirigir con mensaje de error
+    header("Location: $pagina_origen?error=" . $error_encoded . "#contact");
+    exit;
+}
+
+// ============================================
 // PREPARAR Y ENVIAR EL EMAIL CON PHPMAILER
 // ============================================
 
@@ -265,6 +310,9 @@ $cuerpo_email = "
             <p style='font-size: 11px; color: #999; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;'>
                 Email recibido desde formulario de contacto | " . date('d/m/Y H:i:s') . "
             </p>
+            <p style='font-size: 10px; color: #28a745; margin-top: 10px;'>
+                ✓ Validado por sistema anti-bot (6 capas de seguridad)
+            </p>
         </div>
     </div>
 </body>
@@ -317,6 +365,9 @@ if (EMAIL_METHOD === 'smtp' || EMAIL_METHOD === 'smtp_with_fallback') {
         $email_enviado = true;
         $metodo_usado = 'SMTP';
 
+        // Limpiar rate limit tras envío exitoso (resetear contador para esta IP)
+        limpiar_rate_limit_exitoso();
+
     } catch (Exception $e) {
         // Si falla SMTP y está configurado el fallback, intentar con mail()
         if (EMAIL_METHOD === 'smtp_with_fallback') {
@@ -352,6 +403,9 @@ if (!$email_enviado && (EMAIL_METHOD === 'mail' || EMAIL_METHOD === 'smtp_with_f
     if ($email_enviado) {
         $metodo_usado = 'mail()';
         error_log("Email enviado correctamente usando mail() nativa de PHP");
+
+        // Limpiar rate limit tras envío exitoso (resetear contador para esta IP)
+        limpiar_rate_limit_exitoso();
     } else {
         error_log("Error: No se pudo enviar el email ni con SMTP ni con mail()");
     }
