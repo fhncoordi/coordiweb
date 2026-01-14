@@ -362,16 +362,8 @@ jQuery(document).ready(function() {
     // ========================================
     // LECTOR DE VOZ (Speech Synthesis API)
     // ========================================
-    // TEMPORALMENTE DESACTIVADO - Pendiente de arreglar después de mover de /new a /
 
     let btn_screen_reader = jQuery('.lab-screen-reader');
-
-    // Ocultar el botón del lector de voz hasta que se arregle
-    btn_screen_reader.hide();
-
-    /*
-    // CÓDIGO COMENTADO TEMPORALMENTE
-
     let speechSynthesis = window.speechSynthesis;
     let isScreenReaderActive = false;
 
@@ -398,6 +390,8 @@ jQuery(document).ready(function() {
             utterance.pitch = 1.0; // Tono normal
             utterance.volume = 1.0; // Volumen máximo
 
+            // Fix para Chrome: Resume antes de hablar (política de activación de usuario)
+            speechSynthesis.resume();
             speechSynthesis.speak(utterance);
         }
 
@@ -456,9 +450,9 @@ jQuery(document).ready(function() {
             return text;
         }
 
-        // Elementos interactivos a los que aplicar el lector de voz
-        // Nota: Limitamos a elementos interactivos principales para evitar sobrecarga
-        let interactiveElements = 'a, button, input, select, textarea, [role="button"], [role="link"], h1, h2, h3, .lab-button, .btn';
+        // Elementos a los que aplicar el lector de voz
+        // Incluye elementos interactivos y elementos de texto (párrafos, listas, etc.)
+        let interactiveElements = 'a, button, input, select, textarea, [role="button"], [role="link"], h1, h2, h3, h4, h5, h6, p, li, td, th, blockquote, .lab-button, .btn';
 
         // Event delegation para hover en elementos interactivos
         jQuery(document).on('mouseenter focusin', interactiveElements, function() {
@@ -489,7 +483,6 @@ jQuery(document).ready(function() {
         btn_screen_reader.hide();
         console.warn('Este navegador no soporta la API de síntesis de voz');
     }
-    */
 
     // Indicadores visuales: marcar botones activos según cookies
     function updateActiveIndicators() {
