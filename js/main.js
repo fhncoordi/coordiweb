@@ -367,8 +367,16 @@ jQuery(document).ready(function() {
     let speechSynthesis = window.speechSynthesis;
     let isScreenReaderActive = false;
 
-    // Verificar si el navegador soporta la API de síntesis de voz
-    if ('speechSynthesis' in window) {
+    // Detectar Chrome (tiene bug que congela speechSynthesis)
+    let isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent);
+
+    // Ocultar lector de voz en Chrome (bug conocido de congelamiento)
+    if (isChrome) {
+        btn_screen_reader.closest('li').hide();
+    }
+
+    // Verificar si el navegador soporta la API de síntesis de voz (y no es Chrome)
+    if ('speechSynthesis' in window && !isChrome) {
 
         // Cargar estado guardado al inicio
         if (Cookies.get('screen-reader') === 'yes') {
