@@ -10,6 +10,31 @@ Plan de implementación del sistema de administración de contenido con MySQL + 
 
 ## 🚨 PARA LA PRÓXIMA SESIÓN
 
+### ✅ Panel de Accesibilidad - Actualización 14 Enero 2026
+
+#### Lector de Voz (Speech Synthesis API)
+- ✅ **Firefox/Safari:** Funciona correctamente
+- ⚠️ **Chrome:** Deshabilitado (bug conocido de congelamiento de speechSynthesis)
+  - Chrome congela la API después de inactividad
+  - Solución temporal: `pkill -9 "Google Chrome"` y reabrir
+  - Decisión: Ocultar el botón en Chrome hasta que Google lo solucione
+
+#### Mejoras de Accesibilidad Implementadas
+- ✅ **aria-labels descriptivos** en todos los botones del panel:
+  - Alto Contraste: "aumenta el contraste entre texto y fondo..."
+  - Fuentes: explican para qué discapacidad están diseñadas
+  - Ajustes: describen qué hace cada función
+- ✅ **Lector de voz mejorado:** Lee los aria-labels completos, no solo el nombre
+
+#### Refactorización del Panel
+- ✅ **Componente reutilizable:** `php/components/panel-accesibilidad.php`
+- ✅ **12 páginas actualizadas** para usar el componente (include)
+- ✅ **Mantenimiento simplificado:** Cambios en un archivo se aplican a todo el sitio
+
+**Documentación:** `/LECTOR_VOZ_IMPLEMENTACION.md`
+
+---
+
 ### ✅ Sistema Anti-Bot COMPLETAMENTE ACTIVO
 
 **Estado actual:** Sistema anti-bot **100% funcional** con **6 de 6 capas activas**.

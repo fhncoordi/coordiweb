@@ -427,13 +427,20 @@ jQuery(document).ready(function() {
         function getReadableText(element) {
             let text = '';
 
-            // Prioridad 1: aria-label
+            // Prioridad 1: aria-label (del elemento o de su padre button/a más cercano)
             if (element.attr('aria-label')) {
                 text = element.attr('aria-label');
+            }
+            // Buscar aria-label en padre button o a (para elementos con display:contents)
+            else if (element.closest('button, a').attr('aria-label')) {
+                text = element.closest('button, a').attr('aria-label');
             }
             // Prioridad 2: title
             else if (element.attr('title')) {
                 text = element.attr('title');
+            }
+            else if (element.closest('button, a').attr('title')) {
+                text = element.closest('button, a').attr('title');
             }
             // Prioridad 3: alt (para imágenes)
             else if (element.attr('alt')) {
@@ -469,6 +476,21 @@ jQuery(document).ready(function() {
 
                 // Evitar leer el botón del lector de voz mismo
                 if ($element.hasClass('lab-screen-reader')) {
+                    return;
+                }
+
+                // Para elementos dentro del panel de accesibilidad: solo leer botones directamente
+                if ($element.closest('.lab-wcag-settings').length > 0) {
+                    // Si es un botón, leer su aria-label
+                    if ($element.is('button') && $element.attr('aria-label')) {
+                        speakText($element.attr('aria-label'));
+                    }
+                    // Si no es un botón, ignorar (evita leer spans, li, etc.)
+                    return;
+                }
+
+                // Evitar leer <li> que son contenedores (tienen <ul> dentro)
+                if ($element.is('li') && $element.find('ul').length > 0) {
                     return;
                 }
 
