@@ -797,6 +797,25 @@ $portfolio_ids = [
                         </div>
                     </div>
 
+                    <!-- Advertencia Modo TEST -->
+                    <div class="row" style="margin-bottom: 30px;">
+                        <div class="col-12">
+                            <div class="alert alert-warning" role="alert" style="border-left: 4px solid #ffc107; background-color: #fff3cd; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="font-size: 40px; line-height: 1;">⚠️</div>
+                                    <div>
+                                        <h4 style="color: #856404; margin: 0 0 10px 0; font-weight: 700;">🚧 Sistema en Modo de Pruebas</h4>
+                                        <p style="margin: 0; color: #856404; line-height: 1.6;">
+                                            <strong>Las donaciones y suscripciones están actualmente en entorno de prueba.</strong><br>
+                                            Puedes probar el sistema usando <strong>tarjetas de prueba de Stripe</strong>, pero no se procesarán cargos reales.<br>
+                                            <small>📝 <em>Tarjeta de prueba: 4242 4242 4242 4242 | Cualquier fecha futura | Cualquier CVV</em></small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Pricing table -->
                     <ul class="pricing-table pricing-col-4">
                         <li>
@@ -1239,9 +1258,12 @@ $portfolio_ids = [
     <div class="modal fade" id="donacionModal" tabindex="-1" aria-labelledby="donacionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                    <h3 class="modal-title" id="donacionModalLabel">Hacer una Donación</h3>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <div class="modal-header" style="background: linear-gradient(135deg, #E5A649 0%, #d89a3a 100%); color: white; padding: 25px 20px;">
+                    <div style="width: 100%; text-align: center;">
+                        <img src="images/brand-coordi-white.png" alt="Coordicanarias" style="max-width: 200px; height: auto; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
+                        <h3 class="modal-title" id="donacionModalLabel" style="margin: 0;">Hacer una Donación</h3>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar" style="position: absolute; right: 20px; top: 20px;"></button>
                 </div>
                 <div class="modal-body" style="padding: 30px;">
                     <p class="text-center mb-4">
@@ -1321,7 +1343,7 @@ $portfolio_ids = [
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" form="donacionForm" class="btn btn-primary" id="btnProcederPago"
-                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                            style="background: linear-gradient(135deg, #E5A649 0%, #d89a3a 100%); border: none; font-weight: 600;">
                         Proceder al pago
                     </button>
                 </div>
@@ -1334,13 +1356,16 @@ $portfolio_ids = [
     <div class="modal fade" id="socioModal" tabindex="-1" aria-labelledby="socioModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                    <h3 class="modal-title" id="socioModalLabel">Hacerte Socio de Coordicanarias</h3>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <div class="modal-header" style="background: linear-gradient(135deg, #E5A649 0%, #d89a3a 100%); color: white; padding: 25px 20px;">
+                    <div style="width: 100%; text-align: center;">
+                        <img src="images/brand-coordi-white.png" alt="Coordicanarias" style="max-width: 200px; height: auto; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
+                        <h3 class="modal-title" id="socioModalLabel" style="margin: 0;">Hacerte Socio de Coordicanarias</h3>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar" style="position: absolute; right: 20px; top: 20px;"></button>
                 </div>
                 <div class="modal-body" style="padding: 30px;">
                     <div style="text-align: center; margin-bottom: 30px;">
-                        <div style="font-size: 48px; color: #667eea; font-weight: bold;">5 €</div>
+                        <div style="font-size: 48px; color: #E5A649; font-weight: bold;">5 €</div>
                         <div style="font-size: 18px; color: #666; margin-top: 5px;">al mes</div>
                     </div>
 
@@ -1405,7 +1430,7 @@ $portfolio_ids = [
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" form="socioForm" class="btn btn-primary" id="btnProcederSuscripcion"
-                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                            style="background: linear-gradient(135deg, #E5A649 0%, #d89a3a 100%); border: none; font-weight: 600;">
                         Continuar al pago
                     </button>
                 </div>

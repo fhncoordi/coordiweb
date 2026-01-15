@@ -55,7 +55,8 @@ $stats = fetchOne("
         SUM(CASE WHEN estado = 'active' THEN 1 ELSE 0 END) as activos,
         SUM(CASE WHEN estado IN ('active', 'trialing') THEN 1 ELSE 0 END) * 5 as ingresos_mensuales,
         SUM(CASE WHEN estado = 'canceled' THEN 1 ELSE 0 END) as cancelados,
-        SUM(CASE WHEN estado = 'past_due' THEN 1 ELSE 0 END) as con_problemas
+        SUM(CASE WHEN estado = 'past_due' THEN 1 ELSE 0 END) as con_problemas,
+        SUM(CASE WHEN cancelar_al_final_periodo = 1 AND estado = 'active' THEN 1 ELSE 0 END) as cancelaciones_programadas
     FROM socios
     $whereClause
 ", $params);
@@ -86,7 +87,7 @@ include __DIR__ . '/includes/sidebar.php';
 
     <!-- Estadísticas -->
     <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-3 col-lg-2">
             <div class="stat-card primary">
                 <div class="stat-card-header">
                     <div>
@@ -101,7 +102,7 @@ include __DIR__ . '/includes/sidebar.php';
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 col-lg-2">
             <div class="stat-card success">
                 <div class="stat-card-header">
                     <div>
@@ -116,7 +117,7 @@ include __DIR__ . '/includes/sidebar.php';
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 col-lg-2">
             <div class="stat-card info">
                 <div class="stat-card-header">
                     <div>
@@ -131,7 +132,7 @@ include __DIR__ . '/includes/sidebar.php';
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 col-lg-2">
             <div class="stat-card warning">
                 <div class="stat-card-header">
                     <div>
@@ -145,6 +146,23 @@ include __DIR__ . '/includes/sidebar.php';
                 <div class="stat-card-label">Pagos fallidos</div>
             </div>
         </div>
+
+        <?php if ($stats['cancelaciones_programadas'] > 0): ?>
+        <div class="col-md-3 col-lg-2">
+            <div class="stat-card" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); color: white;">
+                <div class="stat-card-header">
+                    <div>
+                        <div class="stat-card-title">Cancelaciones</div>
+                    </div>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-card-value"><?= $stats['cancelaciones_programadas'] ?></div>
+                <div class="stat-card-label">Programadas</div>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 
     <!-- Filtros -->
@@ -240,23 +258,33 @@ include __DIR__ . '/includes/sidebar.php';
                         </td>
                         <td>
                             <?php
-                            $badgeClass = [
-                                'active' => 'bg-success',
-                                'trialing' => 'bg-info',
-                                'past_due' => 'bg-warning',
-                                'canceled' => 'bg-danger',
-                                'incomplete' => 'bg-secondary',
-                                'unpaid' => 'bg-secondary'
-                            ][$socio['estado']] ?? 'bg-secondary';
+                            // Verificar si está programada para cancelarse
+                            $cancelarAlFinal = isset($socio['cancelar_al_final_periodo']) && $socio['cancelar_al_final_periodo'] == 1;
 
-                            $estadoTexto = [
-                                'active' => 'Activo',
-                                'trialing' => 'En Prueba',
-                                'past_due' => 'Pago Vencido',
-                                'canceled' => 'Cancelado',
-                                'incomplete' => 'Incompleto',
-                                'unpaid' => 'Impagado'
-                            ][$socio['estado']] ?? $socio['estado'];
+                            if ($cancelarAlFinal && $socio['estado'] === 'active') {
+                                // Suscripción activa pero programada para cancelarse
+                                $badgeClass = 'bg-warning';
+                                $estadoTexto = 'Cancelación Programada';
+                            } else {
+                                // Estado normal
+                                $badgeClass = [
+                                    'active' => 'bg-success',
+                                    'trialing' => 'bg-info',
+                                    'past_due' => 'bg-warning',
+                                    'canceled' => 'bg-danger',
+                                    'incomplete' => 'bg-secondary',
+                                    'unpaid' => 'bg-secondary'
+                                ][$socio['estado']] ?? 'bg-secondary';
+
+                                $estadoTexto = [
+                                    'active' => 'Activo',
+                                    'trialing' => 'En Prueba',
+                                    'past_due' => 'Pago Vencido',
+                                    'canceled' => 'Cancelado',
+                                    'incomplete' => 'Incompleto',
+                                    'unpaid' => 'Impagado'
+                                ][$socio['estado']] ?? $socio['estado'];
+                            }
                             ?>
                             <span class="badge <?= $badgeClass ?>"><?= $estadoTexto ?></span>
                         </td>
@@ -269,7 +297,12 @@ include __DIR__ . '/includes/sidebar.php';
                                 $timestamp = strtotime($socio['fecha_proximo_cobro']);
                                 // Verificar que el timestamp sea válido (después del 1 de enero de 2020)
                                 if ($timestamp && $timestamp > strtotime('2020-01-01')) {
-                                    echo date('d/m/Y', $timestamp);
+                                    // Si está programada para cancelarse, mostrar de forma diferente
+                                    if ($cancelarAlFinal) {
+                                        echo '<span class="text-warning fw-bold">⚠️ Cancelación: ' . date('d/m/Y', $timestamp) . '</span>';
+                                    } else {
+                                        echo date('d/m/Y', $timestamp);
+                                    }
                                 } else {
                                     echo '<span class="text-muted">Consultar Stripe</span>';
                                 }

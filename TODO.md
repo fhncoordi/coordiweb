@@ -1,4 +1,4 @@
-# TODO - Sistema CMS Coordicanarias
+# git puTODO - Sistema CMS Coordicanarias
 
 Plan de implementación del sistema de administración de contenido con MySQL + PHP puro.
 

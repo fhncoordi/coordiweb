@@ -333,21 +333,38 @@ switch ($event->type) {
             // Calcular fecha del próximo cobro
             $fechaProximoCobro = $periodEnd ? date('Y-m-d', $periodEnd) : null;
 
+            // Verificar si está programada para cancelarse
+            // Stripe puede usar dos campos diferentes:
+            // 1. cancel_at_period_end (boolean) - Método antiguo
+            // 2. cancel_at (timestamp) - Método moderno
+            $cancelarAlFinal = 0;
+
+            if (isset($subscription->cancel_at_period_end) && $subscription->cancel_at_period_end) {
+                $cancelarAlFinal = 1;
+                error_log("DEBUG subscription.updated - Cancelación detectada vía cancel_at_period_end");
+            } elseif (isset($subscription->cancel_at) && $subscription->cancel_at !== null) {
+                $cancelarAlFinal = 1;
+                error_log("DEBUG subscription.updated - Cancelación detectada vía cancel_at: " . date('Y-m-d H:i:s', $subscription->cancel_at));
+            }
+
             error_log("DEBUG subscription.updated - current_period_end: " . ($periodEnd ?? 'NULL'));
             error_log("DEBUG subscription.updated - fecha calculada: " . ($fechaProximoCobro ?? 'NULL'));
+            error_log("DEBUG subscription.updated - cancelar_al_final_periodo: " . ($cancelarAlFinal ? '1' : '0'));
 
             execute("
                 UPDATE socios
                 SET estado = ?,
-                    fecha_proximo_cobro = ?
+                    fecha_proximo_cobro = ?,
+                    cancelar_al_final_periodo = ?
                 WHERE stripe_subscription_id = ?
             ", [
                 $subscription->status,
                 $fechaProximoCobro,
+                $cancelarAlFinal,
                 $subscription->id
             ]);
 
-            error_log("Suscripción actualizada: {$subscription->id} - Nuevo estado: {$subscription->status}");
+            error_log("Suscripción actualizada: {$subscription->id} - Estado: {$subscription->status} - Cancelar al final: " . ($cancelarAlFinal ? 'Sí' : 'No'));
         } catch (Exception $e) {
             error_log("Error actualizando suscripción: " . $e->getMessage());
         }
@@ -363,7 +380,8 @@ switch ($event->type) {
                 UPDATE socios
                 SET estado = 'canceled',
                     fecha_cancelacion = NOW(),
-                    motivo_cancelacion = 'usuario'
+                    motivo_cancelacion = 'usuario',
+                    cancelar_al_final_periodo = 0
                 WHERE stripe_subscription_id = ?
             ", [$subscription->id]);
 

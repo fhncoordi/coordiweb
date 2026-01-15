@@ -177,7 +177,7 @@ function enviarEmailConfirmacionDonacion($donacion) {
 
         ' . ($donacion['stripe_payment_intent_id'] ? '
         <p style="text-align: center;">
-            <a href="https://dashboard.stripe.com/test/payments/' . htmlspecialchars($donacion['stripe_payment_intent_id']) . '" class="button">
+            <a href="https://coordicanarias.com/stripe/recibo-donacion.php?pi=' . urlencode($donacion['stripe_payment_intent_id']) . '" class="button">
                 Ver Recibo Completo
             </a>
         </p>

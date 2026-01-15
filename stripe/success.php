@@ -59,19 +59,20 @@ if ($session_id) {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
         }
         .success-card {
             background: white;
             border-radius: 20px;
             padding: 50px;
-            max-width: 600px;
+            max-width: 700px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
         .success-icon {
             font-size: 80px;
-            color: #28a745;
+            color: #E5A649;
             margin-bottom: 20px;
         }
         .success-title {
@@ -102,7 +103,7 @@ if ($session_id) {
             border-bottom: none;
         }
         .btn-home {
-            background: #667eea;
+            background: linear-gradient(135deg, #E5A649 0%, #d89a3a 100%);
             color: white;
             padding: 15px 40px;
             border-radius: 50px;
@@ -110,10 +111,67 @@ if ($session_id) {
             display: inline-block;
             margin-top: 20px;
             font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .btn-home:hover {
-            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(229, 166, 73, 0.4);
             color: white;
+        }
+        .btn-print {
+            display: inline-block;
+            padding: 10px 25px;
+            background: white;
+            color: #E5A649;
+            border: 2px solid #E5A649;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn-print:hover {
+            background: #E5A649;
+            color: white;
+        }
+        .header-recibo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #E5A649;
+        }
+        .header-recibo img {
+            max-width: 200px;
+            margin-bottom: 15px;
+        }
+        .header-recibo h1 {
+            color: #E5A649;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+        }
+        .header-recibo p {
+            color: #666;
+            font-size: 13px;
+            margin: 0;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .success-container {
+                background: white;
+                padding: 0;
+            }
+            .success-card {
+                box-shadow: none;
+                padding: 20px;
+            }
+            .btn-print, .btn-home {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -121,10 +179,16 @@ if ($session_id) {
     <div class="success-container">
         <div class="success-card">
             <?php if ($donacion && $donacion['estado'] === 'completed'): ?>
+                <div class="header-recibo">
+                    <img src="<?= url('images/logo-coordi.png') ?>" alt="Coordicanarias" onerror="this.style.display='none'">
+                    <h1>Recibo de Donación</h1>
+                    <p>Coordinadora de Personas con Discapacidad Física de Canarias</p>
+                </div>
+
                 <div class="success-icon">✓</div>
-                <h1 class="success-title">¡Pago Completado!</h1>
+                <h2 class="success-title" style="font-size: 24px;">¡Pago Completado!</h2>
                 <p class="success-message">
-                    Gracias <?= htmlspecialchars($donacion['nombre']) ?> por tu generosa donación.<br>
+                    Gracias <strong><?= htmlspecialchars($donacion['nombre']) ?></strong> por tu generosa donación.<br>
                     Tu apoyo nos ayuda a continuar nuestra labor.
                 </p>
 
@@ -143,13 +207,19 @@ if ($session_id) {
                     </div>
                     <div class="detail-row">
                         <strong>ID de transacción:</strong>
-                        <span style="font-size: 12px;"><?= htmlspecialchars($donacion['stripe_session_id']) ?></span>
+                        <span style="font-size: 12px; word-break: break-all; display: block; margin-top: 5px;"><?= htmlspecialchars($donacion['stripe_session_id']) ?></span>
                     </div>
                 </div>
 
                 <p style="font-size: 14px; color: #999;">
                     Recibirás un email de confirmación en breve.
                 </p>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button onclick="window.print()" class="btn-print">
+                        🖨️ Imprimir Recibo
+                    </button>
+                </div>
 
             <?php else: ?>
                 <div class="success-icon" style="color: #ffc107;">⚠</div>

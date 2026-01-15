@@ -84,6 +84,8 @@ if ($email) {
         .info-value {
             color: #333;
             font-weight: 600;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
         .badge-estado {
             padding: 5px 12px;
@@ -104,7 +106,7 @@ if ($email) {
             color: #721c24;
         }
         .btn-primary-custom {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #E5A649 0%, #d89a3a 100%);
             border: none;
             color: white;
             padding: 15px 40px;
@@ -119,7 +121,7 @@ if ($email) {
         }
         .btn-primary-custom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(229, 166, 73, 0.4);
             color: white;
         }
         .btn-danger-custom {
@@ -148,11 +150,41 @@ if ($email) {
         .search-box input {
             padding: 15px 20px;
             border-radius: 50px;
-            border: 2px solid #667eea;
+            border: 2px solid #E5A649;
             font-size: 16px;
             width: 100%;
             max-width: 400px;
             text-align: center;
+        }
+        .btn-print {
+            display: inline-block;
+            padding: 10px 25px;
+            background: white;
+            color: #E5A649;
+            border: 2px solid #E5A649;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn-print:hover {
+            background: #E5A649;
+            color: white;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .portal-container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            .btn-print, .btn-primary-custom, .btn-danger-custom {
+                display: none;
+            }
         }
         .error-box {
             background: #f8d7da;
@@ -161,6 +193,27 @@ if ($email) {
             border-radius: 10px;
             border-left: 4px solid #dc3545;
             margin: 20px 0;
+        }
+        .header-recibo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #E5A649;
+        }
+        .header-recibo img {
+            max-width: 200px;
+            margin-bottom: 15px;
+        }
+        .header-recibo h1 {
+            color: #E5A649;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+        }
+        .header-recibo p {
+            color: #666;
+            font-size: 13px;
+            margin: 0;
         }
     </style>
 </head>
@@ -182,7 +235,7 @@ if ($email) {
             </div>
 
             <div style="text-align: center; margin-top: 40px;">
-                <a href="<?= url('index.php') ?>" style="color: #667eea; text-decoration: none;">
+                <a href="<?= url('index.php') ?>" style="color: #E5A649; text-decoration: none;">
                     ← Volver al inicio
                 </a>
             </div>
@@ -207,23 +260,39 @@ if ($email) {
 
         <?php else: ?>
             <!-- Panel de gestión del socio -->
-            <h1>Mi Suscripción</h1>
-            <p class="subtitle">Hola, <strong><?= htmlspecialchars($socio['nombre']) ?></strong></p>
+            <div class="header-recibo">
+                <img src="<?= url('images/logo-coordi.png') ?>" alt="Coordicanarias" onerror="this.style.display='none'">
+                <h1>Certificado de Socio</h1>
+                <p>Coordinadora de Personas con Discapacidad Física de Canarias</p>
+            </div>
+
+            <p class="subtitle" style="text-align: center; margin-bottom: 30px;">
+                Hola, <strong><?= htmlspecialchars($socio['nombre']) ?></strong>
+            </p>
 
             <div class="info-box">
                 <div class="info-item">
                     <span class="info-label">Estado:</span>
                     <span class="info-value">
                         <?php
-                        $estados = [
-                            'active' => '<span class="badge-estado badge-active">✓ Activa</span>',
-                            'trialing' => '<span class="badge-estado badge-active">🎁 En período de prueba</span>',
-                            'past_due' => '<span class="badge-estado badge-past_due">⚠️ Pago pendiente</span>',
-                            'canceled' => '<span class="badge-estado badge-canceled">✗ Cancelada</span>',
-                            'incomplete' => '<span class="badge-estado badge-past_due">⏳ Procesando...</span>',
-                            'unpaid' => '<span class="badge-estado badge-canceled">✗ Impagada</span>',
-                        ];
-                        echo $estados[$socio['estado']] ?? $socio['estado'];
+                        // Verificar si está programada para cancelarse
+                        $cancelarAlFinal = isset($socio['cancelar_al_final_periodo']) && $socio['cancelar_al_final_periodo'] == 1;
+
+                        if ($cancelarAlFinal && $socio['estado'] === 'active') {
+                            // Suscripción activa pero programada para cancelarse
+                            echo '<span class="badge-estado badge-past_due">⏳ Se cancelará el ' . date('d/m/Y', strtotime($socio['fecha_proximo_cobro'])) . '</span>';
+                        } else {
+                            // Estado normal
+                            $estados = [
+                                'active' => '<span class="badge-estado badge-active">✓ Activa</span>',
+                                'trialing' => '<span class="badge-estado badge-active">🎁 En período de prueba</span>',
+                                'past_due' => '<span class="badge-estado badge-past_due">⚠️ Pago pendiente</span>',
+                                'canceled' => '<span class="badge-estado badge-canceled">✗ Cancelada</span>',
+                                'incomplete' => '<span class="badge-estado badge-past_due">⏳ Procesando...</span>',
+                                'unpaid' => '<span class="badge-estado badge-canceled">✗ Impagada</span>',
+                            ];
+                            echo $estados[$socio['estado']] ?? $socio['estado'];
+                        }
                         ?>
                     </span>
                 </div>
@@ -251,15 +320,34 @@ if ($email) {
 
             <?php if ($socio['estado'] === 'active' || $socio['estado'] === 'trialing' || $socio['estado'] === 'past_due'): ?>
                 <!-- Suscripción activa - Mostrar opciones de gestión -->
-                <div style="background: #e7f3ff; border-radius: 10px; padding: 20px; margin: 20px 0;">
-                    <h5 style="color: #014361; margin-bottom: 10px;">Gestionar Suscripción</h5>
-                    <p style="margin: 0; color: #014361; font-size: 15px;">
-                        Puedes actualizar tu método de pago, ver facturas o cancelar tu suscripción
-                        usando el portal de Stripe.
-                    </p>
+
+                <?php if ($cancelarAlFinal): ?>
+                    <!-- Mensaje especial cuando está programada para cancelarse -->
+                    <div style="background: #fff3cd; border-radius: 10px; padding: 20px; margin: 20px 0; border-left: 4px solid #ffc107;">
+                        <h5 style="color: #856404; margin-bottom: 10px;">⚠️ Cancelación Programada</h5>
+                        <p style="margin: 0; color: #856404; font-size: 15px; line-height: 1.6;">
+                            Tu suscripción se cancelará automáticamente el <strong><?= date('d/m/Y', strtotime($socio['fecha_proximo_cobro'])) ?></strong>.<br>
+                            Hasta entonces, seguirás disfrutando de tu membresía como socio.<br>
+                            <strong>¿Cambiaste de opinión?</strong> Puedes reactivar tu suscripción desde el Portal de Gestión.
+                        </p>
+                    </div>
+                <?php else: ?>
+                    <div style="background: #e7f3ff; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                        <h5 style="color: #014361; margin-bottom: 10px;">Gestionar Suscripción</h5>
+                        <p style="margin: 0; color: #014361; font-size: 15px;">
+                            Puedes actualizar tu método de pago, ver facturas o cancelar tu suscripción
+                            usando el portal de Stripe.
+                        </p>
+                    </div>
+                <?php endif; ?>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button onclick="window.print()" class="btn-print">
+                        🖨️ Imprimir Estado de Suscripción
+                    </button>
                 </div>
 
-                <div style="text-align: center; margin-top: 30px;">
+                <div style="text-align: center; margin-top: 20px;">
                     <form method="POST" action="<?= url('stripe/create-portal-session.php') ?>">
                         <input type="hidden" name="customer_id" value="<?= htmlspecialchars($socio['stripe_customer_id']) ?>">
                         <input type="hidden" name="email" value="<?= htmlspecialchars($socio['email']) ?>">
@@ -280,7 +368,13 @@ if ($email) {
                     </p>
                 </div>
 
-                <div style="text-align: center; margin-top: 30px;">
+                <div style="text-align: center; margin-top: 20px;">
+                    <button onclick="window.print()" class="btn-print">
+                        🖨️ Imprimir Confirmación
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
                     <a href="<?= url('index.php#colabora') ?>" class="btn-primary-custom" style="background: #28a745;">
                         Volver a suscribirme
                     </a>
@@ -288,7 +382,7 @@ if ($email) {
             <?php endif; ?>
 
             <div style="text-align: center; margin-top: 40px;">
-                <a href="<?= url('index.php') ?>" style="color: #667eea; text-decoration: none;">
+                <a href="<?= url('index.php') ?>" style="color: #E5A649; text-decoration: none;">
                     ← Volver al inicio
                 </a>
             </div>

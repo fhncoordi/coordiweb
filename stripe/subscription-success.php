@@ -82,25 +82,26 @@ if ($session_id) {
     <link rel="stylesheet" href="<?= url('css/bootstrap.min.css') ?>">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
         }
         .success-container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
             padding: 50px 40px;
-            max-width: 600px;
+            max-width: 700px;
             text-align: center;
         }
         .success-icon {
             width: 100px;
             height: 100px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #E5A649 0%, #d89a3a 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -146,7 +147,7 @@ if ($session_id) {
             text-align: left;
         }
         .info-box h3 {
-            color: #667eea;
+            color: #E5A649;
             font-size: 18px;
             margin-bottom: 15px;
             font-weight: 600;
@@ -167,9 +168,11 @@ if ($session_id) {
         .info-value {
             color: #333;
             font-weight: 600;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
         .btn-primary-custom {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #E5A649 0%, #d89a3a 100%);
             border: none;
             color: white;
             padding: 15px 40px;
@@ -183,13 +186,13 @@ if ($session_id) {
         }
         .btn-primary-custom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(229, 166, 73, 0.4);
             color: white;
         }
         .btn-secondary-custom {
             background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
+            border: 2px solid #E5A649;
+            color: #E5A649;
             padding: 12px 30px;
             border-radius: 50px;
             font-size: 16px;
@@ -200,8 +203,59 @@ if ($session_id) {
             transition: all 0.2s;
         }
         .btn-secondary-custom:hover {
-            background: #667eea;
+            background: #E5A649;
             color: white;
+        }
+        .btn-print {
+            display: inline-block;
+            padding: 10px 25px;
+            background: white;
+            color: #E5A649;
+            border: 2px solid #E5A649;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn-print:hover {
+            background: #E5A649;
+            color: white;
+        }
+        .header-recibo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #E5A649;
+        }
+        .header-recibo img {
+            max-width: 200px;
+            margin-bottom: 15px;
+        }
+        .header-recibo h1 {
+            color: #E5A649;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+        }
+        .header-recibo p {
+            color: #666;
+            font-size: 13px;
+            margin: 0;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .success-container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            .btn-print, .btn-primary-custom, .btn-secondary-custom {
+                display: none;
+            }
         }
         .error-box {
             background: #f8d7da;
@@ -222,13 +276,19 @@ if ($session_id) {
                 </p>
             </div>
         <?php elseif ($session && $subscription): ?>
+            <div class="header-recibo">
+                <img src="<?= url('images/logo-coordi.png') ?>" alt="Coordicanarias" onerror="this.style.display='none'">
+                <h1>Alta como Socio</h1>
+                <p>Coordinadora de Personas con Discapacidad Física de Canarias</p>
+            </div>
+
             <div class="success-icon">
                 <svg viewBox="0 0 52 52">
                     <polyline points="14 27 22 35 38 19" />
                 </svg>
             </div>
 
-            <h1>¡Bienvenido a la Familia!</h1>
+            <h2 style="color: #333; font-size: 28px; font-weight: 700; margin-bottom: 15px;">¡Bienvenido a la Familia!</h2>
             <p class="subtitle">
                 Gracias por convertirte en socio de Coordicanarias.<br>
                 Tu apoyo mensual hace una diferencia real en la vida de muchas personas.
@@ -274,7 +334,13 @@ if ($session_id) {
                 </p>
             </div>
 
-            <div style="margin-top: 30px;">
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="window.print()" class="btn-print">
+                    🖨️ Imprimir Confirmación
+                </button>
+            </div>
+
+            <div style="margin-top: 20px;">
                 <a href="<?= url('index.php') ?>" class="btn-primary-custom">Volver al inicio</a>
                 <br>
                 <a href="<?= url('stripe/manage-subscription.php?email=' . urlencode($customer->email ?? '')) ?>" class="btn-secondary-custom">
