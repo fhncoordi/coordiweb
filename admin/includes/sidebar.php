@@ -63,7 +63,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
             </div>
 
-            <!-- Sección: Donaciones & Socios -->
+            <!-- Sección: Donaciones & Socios (solo admin) -->
+            <?php if (isAdmin()): ?>
             <div class="nav-section">
                 <div class="nav-section-title">Donaciones & Socios</div>
 
@@ -77,6 +78,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <span>Socios</span>
                 </a>
             </div>
+            <?php endif; ?>
 
             <!-- Sección: Sistema (solo admin) -->
             <?php if (puedeGestionarUsuarios() || puedeGestionarConfiguracion() || puedeVerRegistroActividad()): ?>

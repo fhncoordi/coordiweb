@@ -398,9 +398,11 @@ jQuery(document).ready(function() {
             utterance.pitch = 1.0; // Tono normal
             utterance.volume = 1.0; // Volumen máximo
 
-            // Fix para Chrome: Resume antes de hablar (política de activación de usuario)
-            speechSynthesis.resume();
-            speechSynthesis.speak(utterance);
+            // Fix para evitar corte de la primera palabra:
+            // Dar tiempo al sintetizador para inicializarse
+            setTimeout(function() {
+                speechSynthesis.speak(utterance);
+            }, 50);
         }
 
         // Toggle Lector de Voz

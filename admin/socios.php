@@ -8,8 +8,9 @@ require_once __DIR__ . '/../php/config.php';
 require_once __DIR__ . '/../php/core/auth.php';
 require_once __DIR__ . '/../php/core/security.php';
 
-// Requerir autenticación
+// Requerir autenticación y rol admin
 requireLogin();
+requireRole('admin');
 
 // Establecer headers de seguridad
 setSecurityHeaders();

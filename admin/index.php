@@ -63,29 +63,41 @@ try {
         $total_usuarios = 0;
     }
 
-    // Estadísticas de Donaciones
-    $stats_donaciones = fetchOne("
-        SELECT
-            COUNT(*) as total_donaciones,
-            SUM(CASE WHEN estado = 'completed' THEN importe ELSE 0 END) as total_recaudado,
-            SUM(CASE WHEN estado = 'completed' THEN 1 ELSE 0 END) as completadas
-        FROM donaciones
-    ");
-    $total_donaciones = $stats_donaciones['total_donaciones'] ?? 0;
-    $total_recaudado = $stats_donaciones['total_recaudado'] ?? 0;
-    $donaciones_completadas = $stats_donaciones['completadas'] ?? 0;
+    // Estadísticas de Donaciones (solo admin)
+    if ($usuario['rol'] === 'admin') {
+        $stats_donaciones = fetchOne("
+            SELECT
+                COUNT(*) as total_donaciones,
+                SUM(CASE WHEN estado = 'completed' THEN importe ELSE 0 END) as total_recaudado,
+                SUM(CASE WHEN estado = 'completed' THEN 1 ELSE 0 END) as completadas
+            FROM donaciones
+        ");
+        $total_donaciones = $stats_donaciones['total_donaciones'] ?? 0;
+        $total_recaudado = $stats_donaciones['total_recaudado'] ?? 0;
+        $donaciones_completadas = $stats_donaciones['completadas'] ?? 0;
+    } else {
+        $total_donaciones = 0;
+        $total_recaudado = 0;
+        $donaciones_completadas = 0;
+    }
 
-    // Estadísticas de Socios (Suscripciones)
-    $stats_socios = fetchOne("
-        SELECT
-            COUNT(*) as total_socios,
-            SUM(CASE WHEN estado IN ('active', 'trialing') THEN 1 ELSE 0 END) as socios_activos,
-            SUM(CASE WHEN estado IN ('active', 'trialing') THEN 1 ELSE 0 END) * 5 as ingresos_mensuales
-        FROM socios
-    ");
-    $total_socios = $stats_socios['total_socios'] ?? 0;
-    $socios_activos = $stats_socios['socios_activos'] ?? 0;
-    $ingresos_mensuales = $stats_socios['ingresos_mensuales'] ?? 0;
+    // Estadísticas de Socios (solo admin)
+    if ($usuario['rol'] === 'admin') {
+        $stats_socios = fetchOne("
+            SELECT
+                COUNT(*) as total_socios,
+                SUM(CASE WHEN estado IN ('active', 'trialing') THEN 1 ELSE 0 END) as socios_activos,
+                SUM(CASE WHEN estado IN ('active', 'trialing') THEN 1 ELSE 0 END) * 5 as ingresos_mensuales
+            FROM socios
+        ");
+        $total_socios = $stats_socios['total_socios'] ?? 0;
+        $socios_activos = $stats_socios['socios_activos'] ?? 0;
+        $ingresos_mensuales = $stats_socios['ingresos_mensuales'] ?? 0;
+    } else {
+        $total_socios = 0;
+        $socios_activos = 0;
+        $ingresos_mensuales = 0;
+    }
 
     // Últimos proyectos creados (filtrado por área si es coordinador)
     if ($es_coordinador) {
@@ -215,7 +227,8 @@ include __DIR__ . '/includes/sidebar.php';
         </div>
     </div>
 
-    <!-- Tarjetas de Donaciones & Socios -->
+    <!-- Tarjetas de Donaciones & Socios (solo admin) -->
+    <?php if (isAdmin()): ?>
     <div class="row g-4 mt-2">
         <div class="col-12">
             <h5 class="text-muted mb-3"><i class="fas fa-hand-holding-heart me-2"></i>Donaciones & Socios</h5>
@@ -295,6 +308,7 @@ include __DIR__ . '/includes/sidebar.php';
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
     <!-- Fila con dos columnas -->
     <div class="row g-4 mt-4">
