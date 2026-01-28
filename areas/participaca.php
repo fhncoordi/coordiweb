@@ -11,6 +11,7 @@ require_once __DIR__ . '/../php/models/Area.php';
 require_once __DIR__ . '/../php/models/Servicio.php';
 require_once __DIR__ . '/../php/models/Beneficio.php';
 require_once __DIR__ . '/../php/models/Proyecto.php';
+require_once __DIR__ . '/../php/models/ProyectoDocumento.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
 require_once __DIR__ . '/../php/models/Noticia.php';
 require_once __DIR__ . '/../php/form_security_helper.php';
@@ -405,6 +406,7 @@ if (!function_exists('formatearFecha')) {
                 <div class="row">
                     <?php if (!empty($proyectos)): ?>
                         <?php foreach ($proyectos as $proyecto): ?>
+                            <?php $documentos_proyecto = ProyectoDocumento::getByProyecto($proyecto['id']); ?>
                             <div class="col-lg-6 mb-4">
                                 <article style="background: #f8f8f8; padding: 30px; border-radius: 8px; height: 100%;">
                                     <h3 style="margin-bottom: 15px;">
@@ -421,6 +423,41 @@ if (!function_exists('formatearFecha')) {
                                     <div style="margin-bottom: 15px;">
                                         <?= nl2br(e($proyecto['descripcion'])) ?>
                                     </div>
+                                    <?php if (!empty($documentos_proyecto)): ?>
+                                    <div style="margin-top: 25px; padding-top: 25px; border-top: 2px solid #ddd;">
+                                        <h4 style="font-size: 1.15em; margin-bottom: 20px; color: #243659; display: flex; align-items: center;">
+                                            <i class="fas fa-download" style="margin-right: 10px; color: #27ae60; font-size: 1.3em;"></i>
+                                            Documentos disponibles
+                                        </h4>
+                                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                                            <?php foreach ($documentos_proyecto as $doc): ?>
+                                            <a href="../<?= e($doc['ruta_completa']) ?>" download="<?= attr($doc['nombre_original']) ?>"
+                                               style="display: flex; align-items: center; padding: 18px 20px;
+                                                      background: <?= ProyectoDocumento::getGradiente($doc['extension']) ?>;
+                                                      border-radius: 10px; text-decoration: none; color: white;
+                                                      transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+                                               onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 15px rgba(0,0,0,0.2)'"
+                                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)'">
+                                                <div style="min-width: 55px; text-align: center; margin-right: 20px;">
+                                                    <i class="fas <?= ProyectoDocumento::getIcono($doc['extension']) ?>" style="font-size: 2.8em; opacity: 0.95;"></i>
+                                                </div>
+                                                <div style="flex: 1;">
+                                                    <strong style="font-size: 1.15em; display: block; margin-bottom: 6px; line-height: 1.3;">
+                                                        <?= e($doc['titulo']) ?>
+                                                    </strong>
+                                                    <small style="opacity: 0.85; font-size: 0.9em;">
+                                                        <i class="fas fa-file" style="margin-right: 5px;"></i>
+                                                        <?= strtoupper($doc['extension']) ?> · <?= ProyectoDocumento::formatearTamano($doc['tamano']) ?>
+                                                    </small>
+                                                </div>
+                                                <div style="min-width: 45px; text-align: center; margin-left: 15px;">
+                                                    <i class="fas fa-download" style="font-size: 1.6em; opacity: 0.95;"></i>
+                                                </div>
+                                            </a>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <?php endif; ?>
                                 </article>
                             </div>
                         <?php endforeach; ?>
