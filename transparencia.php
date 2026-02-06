@@ -3,6 +3,7 @@ require_once __DIR__ . '/php/config.php';
 require_once __DIR__ . '/php/db/connection.php';
 require_once __DIR__ . '/php/core/security.php';
 require_once __DIR__ . '/php/models/Configuracion.php';
+require_once __DIR__ . '/php/form_security_helper.php';
 
 $config = Configuracion::getAll();
 
@@ -34,6 +35,13 @@ if (!function_exists('attr')) {
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link href="css/my.css" rel="stylesheet" type="text/css">
+    <!-- reCAPTCHA v3 -->
+    <?php echo generar_script_recaptcha(); ?>
+
+    <!-- Configuracion para JavaScript -->
+    <script>
+        window.RECAPTCHA_SITE_KEY = '<?php echo obtener_recaptcha_site_key(); ?>';
+    </script>
     <style>
         /* Scroll suave nativo */
         html {
@@ -1307,18 +1315,27 @@ if (!function_exists('attr')) {
                     <div class="col-md-6">
                         <h2>Solicitud de Información</h2>
                         <br>
+                        <!-- Mensaje de éxito/error -->
+                        <div id="form-message" class="form-message" style="display: none;"></div>
+
                         <div class="contact-form">
-                            <form action="#" method="post" aria-label="Formulario de solicitud de información pública">
+                            <form method="post" action="php/enviar_correo.php" id="contact-form" aria-label="Formulario de solicitud de información pública">
+                                <input type="hidden" name="area" value="transparencia">
+                                <!-- CAMPOS DE SEGURIDAD ANTI-BOT -->
+                                <?php echo generar_campos_seguridad(); ?>
+                                <!-- FIN CAMPOS DE SEGURIDAD -->
+
                                 <label for="fname" style="color: #000;">
                                     Nombre completo: <span aria-label="obligatorio" style="color: #000;">*</span>
                                 </label>
                                 <input
                                         type="text"
                                         id="fname"
-                                        name="firstname"
+                                        name="txtName"
                                         placeholder="Tu nombre y apellidos"
                                         aria-required="true"
                                         autocomplete="name"
+                                        title="Nombre"
                                         required
                                 />
 
@@ -1328,20 +1345,12 @@ if (!function_exists('attr')) {
                                 <input
                                         type="email"
                                         id="email"
-                                        name="email"
+                                        name="txtEmail"
                                         placeholder="Tu correo electrónico"
                                         aria-required="true"
                                         autocomplete="email"
+                                        title="Email"
                                         required
-                                />
-
-                                <label for="phone" style="color: #000;">Teléfono (opcional):</label>
-                                <input
-                                        type="tel"
-                                        id="phone"
-                                        name="phone"
-                                        placeholder="Tu teléfono de contacto"
-                                        autocomplete="tel"
                                 />
 
                                 <label for="subject" style="color: #000;">
@@ -1349,9 +1358,10 @@ if (!function_exists('attr')) {
                                 </label>
                                 <textarea
                                         id="subject"
-                                        name="subject"
+                                        name="txtMsg"
                                         placeholder="Describe la información pública que solicitas..."
                                         aria-required="true"
+                                        title="Mensaje"
                                         style="height:200px"
                                         required
                                 ></textarea>
@@ -1659,6 +1669,9 @@ if (!function_exists('attr')) {
         }
     });
 </script>
+
+<!-- Script de seguridad de formularios -->
+<script src="js/form-security.js"></script>
 
 </body>
 
