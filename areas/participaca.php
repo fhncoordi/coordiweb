@@ -14,6 +14,7 @@ require_once __DIR__ . '/../php/models/Proyecto.php';
 require_once __DIR__ . '/../php/models/ProyectoDocumento.php';
 require_once __DIR__ . '/../php/models/Configuracion.php';
 require_once __DIR__ . '/../php/models/Noticia.php';
+require_once __DIR__ . '/../php/models/NoticiaDocumento.php';
 require_once __DIR__ . '/../php/form_security_helper.php';
 
 // Obtener el área actual por slug
@@ -525,6 +526,7 @@ if (!function_exists('formatearFecha')) {
                     </div>
                     <div class="row">
                         <?php foreach ($noticias as $noticia): ?>
+                        <?php $documentos_noticia = NoticiaDocumento::getByNoticia($noticia['id']); ?>
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="item">
                                 <?php if (!empty($noticia['imagen_destacada'])): ?>
@@ -545,6 +547,42 @@ if (!function_exists('formatearFecha')) {
                                             <?php if (!empty($noticia['contenido'])): ?>
                                             <div class="lab-bs-item-content-full" style="line-height: 1.6; color: #fff;">
                                                 <?= nl2br(e($noticia['contenido'])) ?>
+                                            </div>
+                                            <?php endif; ?>
+
+                                            <?php if (!empty($documentos_noticia)): ?>
+                                            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                                    <?php foreach ($documentos_noticia as $doc): ?>
+                                                    <a href="../<?= e($doc['ruta_completa']) ?>"
+                                                       download="<?= attr($doc['nombre_original']) ?>"
+                                                       style="display: flex; align-items: center; padding: 14px 16px;
+                                                              background: <?= NoticiaDocumento::getGradiente($doc['extension']) ?>;
+                                                              border-radius: 10px; text-decoration: none; color: white;
+                                                              transition: all 0.3s ease;
+                                                              box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+                                                       onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 15px rgba(0,0,0,0.2)'"
+                                                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)'">
+                                                        <div style="min-width: 40px; text-align: center; margin-right: 15px;">
+                                                            <i class="fas <?= NoticiaDocumento::getIcono($doc['extension']) ?>"
+                                                               style="font-size: 2em; opacity: 0.95;"></i>
+                                                        </div>
+                                                        <div style="flex: 1;">
+                                                            <strong style="font-size: 1em; display: block; margin-bottom: 4px; line-height: 1.3;">
+                                                                <?= e($doc['titulo']) ?>
+                                                            </strong>
+                                                            <small style="opacity: 0.85; font-size: 0.85em;">
+                                                                <i class="fas fa-file" style="margin-right: 5px;"></i>
+                                                                <?= strtoupper($doc['extension']) ?> ·
+                                                                <?= NoticiaDocumento::formatearTamano($doc['tamano']) ?>
+                                                            </small>
+                                                        </div>
+                                                        <div style="min-width: 35px; text-align: center; margin-left: 10px;">
+                                                            <i class="fas fa-download" style="font-size: 1.3em; opacity: 0.95;"></i>
+                                                        </div>
+                                                    </a>
+                                                    <?php endforeach; ?>
+                                                </div>
                                             </div>
                                             <?php endif; ?>
                                         </div>

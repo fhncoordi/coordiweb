@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $nuevo_id = Proyecto::create($datos);
 
                     if ($nuevo_id) {
-                        registrarActividad('create', 'proyectos', $nuevo_id, 'Creó proyecto: ' . $datos['titulo']);
+                        registrarActividad(getCurrentUserId(), 'crear', 'proyectos', $nuevo_id, 'Creó proyecto: ' . $datos['titulo']);
                         header('Location: ' . url('admin/proyectos.php?success=created'));
                         exit;
                     } else {
@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Actualizar proyecto solo si no hubo error de imagen
                     if (empty($mensaje)) {
                         if (Proyecto::update($proyecto_id, $datos)) {
-                            registrarActividad('update', 'proyectos', $proyecto_id, 'Actualizó proyecto: ' . $datos['titulo']);
+                            registrarActividad(getCurrentUserId(), 'actualizar', 'proyectos', $proyecto_id, 'Actualizó proyecto: ' . $datos['titulo']);
                             header('Location: ' . url('admin/proyectos.php?success=updated'));
                             exit;
                         } else {
@@ -649,144 +649,145 @@ include __DIR__ . '/includes/sidebar.php';
                 </div>
             </div>
 
-            <!-- Columna: Documentos (solo en modo editar) -->
-            <?php if ($modo === 'editar'): ?>
-            <div class="col-12 mt-4">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">
-                            <i class="fas fa-paperclip me-2"></i>Documentos Adjuntos
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <!-- Subir nuevo documento -->
-                        <form method="POST" enctype="multipart/form-data" class="mb-4 p-3 bg-light rounded border">
-                            <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
-                            <input type="hidden" name="accion" value="subir_documento">
-                            <input type="hidden" name="proyecto_id" value="<?= $proyecto['id'] ?>">
+        </form>
 
-                            <h6 class="mb-3"><i class="fas fa-upload me-2"></i>Subir nuevo documento</h6>
+        <!-- Columna: Documentos (solo en modo editar, FUERA del form principal) -->
+        <?php if ($modo === 'editar'): ?>
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-paperclip me-2"></i>Documentos Adjuntos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Subir nuevo documento -->
+                    <form method="POST" enctype="multipart/form-data" class="mb-4 p-3 bg-light rounded border">
+                        <input type="hidden" name="csrf_token" value="<?= generateCSRFToken() ?>">
+                        <input type="hidden" name="accion" value="subir_documento">
+                        <input type="hidden" name="proyecto_id" value="<?= $proyecto['id'] ?>">
 
-                            <div class="row g-3 align-items-end">
-                                <div class="col-md-5">
-                                    <label for="titulo_documento" class="form-label">
-                                        Nombre del documento <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="titulo_documento"
-                                           name="titulo_documento"
-                                           placeholder="Ej: Folleto informativo del proyecto"
-                                           required
-                                           maxlength="255">
-                                    <div class="form-text">
-                                        Este es el nombre que verán los visitantes
-                                    </div>
-                                </div>
+                        <h6 class="mb-3"><i class="fas fa-upload me-2"></i>Subir nuevo documento</h6>
 
-                                <div class="col-md-5">
-                                    <label for="documento" class="form-label">
-                                        Seleccionar archivo <span class="text-danger">*</span>
-                                    </label>
-                                    <input type="file"
-                                           class="form-control"
-                                           id="documento"
-                                           name="documento"
-                                           accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif,.webp,.zip,.txt"
-                                           required>
-                                    <div class="form-text">
-                                        Máximo 10MB. PDF, DOC, DOCX, XLS, XLSX, JPG, PNG, ZIP, TXT
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-success w-100">
-                                        <i class="fas fa-upload me-2"></i>Subir
-                                    </button>
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-5">
+                                <label for="titulo_documento" class="form-label">
+                                    Nombre del documento <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="titulo_documento"
+                                       name="titulo_documento"
+                                       placeholder="Ej: Folleto informativo del proyecto"
+                                       required
+                                       maxlength="255">
+                                <div class="form-text">
+                                    Este es el nombre que verán los visitantes
                                 </div>
                             </div>
-                        </form>
 
-                        <!-- Lista de documentos -->
-                        <?php if (!empty($documentos)): ?>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 50px;">Tipo</th>
-                                        <th>Nombre</th>
-                                        <th style="width: 80px;">Formato</th>
-                                        <th style="width: 100px;">Tamaño</th>
-                                        <th style="width: 150px;">Fecha</th>
-                                        <th style="width: 100px;">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($documentos as $doc): ?>
-                                    <tr>
-                                        <td class="text-center">
-                                            <i class="fas <?= ProyectoDocumento::getIcono($doc['extension']) ?> fa-2x text-primary"></i>
-                                        </td>
-                                        <td>
-                                            <strong><?= e($doc['titulo']) ?></strong>
-                                            <br>
-                                            <small class="text-muted">
-                                                <i class="fas fa-file"></i> <?= e($doc['nombre_original']) ?>
-                                            </small>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-secondary"><?= strtoupper($doc['extension']) ?></span>
-                                        </td>
-                                        <td><?= ProyectoDocumento::formatearTamano($doc['tamano']) ?></td>
-                                        <td>
-                                            <small><?= date('d/m/Y H:i', strtotime($doc['fecha_subida'])) ?></small>
-                                            <?php if ($doc['subido_por_nombre']): ?>
-                                            <br><small class="text-muted">por <?= e($doc['subido_por_nombre']) ?></small>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group" role="group">
-                                                <a href="<?= url($doc['ruta_completa']) ?>"
-                                                   class="btn btn-sm btn-outline-primary"
-                                                   title="Descargar"
-                                                   download="<?= attr($doc['nombre_original']) ?>">
-                                                    <i class="fas fa-download"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                                        title="Eliminar"
-                                                        onclick="confirmarEliminarDocumento(<?= $doc['id'] ?>, '<?= addslashes($doc['titulo']) ?>')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                            <div class="col-md-5">
+                                <label for="documento" class="form-label">
+                                    Seleccionar archivo <span class="text-danger">*</span>
+                                </label>
+                                <input type="file"
+                                       class="form-control"
+                                       id="documento"
+                                       name="documento"
+                                       accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif,.webp,.zip,.txt"
+                                       required>
+                                <div class="form-text">
+                                    Máximo 10MB. PDF, DOC, DOCX, XLS, XLSX, JPG, PNG, ZIP, TXT
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-upload me-2"></i>Subir
+                                </button>
+                            </div>
                         </div>
-                        <?php else: ?>
-                        <div class="text-center text-muted py-4">
-                            <i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i>
-                            <p class="mb-0">No hay documentos adjuntos a este proyecto</p>
-                            <small>Usa el formulario superior para subir el primer documento</small>
-                        </div>
-                        <?php endif; ?>
+                    </form>
+
+                    <!-- Lista de documentos -->
+                    <?php if (!empty($documentos)): ?>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 50px;">Tipo</th>
+                                    <th>Nombre</th>
+                                    <th style="width: 80px;">Formato</th>
+                                    <th style="width: 100px;">Tamaño</th>
+                                    <th style="width: 150px;">Fecha</th>
+                                    <th style="width: 100px;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($documentos as $doc): ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <i class="fas <?= ProyectoDocumento::getIcono($doc['extension']) ?> fa-2x text-primary"></i>
+                                    </td>
+                                    <td>
+                                        <strong><?= e($doc['titulo']) ?></strong>
+                                        <br>
+                                        <small class="text-muted">
+                                            <i class="fas fa-file"></i> <?= e($doc['nombre_original']) ?>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary"><?= strtoupper($doc['extension']) ?></span>
+                                    </td>
+                                    <td><?= ProyectoDocumento::formatearTamano($doc['tamano']) ?></td>
+                                    <td>
+                                        <small><?= date('d/m/Y H:i', strtotime($doc['fecha_subida'])) ?></small>
+                                        <?php if ($doc['subido_por_nombre']): ?>
+                                        <br><small class="text-muted">por <?= e($doc['subido_por_nombre']) ?></small>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="<?= url($doc['ruta_completa']) ?>"
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="Descargar"
+                                               download="<?= attr($doc['nombre_original']) ?>">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    title="Eliminar"
+                                                    onclick="confirmarEliminarDocumento(<?= $doc['id'] ?>, '<?= addslashes($doc['titulo']) ?>')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
                     </div>
+                    <?php else: ?>
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i>
+                        <p class="mb-0">No hay documentos adjuntos a este proyecto</p>
+                        <small>Usa el formulario superior para subir el primer documento</small>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
-            <?php endif; ?>
+        </div>
+        <?php endif; ?>
 
-            <!-- Botones de Acción -->
-            <div class="mt-4 d-flex gap-2">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save me-2"></i>
-                    <?= $modo === 'crear' ? 'Crear Proyecto' : 'Guardar Cambios' ?>
-                </button>
-                <a href="<?= url('admin/proyectos.php') ?>" class="btn btn-secondary">
-                    <i class="fas fa-times me-2"></i>Cancelar
-                </a>
-            </div>
-        </form>
+        <!-- Botones de Acción -->
+        <div class="mt-4 d-flex gap-2">
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('formProyecto').submit()">
+                <i class="fas fa-save me-2"></i>
+                <?= $modo === 'crear' ? 'Crear Proyecto' : 'Guardar Cambios' ?>
+            </button>
+            <a href="<?= url('admin/proyectos.php') ?>" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>Cancelar
+            </a>
+        </div>
     </div>
     <?php endif; ?>
 
