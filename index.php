@@ -242,7 +242,7 @@ $portfolio_ids = [
                                             <a class="" data-scroll href="#contact">Contacto</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="" href="transparencia.php">Transparencia</a>
+                                            <a class="" href="https://coordicanarias.canariastransparente.org/">Transparencia</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -293,7 +293,7 @@ $portfolio_ids = [
                                                     <a class="" href="#contact">Contacto</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="transparencia.php">Transparencia</a>
+                                                    <a class="" href="https://coordicanarias.canariastransparente.org/">Transparencia</a>
                                                 </li>
                                                 <li class="menu-item menu-search-item">
                                                     <form id="mobile-search-form" class="mobile-search-form" role="search" aria-label="Buscar en el sitio">
@@ -1013,7 +1013,7 @@ $portfolio_ids = [
                         </div>
                         <div class="col-lg-6">
                             <div class="call-to-action-button">
-                                <a class="wm-button button size-large" href="transparencia.php">
+                                <a class="wm-button button size-large" href="https://coordicanarias.canariastransparente.org/">
                                     <span class="icon-thumbs-up-alt"></span>¡Accede a nuestro portal de transparencia ahora!</a>
                             </div>
                         </div>
@@ -1127,7 +1127,7 @@ $portfolio_ids = [
                                     <a class="" data-scroll href="#portfolios">Proyectos</a>
                                     <a class="" data-scroll href="#colabora">Colabora</a>
                                     <a class="" data-scroll href="#contact">Contacto</a>
-                                    <a class="" href="transparencia.php">Transparencia</a>
+                                    <a class="" href="https://coordicanarias.canariastransparente.org/">Transparencia</a>
                                 </div>
                                 <div class="col-6 pop-link" style="text-align: center">
                                     <?php if (count($noticias_destacadas) > 0): ?>

@@ -337,7 +337,7 @@ if (!function_exists('attr')) {
                                                     <a href="../index.php" class="">Inicio</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="../transparencia.php">Transparencia</a>
+                                                    <a class="" href="https://coordicanarias.canariastransparente.org/">Transparencia</a>
                                                 </li>
                                                 <li class="menu-item">
                                                     <a class="" href="#objeto-pp">Objeto</a>

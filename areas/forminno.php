@@ -229,7 +229,7 @@ if (!function_exists('formatearFecha')) {
                                             <a href="../index.php" class="">Inicio</a>
                                         </li>
                                         <li class="menu-item">
-                                            <a href="../transparencia.php" class="">Transparencia</a>
+                                            <a href="https://coordicanarias.canariastransparente.org/" class="">Transparencia</a>
                                         </li>
                                         <li class="menu-item">
                                             <a class="" data-scroll href="#about-fi">Formación e innovación</a>
@@ -282,7 +282,7 @@ if (!function_exists('formatearFecha')) {
                                                     <a href="../index.php" class="">Inicio</a>
                                                 </li>
                                                 <li class="menu-item">
-                                                    <a class="" href="../transparencia.php">Transparencia</a>
+                                                    <a class="" href="https://coordicanarias.canariastransparente.org/">Transparencia</a>
                                                 </li>
                                                 <li class="menu-item">
                                                     <a class="" href="#about-fi">Formación e innovación</a>
